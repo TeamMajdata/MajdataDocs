@@ -18,7 +18,7 @@ import { NolebaseHighlightTargetedHeading } from '@nolebase/vitepress-plugin-hig
 import { NolebaseInlineLinkPreviewPlugin } from '@nolebase/vitepress-plugin-inline-link-preview/client'
 import { NolebasePagePropertiesPlugin } from '@nolebase/vitepress-plugin-page-properties'
 import TwoslashFloatingVue from '@shikijs/vitepress-twoslash/client'
-import { Footer } from '@theojs/lumen' //不好看
+import { Footer, Links } from '@theojs/lumen' //不好看
 import codeblocksFold from 'vitepress-plugin-codeblocks-fold'
 import { Footer_Data } from '../data/footerData.ts'
 import { theme } from 'vitepress-openapi/client'
@@ -64,6 +64,7 @@ export default {
     } as Options)
     app.use(TwoslashFloatingVue)
     app.component('NCard', NCard)
+    app.component('Links', Links)
     app.use(NolebaseGitChangelogPlugin)
     app.provide(InjectionKey, {
       hideChangelogNoChangesText: true,

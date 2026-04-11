@@ -79,17 +79,17 @@ export const shared = defineConfig({
         rel: 'icon',
         type: 'image/png',
         sizes: '32x32',
-        href: '/assets/xxlb.png'
+        href: '/assets/xxlb_headshot.png'
       }
     ],
-    ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/assets/xxlb.png' }],
-    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/assets/xxlb.png' }],
-    ['link', { rel: 'mask-icon', href: '/assets/xxlb.png', color: '#5bbad5' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/assets/xxlb_headshot.png' }],
+    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/assets/xxlb_headshot.png' }],
+    ['link', { rel: 'mask-icon', href: '/assets/xxlb_headshot.png', color: '#5bbad5' }],
     ['meta', { name: 'theme-color', content: '#5f67ee' }],
   ],
 
   themeConfig: {
-    logo: { src: '/assets/xxlb.png', width: 24, height: 24 },
+    logo: { src: '/assets/xxlb_headshot.png', width: 24, height: 24 },
     //开启本地搜索
     search: {
       provider: 'local',

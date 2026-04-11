@@ -15,7 +15,7 @@ hero:
       text: GitHub
       link: https://github.com/TeamMajdata
   image:
-    src: /assets/xxlb.png
+    src: /assets/xxlb_ci_blink.webp
     alt: Logo
 
 features:

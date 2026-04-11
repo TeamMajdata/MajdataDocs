@@ -27,6 +27,45 @@
 .VPLocalSearchBox #localsearch-list mark {
     background-color: rgba(255, 138, 128, 0.3);
 }
+
+/* 首页 Hero 图像轻微上下浮动 */
+.VPHomeHero .image .image-src {
+    animation: hero-float 3.2s ease-in-out infinite;
+    will-change: transform;
+    max-width: 240px;
+    max-height: 240px;
+}
+
+@media (min-width: 640px) {
+    .VPHomeHero .image .image-src {
+        max-width: 320px;
+        max-height: 320px;
+    }
+}
+
+@media (min-width: 960px) {
+    .VPHomeHero .image .image-src {
+        max-width: 480px;
+        max-height: 480px;
+    }
+}
+
+@keyframes hero-float {
+    0%,
+    100% {
+        transform: translate(-50%, -50%) translateY(0);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) translateY(20px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .VPHomeHero .image .image-src {
+        animation: none;
+    }
+}
 /* .vitepress\theme\style\blur.css */
 :root {
 

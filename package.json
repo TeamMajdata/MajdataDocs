@@ -34,7 +34,6 @@
     "dayjs": "^1.11.15",
     "debug": "^4.4.1",
     "markdown-it-mathjax3": "^4.3.2",
-    "markdown-it-task-lists": "^2.1.1",
     "mermaid": "^11.10.1",
     "vitepress": "^1.6.4",
     "vitepress-markdown-timeline": "^1.2.2",

@@ -78,6 +78,17 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           ]
         },
         {
+          text: '功能',
+          base: '/majdataplay/feature',
+          collapsed: true,
+          items: [
+            {
+              text: '录制',
+              link: '/record'
+            }
+          ]
+        },
+        {
           text: '隐私政策',
           link: '/privacy_policy'
         }

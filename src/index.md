@@ -9,8 +9,8 @@ hero:
   text: 新时代完全体开源的 maimai 自制工具链
   actions:
     - theme: brand
-      text: 开始使用
-      link: /guide/start-install
+      text: 开始
+      link: /other/about
     - theme: alt
       text: GitHub
       link: https://github.com/TeamMajdata

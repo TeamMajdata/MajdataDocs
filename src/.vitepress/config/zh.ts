@@ -44,8 +44,8 @@ function nav(): DefaultTheme.NavItem[] {
   return [
     {
       text: '快速开始',
-      link: '/guide/start-install',
-      activeMatch: '/guide/'
+      link: '/majdataplay/install',
+      activeMatch: '/majdataplay/'
     },
     {
       text: '关于我们',

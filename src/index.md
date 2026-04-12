@@ -26,7 +26,7 @@ features:
   - icon: 💖
     title: MajdataNet
     link: https://majdata.net/
-    details: maimai 饭制谱面分享平台, 支持谱面上传, 下载, 在线预览, 成绩排行榜和社区互动
+    details: maimai 饭制谱面分享平台, 支持谱面上传, 下载, 在线预览, 成绩排行榜和社区互动<br/>自 2023 年以来, 已上传过超过一万份自制谱资源
 ---
 
 <Confetti />

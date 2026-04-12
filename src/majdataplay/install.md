@@ -7,7 +7,7 @@
 Majdata Hub (以下简称 Hub) 是一款基于浏览器的 MajdataPlay 小工具, <mark>内置有海外的 GitHub 源和大陆的腾讯源</mark>, 可以用于下载和更新 MajdataPlay 的稳定版.
 
 (顺便求一下 star !!)
-[![Readme Card](https://readme-stats.vanillaaaa.org/api/pin/?username=kirisamevanilla&repo=MajdataHub)](https://github.com/KirisameVanilla/MajdataHub)
+[![MajdataHubCard](https://readme-stats.vanillaaaa.org/api/pin/?username=kirisamevanilla&repo=MajdataHub)](https://github.com/KirisameVanilla/MajdataHub)
 
 <Links
   :grid="2"

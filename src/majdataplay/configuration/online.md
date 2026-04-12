@@ -9,7 +9,7 @@
 运行一次游戏后, 游戏的可执行文件的同级目录下会出现一个`settings.json`, 打开它 (推荐使用[VSCode](https://code.visualstudio.com/), 改错了会有划线提示)
 
 往下滑, 或者按`Ctrl + F`搜索`Online`, 来到如图的地方. (可能和我有不一样的地方, 但不用管)
-![initial-configuration](./online/initial_configuration.png)
+![initial_configuration](./online/initial_configuration.png)
 
 - 你需要把`"Enable": false,`改为`"Enable": true,`
 - 如果人在大陆, 并且不会使用代理, 你也许需要更改`"Url"` 为以下镜像站中之一:

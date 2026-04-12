@@ -89,12 +89,34 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             {
               text: '录制',
               link: '/record'
+            },
+            {
+              text: '歌单',
+              link: '/collection'
             }
           ]
         },
         {
           text: '隐私政策',
           link: '/privacy_policy'
+        }
+      ]
+    },
+    {
+      text: 'MajdataNet',
+      base: '/majdatanet',
+      collapsed: false,
+      items: [
+        {
+          text: '功能',
+          base: '/majdatanet/feature',
+          collapsed: true,
+          items: [
+            {
+              text: '歌单',
+              link: '/collection'
+            }
+          ]
         }
       ]
     },

@@ -74,6 +74,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             {
               text: '联网',
               link: '/online'
+            },
+            {
+              text: '外置设备',
+              link: '/external_device'
             }
           ]
         },

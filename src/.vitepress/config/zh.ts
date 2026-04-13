@@ -72,6 +72,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           collapsed: true,
           items: [
             {
+              text: '配置文件',
+              link: '/'
+            },
+            {
               text: '联网',
               link: '/online'
             },
@@ -93,6 +97,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             {
               text: '歌单',
               link: '/collection'
+            },
+            {
+              text: '皮肤',
+              link: '/skin'
             }
           ]
         },

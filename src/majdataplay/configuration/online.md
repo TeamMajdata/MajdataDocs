@@ -1,4 +1,4 @@
-# Online
+# 联网
 
 ::: tip
 想传分打榜/记录? 想直接在游戏内游玩在线谱面? 看我吧!
@@ -6,7 +6,7 @@
 
 ## Windows
 
-运行一次游戏后, 游戏的可执行文件的同级目录下会出现一个`settings.json`, 打开它 (推荐使用[VSCode](https://code.visualstudio.com/), 改错了会有划线提示)
+打开[配置文件](/majdataplay/configuration/#windows) (推荐使用[VSCode](https://code.visualstudio.com/), 改错了会有划线提示)
 
 往下滑, 或者按`Ctrl + F`搜索`Online`, 来到如图的地方. (可能和我有不一样的地方, 但不用管)
 ![initial_configuration](./online/initial_configuration.png)
@@ -29,9 +29,8 @@
 
 ## iOS
 
-运行一次游戏后, 进入`设置`, 全局搜索`MajdataPlay`或在左侧列表中找到`App`并点击进入, 然后在右侧找到`MajdataPlay`.
-
-- 请打开`Netword`部分的`Online`选项
+- [进入`MajdataPlay`设置](/majdataplay/configuration/#ios)
+- 打开`Network`部分的`Online`选项
 - 如你使用`MajdataNet`配套服务, 请点击`Majnet`进入详细配置页面
   - 在`Majnet`详细配置页面, 打开`Enabled`选项
   - 点击`API`, 如你在海外或使用海外上网环境, 选择`CF`; 否则, 请你在其他三个中任选一个, 如无法使用, 请继续更换
@@ -42,4 +41,5 @@
 
 ## Android
 
-//TODO
+- 打开[配置文件](/majdataplay/configuration/#android)
+- 参照 [Windows 部分](/majdataplay/configuration/online#windows)

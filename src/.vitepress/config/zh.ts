@@ -63,6 +63,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       collapsed: false,
       items: [
         {
+          text: '简介',
+          link: '/'
+        },
+        {
           text: '安装',
           link: '/install'
         },

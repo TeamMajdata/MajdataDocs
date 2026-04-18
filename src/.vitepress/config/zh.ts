@@ -105,6 +105,14 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             {
               text: '皮肤',
               link: '/skin'
+            },
+            {
+              text: '练习模式',
+              link: '/practice'
+            },
+            {
+              text: '谱面',
+              link: '/chart'
             }
           ]
         },

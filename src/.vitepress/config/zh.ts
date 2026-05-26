@@ -117,6 +117,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           ]
         },
         {
+          text: '常见问题',
+          link: '/faq'
+        },
+        {
           text: '隐私政策',
           link: '/privacy_policy'
         }

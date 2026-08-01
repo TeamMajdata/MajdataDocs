@@ -145,6 +145,59 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       ]
     },
     {
+      text: 'MajdataX',
+      base: '/majdatax',
+      collapsed: false,
+      items: [
+        {
+          text: '简介',
+          link: '/index'
+        },
+        {
+          text: '使用',
+          base: '/majdatax/usage',
+          collapsed: true,
+          items: [
+            {
+              text: '新建',
+              link: '/new'
+            },
+            {
+              text: '调整',
+              link: '/adjust'
+            },
+            {
+              text: '编辑',
+              link: '/edit'
+            },
+            {
+              text: '恢复',
+              link: '/recovery'
+            }
+          ]
+        },
+        {
+          text: '设置',
+          base: '/majdatax/settings',
+          collapsed: true,
+          items: [
+            {
+              text: '编辑器',
+              link: '/editor'
+            },
+            {
+              text: 'View',
+              link: '/view'
+            },
+            {
+              text: '音量',
+              link: '/volume'
+            }
+          ]
+        },
+      ]
+    },
+    {
       text: '其余',
       base: '/other',
       collapsed: true,

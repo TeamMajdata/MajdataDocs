@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useData } from 'vitepress'
 import { computed, ref } from 'vue'
 import contributorData from '../../data/contributors.json'
 
@@ -22,8 +23,84 @@ interface ContributorProject {
 }
 
 const projects = contributorData.projects as ContributorProject[]
+const { lang } = useData()
 const activeProjectId = ref(projects[0]?.id ?? '')
 const searchQuery = ref('')
+const isEnglish = computed(() => lang.value === 'en-US')
+
+const messages = {
+  en: {
+    sectionLabel: 'Majdata contributor list',
+    intro: 'Every name is part of Majdata’s story.',
+    projectCount: 'Number of projects',
+    selectProject: 'Select a project',
+    credits: 'credits',
+    repository: 'View repository',
+    searchLabel: 'Search by name or role',
+    searchPlaceholder: 'Search by name or role…',
+    clearSearch: 'Clear search',
+    matches: 'matches',
+    noMatch: 'No results for',
+  },
+  zh: {
+    sectionLabel: 'Majdata 贡献者名单',
+    intro: '每一个名字，都是 Majdata 成长轨迹的一部分。',
+    projectCount: '项目数量',
+    selectProject: '选择项目',
+    credits: '项署名',
+    repository: '查看仓库',
+    searchLabel: '搜索名字或分工',
+    searchPlaceholder: '搜索名字或分工…',
+    clearSearch: '清除搜索',
+    matches: '项匹配',
+    noMatch: '没有找到',
+  },
+} as const
+
+const copy = computed(() => (isEnglish.value ? messages.en : messages.zh))
+
+const englishProjects: Record<string, { description: string }> = {
+  majdataplay: {
+    description:
+      'Thank you to everyone who has helped make MajdataPlay complete through development, charting, music, and testing.',
+  },
+  majdataview: {
+    description:
+      'Thank you to everyone who developed MajdataView or helped lay its foundations.',
+  },
+}
+
+const englishRoles: Record<string, string> = {
+  策划: 'Planning',
+  '主程序员、判定开发大神': 'Lead Programmer and Judgment Development',
+  '无敌 UI 美工设计': 'UI and Visual Design',
+  荣誉鸽子: 'Honorary Procrastinator',
+  幕后黑手: 'Masterminds',
+  小小蓝白: 'Little Blue and White',
+  原创谱面设计: 'Original Chart Design',
+  测试工程师: 'Test Engineering',
+  角色设计: 'Character Design',
+  音乐: 'Music',
+}
+
+const englishNotes: Record<string, string> = {
+  长笛: 'Flute',
+  手风琴: 'Accordion',
+}
+
+function projectDescription(project: ContributorProject) {
+  if (!isEnglish.value) return project.description
+  return englishProjects[project.id]?.description ?? project.description
+}
+
+function roleName(role: string) {
+  return isEnglish.value ? (englishRoles[role] ?? role) : role
+}
+
+function memberNote(note?: string) {
+  if (!note || !isEnglish.value) return note
+  return englishNotes[note] ?? note
+}
 
 const activeProject = computed(
   () => projects.find((project) => project.id === activeProjectId.value) ?? projects[0],
@@ -35,12 +112,12 @@ const filteredGroups = computed(() => {
 
   return (activeProject.value?.groups ?? [])
     .map((group) => {
-      if (group.role.toLocaleLowerCase().includes(query)) return group
+      if (roleName(group.role).toLocaleLowerCase().includes(query)) return group
 
       return {
         ...group,
         members: group.members.filter((member) =>
-          [member.name, member.note]
+          [member.name, memberNote(member.note)]
             .filter(Boolean)
             .some((value) => value!.toLocaleLowerCase().includes(query)),
         ),
@@ -64,19 +141,19 @@ function selectProject(projectId: string) {
 </script>
 
 <template>
-  <section v-if="activeProject" class="credits" aria-label="Majdata 贡献者名单">
+  <section v-if="activeProject" class="credits" :aria-label="copy.sectionLabel">
     <header class="credits__header">
       <div>
         <p class="credits__eyebrow">MAJDATA / CREDITS ARCHIVE</p>
-        <p class="credits__intro">每一个名字，都是 Majdata 成长轨迹的一部分。</p>
+        <p class="credits__intro">{{ copy.intro }}</p>
       </div>
-      <span class="credits__total" aria-label="项目数量">
+      <span class="credits__total" :aria-label="copy.projectCount">
         <strong>{{ projects.length }}</strong>
         <small>PROJECTS</small>
       </span>
     </header>
 
-    <div class="credits__tabs" role="tablist" aria-label="选择项目">
+    <div class="credits__tabs" role="tablist" :aria-label="copy.selectProject">
       <button
         v-for="(project, projectIndex) in projects"
         :id="`credits-tab-${project.id}`"
@@ -91,7 +168,7 @@ function selectProject(projectId: string) {
       >
         <span class="project-tab__index">{{ String(projectIndex + 1).padStart(2, '0') }}</span>
         <span class="project-tab__name">{{ project.name }}</span>
-        <span class="project-tab__count">{{ getContributorCount(project) }} 项署名</span>
+        <span class="project-tab__count">{{ getContributorCount(project) }} {{ copy.credits }}</span>
       </button>
     </div>
 
@@ -105,7 +182,7 @@ function selectProject(projectId: string) {
         <div>
           <p class="project-heading__label">CURRENT PROJECT</p>
           <h3>{{ activeProject.name }}</h3>
-          <p>{{ activeProject.description }}</p>
+          <p>{{ projectDescription(activeProject) }}</p>
         </div>
         <a
           v-if="activeProject.repository"
@@ -114,7 +191,7 @@ function selectProject(projectId: string) {
           target="_blank"
           rel="noreferrer"
         >
-          查看仓库
+          {{ copy.repository }}
           <svg aria-hidden="true" viewBox="0 0 24 24">
             <path d="M7 17 17 7M8 7h9v9" />
           </svg>
@@ -127,12 +204,12 @@ function selectProject(projectId: string) {
             <circle cx="11" cy="11" r="6.5" />
             <path d="m16 16 4 4" />
           </svg>
-          <span class="sr-only">搜索名字或分工</span>
-          <input v-model="searchQuery" type="search" placeholder="搜索名字或分工…" />
+          <span class="sr-only">{{ copy.searchLabel }}</span>
+          <input v-model="searchQuery" type="search" :placeholder="copy.searchPlaceholder" />
           <button
             v-if="searchQuery"
             type="button"
-            aria-label="清除搜索"
+            :aria-label="copy.clearSearch"
             @click="searchQuery = ''"
           >
             ×
@@ -140,7 +217,7 @@ function selectProject(projectId: string) {
         </label>
         <p class="credits__result" aria-live="polite">
           <strong>{{ visibleCount }}</strong>
-          <span>{{ searchQuery ? '项匹配' : '项署名' }}</span>
+          <span>{{ searchQuery ? copy.matches : copy.credits }}</span>
         </p>
       </div>
 
@@ -153,18 +230,18 @@ function selectProject(projectId: string) {
         >
           <header class="credit-group__header">
             <span>{{ String(groupIndex + 1).padStart(2, '0') }}</span>
-            <h4>{{ group.role }}</h4>
+            <h4>{{ roleName(group.role) }}</h4>
             <small>{{ group.members.length }}</small>
           </header>
           <ul class="credit-group__members">
             <li v-for="member in group.members" :key="`${group.role}-${member.name}`">
               <a v-if="member.url" :href="member.url" target="_blank" rel="noreferrer">
                 <span>{{ member.name }}</span>
-                <small v-if="member.note">{{ member.note }}</small>
+                <small v-if="member.note">{{ memberNote(member.note) }}</small>
               </a>
               <span v-else>
                 <span>{{ member.name }}</span>
-                <small v-if="member.note">{{ member.note }}</small>
+                <small v-if="member.note">{{ memberNote(member.note) }}</small>
               </span>
             </li>
           </ul>
@@ -173,8 +250,8 @@ function selectProject(projectId: string) {
 
       <div v-else class="credits-empty">
         <span>NO MATCH</span>
-        <p>没有找到“{{ searchQuery }}”</p>
-        <button type="button" @click="searchQuery = ''">清除搜索</button>
+        <p>{{ copy.noMatch }} “{{ searchQuery }}”</p>
+        <button type="button" @click="searchQuery = ''">{{ copy.clearSearch }}</button>
       </div>
     </div>
   </section>

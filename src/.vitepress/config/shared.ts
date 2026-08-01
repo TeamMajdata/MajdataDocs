@@ -119,6 +119,29 @@ export const shared = defineConfig({
               },
             },
           },
+          en: {
+            translations: {
+              button: {
+                buttonText: 'Search',
+                buttonAriaLabel: 'Search',
+              },
+              modal: {
+                displayDetails: 'Display detailed list',
+                resetButtonTitle: 'Reset search',
+                backButtonTitle: 'Close search',
+                noResultsText: 'No results found',
+                footer: {
+                  selectText: 'Select',
+                  selectKeyAriaLabel: 'Enter',
+                  navigateText: 'Navigate',
+                  navigateUpKeyAriaLabel: 'Up arrow',
+                  navigateDownKeyAriaLabel: 'Down arrow',
+                  closeText: 'Close',
+                  closeKeyAriaLabel: 'Escape',
+                },
+              },
+            },
+          },
         },
         miniSearch: {
           options: {

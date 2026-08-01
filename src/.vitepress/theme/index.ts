@@ -20,7 +20,7 @@ import { NolebasePagePropertiesPlugin } from '@nolebase/vitepress-plugin-page-pr
 import TwoslashFloatingVue from '@shikijs/vitepress-twoslash/client'
 import { Footer, Links } from '@theojs/lumen' //不好看
 import codeblocksFold from 'vitepress-plugin-codeblocks-fold'
-import { Footer_Data } from '../data/footerData.ts'
+import { Footer_Data, Footer_Data_en } from '../data/footerData.ts'
 import { theme } from 'vitepress-openapi/client'
 
 import '@nolebase/vitepress-plugin-enhanced-mark/client/style.css'
@@ -42,10 +42,13 @@ import './custom.css'
 export default {
   extends: DefaultTheme,
   Layout: () => {
+    const { lang } = useData()
+
     return h(DefaultTheme.Layout, null, {
       // 'aside-outline-before': () => h(ShareButton),
       'home-hero-before': () => h(Hero),
-      'layout-bottom': () => h(Footer, { Footer_Data }),
+      'layout-bottom': () =>
+        h(Footer, { Footer_Data: lang.value === 'en-US' ? Footer_Data_en : Footer_Data }),
       'nav-bar-content-after': () => h(NolebaseEnhancedReadabilitiesMenu),
       'nav-screen-content-after': () => h(NolebaseEnhancedReadabilitiesScreenMenu),
       'layout-top': () => [h(NolebaseHighlightTargetedHeading)],
@@ -106,6 +109,30 @@ export default {
               title: '更新时间',
               formatAsFrom: true,
               dateFnsLocaleName: 'zhCN',
+            },
+          ],
+          'en-US': [
+            {
+              key: 'wordCount',
+              type: 'dynamic',
+              title: 'Words',
+              options: {
+                type: 'wordsCount',
+              },
+            },
+            {
+              key: 'readingTime',
+              type: 'dynamic',
+              title: 'Reading time',
+              options: {
+                type: 'readingTime',
+              },
+            },
+            {
+              key: 'updatedAt',
+              type: 'datetime',
+              title: 'Updated',
+              formatAsFrom: true,
             },
           ],
         },

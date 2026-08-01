@@ -33,6 +33,7 @@ import 'vitepress-markdown-timeline/dist/theme/index.css'
 import 'vitepress-plugin-codeblocks-fold/style/index.css'
 import 'vitepress-openapi/dist/style.css'
 import Confetti from './components/Confetti.vue'
+import ContributorCredits from './components/ContributorCredits.vue'
 
 import Hero from '../theme/Layout.vue'
 import NCard from './components/NCard.vue'
@@ -56,6 +57,7 @@ export default {
     theme.enhanceApp(ctx)
 
     app.component('Confetti', Confetti) //注册全局组件
+    app.component('ContributorCredits', ContributorCredits)
     app.use(NolebaseEnhancedReadabilitiesPlugin, {
       spotlight: {
         disableHelp: true,

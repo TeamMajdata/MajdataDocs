@@ -1,0 +1,230 @@
+{
+  "projects": [
+    {
+      "id": "majdataplay",
+      "name": "MajdataPlay",
+      "description": "从核心开发到谱面、音乐与测试，感谢每一位让 MajdataPlay 变得完整的人。",
+      "repository": "https://github.com/LingFeng-bbben/MajdataPlay",
+      "groups": [
+        {
+          "role": "策划",
+          "members": [
+            {
+              "name": "bbben"
+            }
+          ]
+        },
+        {
+          "role": "主程序员、判定开发大神",
+          "members": [
+            {
+              "name": "Lezi"
+            }
+          ]
+        },
+        {
+          "role": "IO Developer",
+          "members": [
+            {
+              "name": "istareatscreens"
+            }
+          ]
+        },
+        {
+          "role": "无敌 UI 美工设计",
+          "members": [
+            {
+              "name": "AeCw"
+            }
+          ]
+        },
+        {
+          "role": "荣誉鸽子",
+          "members": [
+            {
+              "name": "墨滢"
+            }
+          ]
+        },
+        {
+          "role": "幕后黑手",
+          "members": [
+            {
+              "name": "小小红白 feat. 小小蓝白"
+            }
+          ]
+        },
+        {
+          "role": "小小蓝白",
+          "members": [
+            {
+              "name": "夜宵紫苑",
+              "note": "CV"
+            }
+          ]
+        },
+        {
+          "role": "原创谱面设计",
+          "members": [
+            {
+              "name": "Dororo feat. Renekton"
+            },
+            {
+              "name": "おにねこ"
+            },
+            {
+              "name": "shangle"
+            },
+            {
+              "name": "ルルリリ"
+            },
+            {
+              "name": "NaOH"
+            },
+            {
+              "name": "魔法使いシラガ"
+            },
+            {
+              "name": "Hatsune"
+            },
+            {
+              "name": "Akatsune"
+            },
+            {
+              "name": "HarKln"
+            },
+            {
+              "name": "YYlY"
+            },
+            {
+              "name": "reflectW"
+            },
+            {
+              "name": "DO-LIVE"
+            },
+            {
+              "name": "谱面-200号"
+            },
+            {
+              "name": "伍舟之雨"
+            }
+          ]
+        },
+        {
+          "role": "测试工程师",
+          "members": [
+            {
+              "name": "小豆亚麻"
+            },
+            {
+              "name": "桜语不詳"
+            }
+          ]
+        },
+        {
+          "role": "角色设计",
+          "members": [
+            {
+              "name": "Sion"
+            },
+            {
+              "name": "舒肤鸡sama"
+            },
+            {
+              "name": "Wh1te"
+            }
+          ]
+        },
+        {
+          "role": "音乐",
+          "members": [
+            {
+              "name": "bbben"
+            },
+            {
+              "name": "汪ワンー feat. 東條空助"
+            },
+            {
+              "name": "DJ Momo"
+            },
+            {
+              "name": "KeyLord"
+            },
+            {
+              "name": "魔法使いシラガ"
+            },
+            {
+              "name": "高潮夙培",
+              "note": "长笛"
+            },
+            {
+              "name": "斯美塔那么瘦",
+              "note": "手风琴"
+            }
+          ]
+        },
+        {
+          "role": "International Contributors",
+          "members": [
+            {
+              "name": "RyutoSetsujin"
+            },
+            {
+              "name": "itBunHop"
+            },
+            {
+              "name": "Hisui"
+            },
+            {
+              "name": "ANNET"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "majdataview",
+      "name": "MajdataView",
+      "description": "感谢参与 MajdataView 开发，以及为其奠定基础的每一位贡献者。",
+      "repository": "https://github.com/LingFeng-bbben/MajdataView",
+      "groups": [
+        {
+          "role": "Main Programmer",
+          "members": [
+            {
+              "name": "bbben"
+            },
+            {
+              "name": "Moying-moe"
+            }
+          ]
+        },
+        {
+          "role": "Mirroring",
+          "members": [
+            {
+              "name": "Wh1tyEnd"
+            }
+          ]
+        },
+        {
+          "role": "Hanabi Effect",
+          "members": [
+            {
+              "name": "青山散人"
+            }
+          ]
+        },
+        {
+          "role": "Special thanks",
+          "members": [
+            {
+              "name": "Celeca",
+              "note": "Simai developer"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -38,3 +38,9 @@ GPL 协议意味着如果你对软件进行了二次修改并准备公开分发,
 [![Readme Card](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=MajdataNet)](https://github.com/TeamMajdata/MajdataNet)
 [![Readme Card](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=MajdataProvider)](https://github.com/TeamMajdata/MajdataProvider)
 [![Readme Card](https://readme-stats.vanillaaaa.org/api/pin/?username=kirisamevanilla&repo=MajdataHub)](https://github.com/KirisameVanilla/MajdataHub)
+
+## 贡献者
+
+名单按项目与分工整理。感谢每一位参与开发、设计、测试和内容制作的朋友。
+
+<ContributorCredits />

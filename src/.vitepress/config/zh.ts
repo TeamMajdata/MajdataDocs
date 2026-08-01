@@ -117,6 +117,17 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           ]
         },
         {
+          text: '开发',
+          base: '/majdataplay/development',
+          collapsed: true,
+          items: [
+            {
+              text: '编译 MajdataPlay',
+              link: '/build'
+            }
+          ]
+        },
+        {
           text: '常见问题',
           link: '/faq'
         },

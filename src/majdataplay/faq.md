@@ -9,3 +9,9 @@
 ## 如何移动游戏窗口到另一个屏幕？
 
 > 同时按下 `Alt` + `Enter` 键取消全屏, 然后使用鼠标拖动到目标屏幕, 再次同时按下 `Alt` + `Enter` 键开启全屏
+
+## 如何查看 MajdataPlay 的日志？
+
+1. 找到[配置文件](/majdataplay/configuration/)所在的文件夹。
+2. 打开其中的 `Logs` 文件夹。
+3. 使用文本编辑器打开 `MajPlayRuntime.log` 文件。

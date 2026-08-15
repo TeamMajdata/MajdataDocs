@@ -117,6 +117,21 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           ]
         },
         {
+          text: '判定',
+          base: '/majdataplay/judgment',
+          collapsed: true,
+          items: [
+            {
+              text: 'Tap',
+              link: '/tap'
+            },
+            {
+              text: 'Hold',
+              link: '/hold'
+            }
+          ]
+        },
+        {
           text: '开发',
           base: '/majdataplay/development',
           collapsed: true,

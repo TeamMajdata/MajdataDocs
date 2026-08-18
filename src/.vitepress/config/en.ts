@@ -129,6 +129,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
               text: 'Hold',
               link: '/hold',
             },
+            {
+              text: 'Slide',
+              link: '/slide',
+            },
           ],
         },
         {

@@ -136,6 +136,17 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           ],
         },
         {
+          text: 'Simai Extensions',
+          base: '/en/majdataplay/simai-extension',
+          collapsed: true,
+          items: [
+            {
+              text: 'Slide Code',
+              link: '/slidecode'
+            }
+          ]
+        },
+        {
           text: 'Development',
           base: '/en/majdataplay/development',
           collapsed: true,

@@ -86,7 +86,7 @@ If a numeric parameter is not preceded by an instruction letter, search backward
 
 ---
 
-# 3. Parsing
+## 3. Parsing
 
 When parsing a Slide Code, only four types of transitions need to be considered:
 
@@ -97,7 +97,7 @@ When parsing a Slide Code, only four types of transitions need to be considered:
 
 ---
 
-## 3.1. Geometric Definitions
+### 3.1. Geometric Definitions
 
 We first define the geometry.
 
@@ -111,7 +111,7 @@ $$
 
 The specific numerical value will not be used below; all formulas are expressed in terms of `R`.
 
-### 3.1.1. Nodes
+#### 3.1.1. Nodes
 
 The angular positions of the eight outer buttons are:
 
@@ -129,7 +129,7 @@ There are 17 nodes in total, corresponding to `A1~8`, `B1~8`, and `C`.
 
 The nodes corresponding to the `X` and `K` instructions are identical to those of the `A` instruction.
 
-#### A Nodes
+##### A Nodes
 
 The A1~8 nodes lie on the judgment line. Their coordinates are:
 
@@ -137,7 +137,7 @@ $$
 A_n = R(\cos\theta_n + i\sin\theta_n)
 $$
 
-#### B Nodes
+##### B Nodes
 
 The positions of the B1~8 nodes are determined by the geometry shown in the diagram. Their coordinates are:
 
@@ -147,7 +147,7 @@ R\frac{\cos 67.5^\circ}{\cos 22.5^\circ}
 (\cos\theta_n + i\sin\theta_n)
 $$
 
-#### C Node
+##### C Node
 
 The C node is simply the origin:
 
@@ -157,11 +157,11 @@ $$
 
 ---
 
-### 3.1.2. Circular Tracks
+#### 3.1.2. Circular Tracks
 
 There are ten circular tracks, numbered `0~9`.
 
-#### Track 0
+##### Track 0
 
 Track `0` is centered at C and tangent to the line $A_5A_8$.
 
@@ -173,7 +173,7 @@ R\cos67.5^\circ
 (\cos t + i\sin t)
 $$
 
-#### Tracks 1~8
+##### Tracks 1~8
 
 Tracks `1~8` are circles passing through C and tangent to the lines connecting adjacent A areas.
 
@@ -200,7 +200,7 @@ R\frac{\cos22.5^\circ}{2}
 (\cos t + i\sin t)
 $$
 
-#### Track 9
+##### Track 9
 
 Track `9` is the outermost circle, i.e. the judgment line itself.
 
@@ -214,9 +214,9 @@ A diagram is omitted here.
 
 ---
 
-# 3.2. The Four Types of Path Connections
+### 3.2. The Four Types of Path Connections
 
-## 3.2.1. Node → Node
+#### 3.2.1. Node → Node
 
 Suppose we want to move from node $z_1$ to node $z_2$.
 
@@ -245,7 +245,7 @@ These values can simply be packaged into the corresponding segment of the piecew
 
 ---
 
-## 3.2.2. Node → Track
+#### 3.2.2. Node → Track
 
 First, only nodes located **outside the geometric shape of a track** can enter that track.
 
@@ -263,7 +263,7 @@ For nodes that lie exactly on a track, there are two special cases:
 
 In these cases, no tangent entry segment is required.
 
-### Tangent Entry
+##### Tangent Entry
 
 In all other cases, a suitable tangent must be calculated for entering the track.
 
@@ -318,7 +318,7 @@ After entering the track, how the Slide continues along the track depends on the
 
 ---
 
-## 3.2.3. Track → Node
+#### 3.2.3. Track → Node
 
 Regardless of the previous instruction, the path is now located on the track and must leave the track along a tangent toward the target node.
 
@@ -339,7 +339,7 @@ If the target node lies exactly on the track, $\beta$ is simply the angular posi
 
 We also have the angular position $\beta_0$ of the current path endpoint relative to the track center. This is the tangent-point angle calculated in the previous step.
 
-### Traveling Along the Track
+##### Traveling Along the Track
 
 We simply travel along the track from angle $\beta_0$ to angle $\beta$ in the specified direction.
 
@@ -375,11 +375,11 @@ $$
 
 If necessary, a tangent segment from the track to the target node is then appended. The two parametric segments are combined into the corresponding piecewise path function.
 
-### Important: Always Take the Shortest Arc
+##### Important: Always Take the Shortest Arc
 
 When traveling along a track, the path should always use the **shortest possible arc** in the specified direction. Under normal circumstances, the path must never make an additional full revolution.
 
-### Special Case: Identical Angles
+##### Special Case: Identical Angles
 
 There is one exception.
 
@@ -399,7 +399,7 @@ $$
 
 That is, if the angular difference is within **0.057°**, the two angles are considered to represent the same point, and the Slide should make one complete revolution.
 
-### Angle Normalization
+##### Angle Normalization
 
 There is another issue in the implementation: because $\beta$ and $\beta_0$ are obtained through multiple floating-point calculations, they may not necessarily lie within the principal range.
 
@@ -420,7 +420,7 @@ Then, depending on the travel direction:
 
 ---
 
-## 3.2.4. Track → Track
+#### 3.2.4. Track → Track
 
 For a Track → Track transition, both track instructions must have the same direction:
 
@@ -429,7 +429,7 @@ For a Track → Track transition, both track instructions must have the same dir
 
 `P` and `Q` cannot be connected directly. A node instruction must be placed between them.
 
-### Same Track: Track 3 → Track 3
+##### Same Track: Track 3 → Track 3
 
 When the two track instructions refer to the same track, for example:
 
@@ -455,7 +455,7 @@ The sign depends on the travel direction. The unit tangent vector and path lengt
 
 ---
 
-# 3.3. Transitions Between Tracks 0~8
+### 3.3. Transitions Between Tracks 0~8
 
 Next, consider transitions between tracks `0~8`, for example:
 
@@ -469,7 +469,7 @@ First, note that the two tangent points of an external common tangent have the s
 
 Therefore, once we calculate the angular position of the tangent point relative to the circle centers, the entire tangent segment is uniquely determined.
 
-## Tracks 1~8
+#### Tracks 1~8
 
 Because tracks `1~8` all have the same radius, calculating the tangent-point angles of their external common tangent is relatively simple.
 
@@ -489,7 +489,7 @@ For clockwise travel, rotate the vector **90° counterclockwise** instead.
 
 ---
 
-## Track 0 and Tracks 1~8
+#### Track 0 and Tracks 1~8
 
 The transition between track 0 and tracks `1~8` is slightly more complicated because their radii are different.
 
@@ -508,7 +508,7 @@ The appropriate tangent must then be selected according to the travel direction:
 
 ---
 
-# 3.4. Track Transitions Involving Track 9
+### 3.4. Track Transitions Involving Track 9
 
 Transitions involving track `9`, the outermost track, are considerably more complicated.
 
@@ -519,7 +519,7 @@ First:
 
 Instead, an appropriate **common tangent circle** is used to perform the transition.
 
-## Common Tangent Circle Parameters
+#### Common Tangent Circle Parameters
 
 The derivation of this auxiliary circle is rather complicated, so the resulting formulas are given directly here without explanation.
 

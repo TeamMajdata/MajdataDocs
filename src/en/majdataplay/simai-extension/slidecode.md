@@ -526,10 +526,10 @@ The derivation of this auxiliary circle is rather complicated, so the resulting 
 First, define:
 
 $$
-\gamma = 44.2^\circ
+\gamma = 45^\circ
 $$
 
-This angle is defined as shown in the diagram. A value of `44.2°` provides a suitable result.
+This angle is defined as shown in the diagram. A value of `45°` provides a suitable result.
 
 Then define:
 

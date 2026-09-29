@@ -15,3 +15,10 @@
 1. 找到[配置文件](/majdataplay/configuration/)所在的文件夹。
 2. 打开其中的 `Logs` 文件夹。
 3. 使用文本编辑器打开 `MajPlayRuntime.log` 文件。
+
+## 遇到其他问题？
+
+1. 加入MajdataPlay QQ交流群 `667644338`。
+2. 描述你遇到的问题（<mark>尽量详细</mark>）。
+3. 上传日志文件。
+4. 耐心等待群友解答。

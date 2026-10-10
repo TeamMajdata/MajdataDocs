@@ -80,6 +80,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
               link: '/'
             },
             {
+              text: '配置详解',
+              link: '/configuration'
+            },
+            {
               text: '联网',
               link: '/online'
             },

@@ -255,15 +255,15 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           collapsed: false,
           items: [
             { text: 'Overview', link: '/index' },
-            { text: 'Instructions', link: '/instructions' },
-            { text: 'Expansion and Shorthand Rules', link: '/shorthand' },
-            { text: 'Geometric Definitions', link: '/geometry' },
-            { text: 'Node → Node', link: '/node-to-node' },
-            { text: 'Node → Track', link: '/node-to-track' },
-            { text: 'Track → Node', link: '/track-to-node' },
-            { text: 'Track → Track', link: '/track-to-track' },
-            { text: 'Transitions Between Tracks 0–8', link: '/inner-transitions' },
-            { text: 'Track Transitions Involving Track 9', link: '/outer-transitions' }
+            { text: 'Node Instructions', link: '/nodes' },
+            { text: 'Track Instructions', link: '/tracks' },
+            { text: 'Expansion and Simai Compatibility', link: '/shorthand' },
+            { text: 'Node and Track Connections', link: '/node-paths' },
+            { text: 'Track-to-Track Transitions', link: '/track-transitions' },
+            { text: 'Judgment Queue', link: '/judgment' },
+            { text: 'Appearance Design Tips', link: '/appearance' },
+            { text: 'Playability Design Tips', link: '/playability' },
+            { text: 'Examples', link: '/examples' }
           ]
         }
       ]

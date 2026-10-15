@@ -19,3 +19,5 @@
 
 - apk 文件版: `/storage/emulated/0/Documents/MajdataPlay/settings.json`
 - Play 商店版: `/storage/emulated/0/Android/data/net.majdata.majdataplay/files/settings.json`
+
+建议使用`MT管理器`等其他带有编辑器的文件管理软件进行更改

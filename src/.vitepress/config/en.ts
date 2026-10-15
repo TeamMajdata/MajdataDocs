@@ -80,6 +80,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
               link: '/',
             },
             {
+              text: 'Configuration reference',
+              link: '/configuration',
+            },
+            {
               text: 'Online services',
               link: '/online',
             },

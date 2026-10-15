@@ -29,7 +29,7 @@ TouchDrop 重写了`Judge`，使用独立的`TOUCH_JUDGE_*`区间（与 TouchHol
 | Great 2nd | - | `(13f, 14f]` | `1f` |
 | Great 3rd | - | `(14f, 15f]` | `1f` |
 | Good | - | `(15f, 18f]` | `3f` |
-| Miss | `(18f, inf)` | - | - |
+| Miss | - | `(18f, inf)` | - |
 
 ### Miss
 

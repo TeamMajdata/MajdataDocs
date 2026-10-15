@@ -29,7 +29,7 @@ This page covers both Touch and TouchHold.
 | Great 2nd | - | `(13f, 14f]` | `1f` |
 | Great 3rd | - | `(14f, 15f]` | `1f` |
 | Good | - | `(15f, 18f]` | `3f` |
-| Miss | `(18f, inf)` | - | - |
+| Miss | - | `(18f, inf)` | - |
 
 ### Miss
 

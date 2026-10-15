@@ -147,6 +147,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             {
               text: 'External IO Manager',
               link: '/external-io-manager',
+            },
+            {
+              text: 'New Device Support',
+              link: '/new-device',
             }
           ],
         },

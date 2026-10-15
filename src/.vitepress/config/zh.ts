@@ -147,6 +147,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             {
               text: '外部IO管理器',
               link: '/external-io-manager'
+            },
+            {
+              text: '适配新设备',
+              link: '/new-device'
             }
           ]
         },

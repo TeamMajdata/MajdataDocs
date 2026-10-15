@@ -1,4 +1,4 @@
-# Touch
+# Touch & TouchHold
 
 Class: [TouchDrop.cs](https://github.com/LingFeng-bbben/MajdataPlay/blob/dev/Assets/Scripts/Scenes/Game/NoteBehaviours/TouchDrop.cs), [TouchHoldDrop.cs](https://github.com/LingFeng-bbben/MajdataPlay/blob/dev/Assets/Scripts/Scenes/Game/NoteBehaviours/TouchHoldDrop.cs)
 
@@ -7,7 +7,7 @@ Method:
 - `Judge(float currentSec)` (TouchDrop inherits from [NoteDrop.cs](https://github.com/LingFeng-bbben/MajdataPlay/blob/dev/Assets/Scripts/Scenes/Game/NoteBehaviours/NoteDrop.cs); TouchHoldDrop overrides it)
 - `HoldEndJudge(float currentSec)` (TouchHoldDrop, inherited from [NoteLongDrop.cs](https://github.com/LingFeng-bbben/MajdataPlay/blob/dev/Assets/Scripts/Scenes/Game/NoteBehaviours/NoteLongDrop.cs))
 
-This page covers both Touch (`tap`/`hanabi` and other single touches) and TouchHold (`fp`/`fh`, etc.).
+This page covers both Touch and TouchHold.
 
 ::: info
 

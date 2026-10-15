@@ -138,7 +138,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
               link: '/slide',
             },
             {
-              text: 'Touch',
+              text: 'Touch & TouchHold',
               link: '/touch',
             },
           ],

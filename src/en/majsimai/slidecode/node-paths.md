@@ -16,7 +16,7 @@ As is well known, the relationship between a point and a circle has three cases:
 
 When the node is inside the track, e.g. a sequence like `B2P3`, **this connection is forbidden** because there is no reasonable connecting path.
 
-![内含节点.png](./assets/内含节点.png)
+![内含节点.png](../../majsimai/slidecode/assets/内含节点.png)
 
 All cases where a node is inside a track are:
 
@@ -36,7 +36,7 @@ The following cases may appear to be "on the track" but are actually outside it,
 
 When the node is outside the track, the tangent point must be calculated based on the specific rotation direction of the track instruction, and the path moves along the corresponding tangent to the tangent point. The following diagram shows the connection for `A1P5`, which is easy to understand:
 
-![A1P5.png](./assets/A1P5.png)
+![A1P5.png](../../majsimai/slidecode/assets/A1P5.png)
 
 ## Track → Node
 
@@ -44,26 +44,26 @@ Once on the track, how far to rotate depends on what instruction follows. When a
 
 For example, continuing the `A1P5` example from above, if the full segment is `A1P5A7`, then the `P5A7` part is parsed as shown below:
 
-![P5A7.png](./assets/P5A7.png)
+![P5A7.png](../../majsimai/slidecode/assets/P5A7.png)
 
 When calculating the rotation angle, the parser **always takes the shortest possible path and never makes an extra revolution under any circumstances**. This is why translating the official `1pp4` and `1pp5` shapes requires explicitly specifying the extra revolution. However, for cases where the rotation start and end points happen to coincide (e.g. the official `8p5`), a full 360° revolution is made. In summary, when no extra revolution is explicitly specified, **the rotation angle is always in the range `(0°, 360°]`** (there is one exception in [Track-to-Track Transitions](./track-transitions)).
 
 Using the above three connection types, we can already analyze much Slide Code. For example, if the above example is a complete Slide, it is written as `1P5K7`:
 
-![1P5K7.png](./assets/1P5K7.png)
+![1P5K7.png](../../majsimai/slidecode/assets/1P5K7.png)
 
 As another example, the reverse ppqq-Slide shown in the [Overview](./index) can be obtained by translating the forward ppqq into Slide Code and then writing it backward. For example, the reverse of `5pp4/3qq4` is obtained by first translating to `5P7K4/3Q2K4`, then reversing each to `4Q7K5/4P2K3`. Of course, since it becomes a same-head Slide, the final form using same-head Slide syntax is `4Q7K5 *P2K3`:
 
-![反向ppqq.png](./assets/反向ppqq.png)
+![反向ppqq.png](../../majsimai/slidecode/assets/反向ppqq.png)
 
 Another example is `4Q2K4 *P7K4`:
 
-![双手爱心.png](./assets/双手爱心.png)
+![双手爱心.png](../../majsimai/slidecode/assets/双手爱心.png)
 
 The following is `4P2B8P7K4`, using the B8 area as a transfer point between two side circles:
 
-![单手爱心.png](./assets/单手爱心.png)
+![单手爱心.png](../../majsimai/slidecode/assets/单手爱心.png)
 
 The following is `1Q2CP6K5`, using the C area as a transfer point. Since the two circles happen to be tangent at the center of the screen, the transition looks very smooth:
 
-![1Q2CP6K5.png](./assets/1Q2CP6K5.png)
+![1Q2CP6K5.png](../../majsimai/slidecode/assets/1Q2CP6K5.png)

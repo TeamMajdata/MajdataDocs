@@ -8,7 +8,7 @@ This aspect is actually quite similar to using Festival-era connected Slides. Th
 
 A special mention goes to Slides that "go around the same circle many times," such as `1P00000K8` below. These are actually very hard to read from a player's perspective, because it is difficult to directly see how many revolutions to make. So this shape is better suited for slow Slides, again giving the player time to "defuse."
 
-![1P00000K8.png](./assets/1P00000K8.png)
+![1P00000K8.png](../../majsimai/slidecode/assets/1P00000K8.png)
 
 Generally, going around the same circle more than about one and a half revolutions makes it difficult to judge the revolution count at a glance (and one and a half is already very long — Slides with long trajectories are inherently unsuitable for fast speeds).
 

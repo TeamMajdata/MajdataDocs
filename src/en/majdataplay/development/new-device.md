@@ -4,20 +4,6 @@ This page is for developers who want to write a device backend in MajdataPlay fo
 
 > This document is based on the current implementation under `Assets/Scripts/IO`: `IODevice`, `HidDevice`, `SerialDevice`, `UsbDevice`, `InputStateBuffer`, `LedOutputState`, `GameDeviceManager`, and the vendor implementations (Rosen, Pipe, Dao, Nov). If a comment disagrees with the actual code, the code wins.
 
-| Section | Content | For whom |
-| --- | --- | --- |
-| [1. Architecture Overview](#_1-architecture-overview) | The three-layer structure and data flow of the device layer | Everyone |
-| [2. Choosing Capability Interfaces](#_2-choosing-capability-interfaces) | Button / touch / LED capability interfaces; button and sensor slot definitions | Everyone |
-| [3. State Buffers](#_3-state-buffers) | How to use `InputStateBuffer` / `LedOutputState` | While writing the device class |
-| [4. Choosing a Transport Base Class](#_4-choosing-a-transport-base-class) | Serial / HID / WinUSB / custom transport trade-offs | While writing the device class |
-| [5. Threading Model and Lifetime](#_5-threading-model-and-lifetime) | Runtime behavior of connect, reconnect, polling and disconnect | While writing the device class |
-| [6. Input Device Example: HID Button Ring](#_6-input-device-example-hid-button-ring) | A ready-to-reference HID button ring implementation | While writing the device class |
-| [7. Output Device Example: Serial LED](#_7-output-device-example-serial-led) | A ready-to-reference serial LED implementation | While writing the device class |
-| [8. Registering the Device](#_8-registering-the-device) | `IODetector`, vendor enum and `GameDeviceManager` registration | While wiring into the game |
-| [9. Existing Implementations for Reference](#_9-existing-implementations-for-reference) | Vendor implementation quick reference and quick-testing advice | Everyone |
-| [10. Appendix: Pre-refactor Adaptation](#_10-appendix-device-adaptation-before-the-io-framework-refactor) | How adaptation worked before the IO framework refactor (`fbfe11d7f`) | While maintaining old revisions |
-| [11. Checklist](#_11-checklist) | Item-by-item self-check before delivery | Before shipping |
-
 ## 1. Architecture Overview
 
 The device layer of MajdataPlay.IO consists of three parts:

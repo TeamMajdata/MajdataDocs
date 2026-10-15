@@ -137,6 +137,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
               text: 'Slide',
               link: '/slide',
             },
+            {
+              text: 'Touch',
+              link: '/touch',
+            },
           ],
         },
         {

@@ -31,32 +31,32 @@ Using Slide Code you can draw the following Slides that cannot be written in tra
 
 Reverse ppqq-Slide:
 
-![反向ppqq.png](../../majsimai/slidecode/assets/反向ppqq.png)
+![反向ppqq.png](./assets/反向ppqq.png)
 
 Larger heart-shaped Slide:
 
-![双手爱心.png](../../majsimai/slidecode/assets/双手爱心.png)
+![双手爱心.png](./assets/双手爱心.png)
 
 One-handed heart:
 
-![单手爱心.png](../../majsimai/slidecode/assets/单手爱心.png)
+![单手爱心.png](./assets/单手爱心.png)
 
 An arc Slide that looks a lot like `1v4` but is not `1v4`:
 
-![弧线1v4.png](../../majsimai/slidecode/assets/弧线1v4.png)
+![弧线1v4.png](./assets/弧线1v4.png)
 
 A polyline Slide that looks a lot like `1p5` but is not `1p5`:
 
-![折线1p5.png](../../majsimai/slidecode/assets/折线1p5.png)
+![折线1p5.png](./assets/折线1p5.png)
 
 Updated but not necessarily hotter letter shapes:
 
-![字母A.png](../../majsimai/slidecode/assets/字母A.png)
+![字母A.png](./assets/字母A.png)
 
 Yin-yang fish:
 
-![阴阳鱼.png](../../majsimai/slidecode/assets/阴阳鱼.png)
+![阴阳鱼.png](./assets/阴阳鱼.png)
 
 Other indescribable things:
 
-![不可名状.png](../../majsimai/slidecode/assets/不可名状.png)
+![不可名状.png](./assets/不可名状.png)

@@ -12,11 +12,11 @@ Players familiar with Maimai should know that official Slide judgment only check
 
 The positions of these 17 nodes are shown below:
 
-![17节点.png](../../majsimai/slidecode/assets/17节点.png)
+![17节点.png](./assets/17节点.png)
 
 Note the differences from the corresponding Touch positions:
 
-![节点位置.png](../../majsimai/slidecode/assets/节点位置.png)
+![节点位置.png](./assets/节点位置.png)
 
 The reason for introducing these positional differences is to maximize the reuse of official Slide shapes, which to some extent makes the resulting Slides look more aesthetically pleasing.
 
@@ -35,16 +35,16 @@ With the above four instructions we can already write the following simple polyl
 
 `1B7K5`, i.e. starting from key 1, turning at B7, ending at key 5 — looks a lot like `1p5`.
 
-![折线1p5.png](../../majsimai/slidecode/assets/折线1p5.png)
+![折线1p5.png](./assets/折线1p5.png)
 
 `1A3A5A7K1` is basically the Slide Code way of writing `1-3-5-7-1`.
 
-![正方形.png](../../majsimai/slidecode/assets/正方形.png)
+![正方形.png](./assets/正方形.png)
 
 `8B7A6B5A4B3A2B1K8` is a four-pointed star.
 
-![四芒星.png](../../majsimai/slidecode/assets/四芒星.png)
+![四芒星.png](./assets/四芒星.png)
 
 `8B6CB3K1` looks like a small W.
 
-![W形.png](../../majsimai/slidecode/assets/W形.png)
+![W形.png](./assets/W形.png)

@@ -153,7 +153,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
               link: '/external-io-manager'
             },
             {
-              text: '适配新设备',
+              text: '设备适配',
               link: '/new-device'
             }
           ]

@@ -1,5 +1,9 @@
 # Install MajdataPlay
 
+::: warning Linux and macOS need testers
+Very few people play MajdataPlay on Linux and macOS, so testing is limited: Linux is **partially supported**, and on macOS only the DAO device has been fully tested. We really need help testing these platforms. If you are willing to help, report your OS version, device model, reproduction steps and the logs under `Logs/` in [Issues](https://github.com/LingFeng-bbben/MajdataPlay/issues).
+:::
+
 ## Windows
 
 ### Use Majplay-update-cli
@@ -66,6 +70,22 @@ Use Majplay-update-cli above for stable builds and automatic updates. To get a n
     }
   ]"
 />
+
+## Linux
+
+The Linux build is currently distributed as a nightly build; there is no official installer. Only the **x64** build is provided:
+
+1. Download `MajdataPlay-StandaloneLinux64-nightly.zip` from the [Nightly Release](https://github.com/LingFeng-bbben/MajdataPlay/releases/tag/nightly).
+2. Extract it to any directory and make the executable runnable: `chmod +x MajdataPlay`
+3. Run `./MajdataPlay` from that directory.
+
+The Linux build depends on the graphics and audio stack of your distribution. If it fails to start, include the terminal output and the logs under `Logs/` in your report.
+
+## macOS
+
+The macOS build is currently **Apple Silicon (ARM64)** only. We recommend installing and updating it through [RhythmHub](https://rhythmhub.sparkbarry.com/en/); you can also download `MajdataPlay-StandaloneOSX-nightly.zip` from the [Nightly Release](https://github.com/LingFeng-bbben/MajdataPlay/releases/tag/nightly) and extract it manually. No prebuilt Intel Mac version is available.
+
+If macOS says it cannot verify the developer when you first open `MajdataPlay.app`, right-click it and choose **Open**, or allow it under **System Settings > Privacy & Security**.
 
 ## iOS
 

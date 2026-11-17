@@ -1,5 +1,9 @@
 # 安装
 
+::: warning Linux / macOS 需要测试者
+Linux 和 macOS 版的玩家很少，测试覆盖也有限：Linux 目前为**部分支持**，macOS 目前只完整测试过 DAO 设备。我们非常需要有人帮忙测试。如果你愿意，请在 [Issues](https://github.com/LingFeng-bbben/MajdataPlay/issues) 反馈系统版本、设备型号、复现步骤和 `Logs/` 日志。
+:::
+
 ## Windows
 
 ### 使用 Majplay-update-cli
@@ -66,6 +70,22 @@ RhythmHub 是 MajdataPlay 的桌面启动器，可通过启动器下载、更新
     }
   ]"
 />
+
+## Linux
+
+Linux 版目前以 Nightly 构建分发，官方没有提供安装器。目前只提供 **x64** 构建：
+
+1. 从 [Nightly Release](https://github.com/LingFeng-bbben/MajdataPlay/releases/tag/nightly) 下载 `MajdataPlay-StandaloneLinux64-nightly.zip`。
+2. 解压到任意目录，并给主程序添加可执行权限：`chmod +x MajdataPlay`
+3. 在解压目录中运行 `./MajdataPlay`。
+
+Linux 版依赖当前发行版的图形与音频环境。如果无法启动，请附上终端输出和 `Logs/` 日志反馈。
+
+## macOS
+
+macOS 版目前只提供 **Apple Silicon (ARM64)** 构建，推荐通过 [RhythmHub](https://rhythmhub.sparkbarry.com/en/) 安装和更新；也可以从 [Nightly Release](https://github.com/LingFeng-bbben/MajdataPlay/releases/tag/nightly) 下载 `MajdataPlay-StandaloneOSX-nightly.zip` 手动解压。Intel Mac 暂不提供现成构建。
+
+首次打开 `MajdataPlay.app` 时，如果 macOS 提示无法验证开发者，请右键选择“打开”，或前往“系统设置 > 隐私与安全性”允许运行。
 
 ## iOS
 

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Majdata 工具链（MajdataPlay / MajdataX / MajSimai / MajdataNet）的文档站，基于 VitePress 构建，中英双语。
+Majdata 工具链（MajdataPlay / MajdataX / MajSimai / MajdataNet）的文档站，基于 VitePress 构建，提供中文、英文和日文版本。
 
 ## 项目结构
 
@@ -11,7 +11,8 @@ src/
 │   │   ├── index.ts    # 入口，合并 locales
 │   │   ├── shared.ts   # 共享配置（插件、主题）
 │   │   ├── zh.ts       # 中文 nav + sidebar（root locale）
-│   │   └── en.ts       # 英文 nav + sidebar（/en/ locale）
+│   │   ├── en.ts       # 英文 nav + sidebar（/en/ locale）
+│   │   └── ja.ts       # 日文 nav + sidebar（/ja/ locale）
 │   └── theme/          # 自定义主题组件与样式
 ├── majdataplay/        # MajdataPlay 中文文档
 ├── majdatax/           # MajdataX 中文文档
@@ -19,6 +20,7 @@ src/
 ├── majdatanet/         # MajdataNet 中文文档
 ├── other/              # 其他页面
 ├── en/                 # 英文文档（目录结构与中文镜像）
+├── ja/                 # 日文文档（目录结构与中文镜像）
 └── public/             # 静态资源（favicon 等）
 ```
 
@@ -35,22 +37,22 @@ pnpm preview          # 预览构建产物
 
 ## 约定（重要）
 
-### 双语同步
+### 多语言同步
 
-- `src/<lang>/` 下的每个中文文档应存在对应的 `src/en/<lang>/` 英文镜像，目录结构与文件名保持一致。
-- 新增或重命名页面时，必须同时更新 `zh.ts` 和 `en.ts` 的 sidebar；中英侧边栏条目应一一对应。
-- 英文文档是中文文档的翻译，内容结构（标题层级、图片、代码块、表格）应与中文版一致；语序可按英文习惯调整。
+- `src/<lang>/` 下的每个中文文档应存在对应的 `src/en/<lang>/` 英文镜像和 `src/ja/<lang>/` 日文镜像，目录结构与文件名保持一致。
+- 新增或重命名页面时，必须同时更新 `zh.ts`、`en.ts` 和 `ja.ts` 的 sidebar；三种语言的侧边栏条目应一一对应。
+- 英文和日文文档是中文文档的翻译，内容结构（标题层级、图片、代码块、表格）应与中文版一致；语序可按各语言习惯调整。
 
 ### 链接
 
-- 中英文档内的站内链接使用各自的语言前缀：中文 `/majdataplay/xxx`，英文 `/en/majdataplay/xxx`。
+- 各语言文档内的站内链接使用各自的语言前缀：中文 `/majdataplay/xxx`，英文 `/en/majdataplay/xxx`，日文 `/ja/majdataplay/xxx`。
 - 使用 `cleanUrls`，链接不带 `.html` 后缀。
-- 删除或重命名页面时，必须清理仓库内所有指向旧路径的引用（包括 `src/en/majdataplay/simai-extension/slidecode.md` 这类重定向页），否则 VitePress 的 dead link 检查会导致构建失败。
+- 删除或重命名页面时，必须清理仓库内所有指向旧路径的引用（包括 `src/*/majdataplay/simai-extension/slidecode.md` 这类重定向页），否则 VitePress 的 dead link 检查会导致构建失败。
 
 ### 图片资源
 
 - **相对路径图片不能跨目录**。VitePress/Rollup 解析 Markdown 图片时会在路径前加 `./`，`../../` 形式的路径会构建失败（`Could not resolve "./../.."`）。
-- 每个 assets 目录是独立副本：`src/majsimai/slidecode/assets/` 与 `src/en/majsimai/slidecode/assets/` 内容相同但互不共享；修改一方图片时注意同步另一方。
+- 每个 assets 目录是独立副本：`src/majsimai/slidecode/assets/`、`src/en/majsimai/slidecode/assets/` 与 `src/ja/majsimai/slidecode/assets/` 内容相同但互不共享；修改一方图片时注意同步其他语言。
 - 修改后应验证所有引用的图片文件确实存在，并运行 `pnpm build` 确认无资源解析错误。
 
 ### 判定文档

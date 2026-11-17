@@ -37,7 +37,17 @@ The GPL requires you to release the complete corresponding source code when you 
 [![MajdataPlay repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=LingFeng-bbben&repo=MajdataPlay)](https://github.com/LingFeng-bbben/MajdataPlay)
 [![MajdataNet repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=MajdataNet)](https://github.com/TeamMajdata/MajdataNet)
 [![MajdataProvider repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=MajdataProvider)](https://github.com/TeamMajdata/MajdataProvider)
-[![Majplay-update-cli repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=Majplay-update-cli)](https://github.com/TeamMajdata/Majplay-update-cli)
+<Links
+  :items="[
+    {
+      image: 'https://github.githubassets.com/assets/pinned-octocat-093da3e6fa40.svg',
+      name: 'Majplay-update-cli',
+      desc: 'Windows download / update tool',
+      link: 'https://github.com/TeamMajdata/Majplay-update-cli',
+      linkText: 'Open the GitHub repository'
+    }
+  ]"
+/>
 
 ## Contributors
 

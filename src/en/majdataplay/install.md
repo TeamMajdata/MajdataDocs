@@ -6,8 +6,6 @@
 
 Majplay-update-cli is the Windows download and update tool for MajdataPlay. It supports stable and nightly builds, system proxies and GitHub mirrors, and launches the game after updating.
 
-[![Majplay-update-cli repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=Majplay-update-cli)](https://github.com/TeamMajdata/Majplay-update-cli)
-
 <Links
   :items="[
     {

@@ -10,6 +10,7 @@ MajdataPlay 是 Unity 项目，必须使用 Unity Editor 编译。仓库根目�
 - [Unity Hub](https://unity.com/download)
 - `ProjectSettings/ProjectVersion.txt` 中指定的 Unity Editor 版本
 - 目标平台对应的 Unity 构建支持模块
+- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)（仅用于生成 Android Java 绑定，不用于编译 Unity 项目）
 
 当前项目使用 Unity `6000.3.17f1`。项目升级后，请以 `ProjectSettings/ProjectVersion.txt` 中的版本为准。在 Unity Hub 的 **Installs** 页面中安装该版本，再通过 **Add modules** 添加需要的模块。
 
@@ -36,6 +37,18 @@ cd MajdataPlay
 git submodule sync --recursive
 git submodule update --init --recursive
 ```
+
+## 生成 Android Java 绑定
+
+Android 存储后端依赖本地编译的 Java wrapper DLL。首次在 Unity 中导入项目前，在仓库根目录运行：
+
+```powershell
+dotnet run --project Tools/CSharp/AndroidJavaWrapperGenerator/AndroidJavaWrapperGenerator.csproj -- --project . --unity-data "C:/Program Files/Unity Editors/6000.3.17f1/Editor/Data" --no-docs
+```
+
+将 `--unity-data` 指向当前 Unity Editor 的 `Editor/Data` 目录；如果 Android SDK 是单独安装的，用 `--sdk` 指定。生成器会把源码写入 `Tools/AndroidJavaWrapper/src`，并在编译成功后把 `MajdataPlay.Platform.Android.Runtime.dll` 安装到 `Assets/Plugins/MajdataPlay/Platform/Android`。
+
+也可以在 Unity 中运行 **Tools > MajdataPlay > Android > Regenerate Java wrappers**。输出目录、取消操作和更多设置见 `Assets/Plugins/MajdataPlay/Platform/Android/README.md`，部分扩展和重新编译方式见 `Tools/AndroidJavaWrapper/README.md`。
 
 ## 在 Unity Editor 中编译
 

@@ -10,6 +10,7 @@ Install the following before building:
 - [Unity Hub](https://unity.com/download)
 - The Unity Editor version specified in `ProjectSettings/ProjectVersion.txt`
 - The Unity build support module for your target platform
+- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) (only for generating the Android Java bindings, not for building the Unity project)
 
 The project currently uses Unity `6000.3.17f1`. If the project is upgraded, use the version in `ProjectSettings/ProjectVersion.txt` instead. Install that version from the **Installs** page in Unity Hub, then use **Add modules** to install the modules you need.
 
@@ -36,6 +37,18 @@ If you have already cloned the repository, run:
 git submodule sync --recursive
 git submodule update --init --recursive
 ```
+
+## Generate the Android Java bindings
+
+The Android storage backend uses a locally compiled Java wrapper DLL. Before importing the project into Unity for the first time, run this from the repository root:
+
+```powershell
+dotnet run --project Tools/CSharp/AndroidJavaWrapperGenerator/AndroidJavaWrapperGenerator.csproj -- --project . --unity-data "C:/Program Files/Unity Editors/6000.3.17f1/Editor/Data" --no-docs
+```
+
+Point `--unity-data` at the `Editor/Data` directory of the Unity Editor in use; if the Android SDK is installed separately, pass it with `--sdk`. The generator writes its sources to `Tools/AndroidJavaWrapper/src` and installs `MajdataPlay.Platform.Android.Runtime.dll` into `Assets/Plugins/MajdataPlay/Platform/Android` after a successful build.
+
+You can also run **Tools > MajdataPlay > Android > Regenerate Java wrappers** in Unity. See `Assets/Plugins/MajdataPlay/Platform/Android/README.md` for output ownership, cancellation and setup, and `Tools/AndroidJavaWrapper/README.md` for partial extensions and rebuilding the DLL without regenerating the Java bindings.
 
 ## Build in the Unity Editor
 

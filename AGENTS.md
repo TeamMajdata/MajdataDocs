@@ -29,11 +29,18 @@ src/
 ```bash
 pnpm install          # 安装依赖（需要 pnpm >= 9，Node >= 20）
 pnpm dev              # 本地开发服务器（127.0.0.1:3000）
-pnpm build            # 生产构建（Vercel 部署使用此命令）
+pnpm build            # 生产构建（GitHub Actions 部署 Cloudflare Pages 使用此命令）
 pnpm preview          # 预览构建产物
 ```
 
 构建错误常见于 dead link 检查失败，构建日志会明确列出死链及其所在文件。
+
+## 部署
+
+- `.github/workflows/deploy.yml` 在推送到 `main` 或手动触发时构建并部署到 Cloudflare Pages。
+- 需要在仓库 secrets 中配置 `CLOUDFLARE_API_TOKEN` 和 `CLOUDFLARE_ACCOUNT_ID`。
+- 可选仓库 variable `CLOUDFLARE_PAGES_PROJECT` 指定 Pages 项目名，默认 `majdata-docs`。
+- Cloudflare Pages 项目需要提前创建，并把 `docs.majdata.net` 绑定到该项目；DNS 切换不由 CI 完成。
 
 ## 约定（重要）
 

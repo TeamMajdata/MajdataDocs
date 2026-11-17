@@ -5,3 +5,15 @@
 ## Thanks
 
 [NapCatDocs](https://github.com/NapNeko/NapCatDocs)
+
+## Deployment
+
+Pushes to `main` build the site and deploy it to Cloudflare Pages through `.github/workflows/deploy.yml`.
+
+Configure these repository secrets and variables:
+
+- Secret `CLOUDFLARE_API_TOKEN`
+- Secret `CLOUDFLARE_ACCOUNT_ID`
+- Optional variable `CLOUDFLARE_PAGES_PROJECT` (defaults to `majdata-docs`)
+
+The Cloudflare Pages project must exist beforehand, and `docs.majdata.net` should be attached to it in the Cloudflare dashboard. CI does not change DNS records.

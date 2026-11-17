@@ -90,6 +90,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             {
               text: '外置设备',
               link: '/external_device'
+            },
+            {
+              text: '旧版配置详解',
+              link: '/legacy'
             }
           ]
         },

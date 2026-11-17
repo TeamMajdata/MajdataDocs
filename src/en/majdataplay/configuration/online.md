@@ -6,14 +6,37 @@ Use online services to submit scores, join leaderboards, save records, and play 
 
 ## Windows
 
-Open the [configuration file](/en/majdataplay/configuration/#windows). [Visual Studio Code](https://code.visualstudio.com/) is recommended because it highlights syntax errors.
+Open `system-settings.json` from the [configuration files](/en/majdataplay/configuration/#windows). [Visual Studio Code](https://code.visualstudio.com/) is recommended because it highlights syntax errors.
 
-Scroll down, or press `Ctrl` + `F` and search for `Online`, until you reach the section shown below. Your values may look different.
+Scroll down, or press `Ctrl` + `F` and search for `"Online"`, until you reach `Network.Online`. The default structure looks like this (your values may differ):
 
-![The Online section in settings.json](/majdataplay/configuration/online/initial_configuration.png)
+```json
+"Network": {
+  "Online": {
+    "Enable": false,
+    "ApiEndpoints": [
+      {
+        "Name": "MajdataNET",
+        "Url": "https://majdata.net/api3/api/",
+        "Username": "YourUsername",
+        "Password": "YourPassword",
+        "AutoLogin": false
+      }
+    ],
+    "Machine": {
+      "Name": "MajdataPlay Client",
+      "Description": "MajdataPlay Client QR Code Authentication"
+    }
+  },
+  "Proxy": {
+    "Enable": true,
+    "Url": ""
+  }
+}
+```
 
-- Change `"Enable": false,` to `"Enable": true,`.
-- If you are in mainland China and do not use a proxy, you may need to set `"Url"` to one of these mirrors:
+- Change `Network.Online.Enable` from `false` to `true`.
+- If you are in mainland China and do not use a proxy, you may need to change the `Url` of the first `ApiEndpoints` entry to one of these mirrors:
   - `"https://maj.moyingmoe.top/api3/api/"`
   - `"https://maj-2.moyingmoe.top/api3/api/"`
   - `"https://maj-3.moyingmoe.top/api3/api/"`
@@ -22,11 +45,15 @@ Scroll down, or press `Ctrl` + `F` and search for `Online`, until you reach the 
 
 You have now completed the basic online configuration.
 
-- To use a proxy, change `"UseProxy": false,` to `"UseProxy": true,` and enter the proxy URL as a string after `"Proxy"`. Only change this option if you know the correct value for your proxy.
-- To prefill credentials or sign in automatically:
+- To use a proxy, and if you **know exactly how this option is filled in**, set `"Enable"` to `true` under `Network.Proxy` and enter the proxy URL as a string after `"Url"`.
+- To prefill credentials or sign in automatically, edit the first `ApiEndpoints` entry:
   - Enter your username after `"Username"`.
   - Enter your password after `"Password"`.
   - To sign in automatically, set `"AutoLogin"` to `true`.
+
+::: tip
+Older versions stored the online settings under the `Online` category of `settings.json` and used the `UseProxy` / `Proxy` keys. The new version migrates them to `Network.Online` and `Network.Proxy` in `system-settings.json` automatically.
+:::
 
 ## iOS
 
@@ -42,5 +69,5 @@ You have now completed the basic online configuration.
 
 ## Android
 
-- Open the [configuration file](/en/majdataplay/configuration/#android).
+- Open `system-settings.json` from the [configuration files](/en/majdataplay/configuration/#android).
 - Follow the [Windows instructions](/en/majdataplay/configuration/online#windows).

@@ -8,9 +8,9 @@ Since the software is still being updated continuously, the related options or d
 
 For the Windows/Mac/Linux version, we provide a wide variety of connection methods and have added automatic detection.
 
-In most cases you do not need to modify the configuration file; the game automatically detects your input method. You can of course also change the related settings yourself in `settings.json`.
+In most cases you do not need to modify the configuration file; the game automatically detects your input method. You can of course also change the related settings yourself in `system-settings.json`.
 
-[Open `settings.json`](/en/majdataplay/configuration/), scroll to the very bottom. The IO settings look like this by default:
+[Open `system-settings.json`](/en/majdataplay/configuration/), scroll to the very bottom. The IO settings look like this by default:
 
 ``` json
 "IO": {
@@ -21,13 +21,14 @@ The values we support are as follows:
 - `Yuan` Yuan controller
 - `Dao`	Dao controller
 - `Nov`	Nov controller
+- `NPro` NPro controller
 - `null` Auto-detect
 - `Pipe` [External IO manager](/en/majdataplay/development/external-io-manager)
 
 
 ## Mobile devices
 
-[Open `settings.json`](/en/majdataplay/configuration/), scroll to the very bottom. The IO settings look like this by default:
+[Open `system-settings.json`](/en/majdataplay/configuration/), scroll to the very bottom. The IO settings look like this by default:
 
 ``` json
 "IO": {

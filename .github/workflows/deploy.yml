@@ -44,9 +44,16 @@ jobs:
       - name: Build documentation
         run: pnpm build
 
+      - name: Check Cloudflare configuration
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::Repository secret CLOUDFLARE_API_TOKEN is not configured."
+            exit 1
+          fi
+          if [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::Repository secret CLOUDFLARE_ACCOUNT_ID is not configured."
+            exit 1
+          fi
+
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy src/.vitepress/dist --project-name=${{ env.PAGES_PROJECT }} --branch=${{ github.ref_name }}
+        run: pnpm dlx wrangler@4 pages deploy src/.vitepress/dist --project-name="$PAGES_PROJECT" --branch="$GITHUB_REF_NAME"

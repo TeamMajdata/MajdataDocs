@@ -2,42 +2,36 @@
 
 ## Windows
 
-### Use Majdata Hub
+### Use Majplay-update-cli
 
-Majdata Hub (Hub) is a browser-based companion utility for MajdataPlay. It includes both an international GitHub source and a Tencent source for mainland China, and it can download and update the stable version of MajdataPlay.
+Majplay-update-cli is the Windows download and update tool for MajdataPlay. It supports stable and nightly builds, system proxies and GitHub mirrors, and launches the game after updating.
 
-(A star would be appreciated!)
-[![Majdata Hub repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=kirisamevanilla&repo=MajdataHub)](https://github.com/KirisameVanilla/MajdataHub)
+[![Majplay-update-cli repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=Majplay-update-cli)](https://github.com/TeamMajdata/Majplay-update-cli)
 
 <Links
-  :grid="2"
   :items="[
     {
       image: 'https://github.githubassets.com/assets/pinned-octocat-093da3e6fa40.svg',
-      name: 'GitHub Release',
-      desc: 'Recommended outside mainland China',
-      link: 'https://github.com/KirisameVanilla/MajdataHub/releases/latest',
-      linkText: 'Open the GitHub Releases page'
-    },
-    {
-      image: 'https://cnb.cool/images/favicon.png',
-      name: 'Tencent CNB',
-      desc: 'Recommended in mainland China',
-      link: 'https://cnb.cool/TeamMajdata/MajdataHub-Build',
-      linkText: 'Open the repository'
+      name: 'Majplay-update-cli',
+      desc: 'Recommended way to install and update on Windows',
+      link: 'https://github.com/TeamMajdata/Majplay-update-cli',
+      linkText: 'Open the GitHub repository'
     }
   ]"
 />
 
-If you only use Hub to download and update MajdataPlay, you generally do not need to update Hub itself.
+How to use it:
 
-After opening Hub, go to **Setting** and select the folder where you want to install MajdataPlay. Then choose a download source and click **Save Settings**.
+1. Get `Update-MajdataPlay.ps1` and `Start-MajdataPlay-Updater.cmd` from the repository.
+2. Put them in any writable folder and double-click `Start-MajdataPlay-Updater.cmd`.
+3. On first run, choose Stable or Nightly; the game is installed into the `MajdataPlay` folder next to the script.
+4. Run it again later to check for updates and launch the game.
 
-Go to **Game**, click **Download Game**, and wait for the download to finish. You can then click **Launch Game** below it to start playing.
+Existing custom skins, sounds, and chart assets under `StreamingAssets` are preserved by default. See the [repository README](https://github.com/TeamMajdata/Majplay-update-cli#readme) for all options.
 
 ### Download directly
 
-Direct downloads are available as stable and nightly builds. Stable builds are available from GitHub, Tencent CNB, and LeZi's mirror. Nightly builds are available only from GitHub.
+Use Majplay-update-cli above for stable builds and automatic updates. To get a nightly build manually:
 
 <Links
   :items="[
@@ -47,33 +41,6 @@ Direct downloads are available as stable and nightly builds. Stable builds are a
       desc: 'Test version',
       link: 'https://github.com/LingFeng-bbben/MajdataPlay/releases/tag/nightly',
       linkText: 'Open the GitHub Releases page'
-    }
-  ]"
-/>
-
-<Links
-  :grid="3"
-  :items="[
-    {
-      image: 'https://github.githubassets.com/assets/pinned-octocat-093da3e6fa40.svg',
-      name: 'MajdataPlay_Build',
-      desc: 'Stable version',
-      link: 'https://github.com/TeamMajdata/MajdataPlay_Build',
-      linkText: 'Open the GitHub page'
-    },
-    {
-      image: 'https://cnb.cool/images/favicon.png',
-      name: 'Tencent CNB',
-      desc: 'Stable version for mainland China',
-      link: 'https://cnb.cool/TeamMajdata/MajdataPlay_Build/-/git/archive/LATEST.zip',
-      linkText: 'Download now'
-    },
-    {
-      image: 'https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg',
-      name: `LeZi's mirror`,
-      desc: 'Another stable-version mirror',
-      link: 'https://storage.leziblog.com/MajdataPlay',
-      linkText: 'Open the mirror'
     }
   ]"
 />

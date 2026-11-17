@@ -2,42 +2,36 @@
 
 ## Windows
 
-### 使用 Majdata Hub
+### 使用 Majplay-update-cli
 
-Majdata Hub (以下简称 Hub) 是一款基于浏览器的 MajdataPlay 小工具, <mark>内置有海外的 GitHub 源和大陆的腾讯源</mark>, 可以用于下载和更新 MajdataPlay 的稳定版.
+Majplay-update-cli 是 MajdataPlay 的 Windows 下载与更新工具，支持稳定版和 Nightly、系统代理和 GitHub 镜像，并会在更新完成后自动启动游戏。
 
-(顺便求一下 star !!)
-[![MajdataHubCard](https://readme-stats.vanillaaaa.org/api/pin/?username=kirisamevanilla&repo=MajdataHub)](https://github.com/KirisameVanilla/MajdataHub)
+[![Majplay-update-cli repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=Majplay-update-cli)](https://github.com/TeamMajdata/Majplay-update-cli)
 
 <Links
-  :grid="2"
   :items="[
     {
       image: 'https://github.githubassets.com/assets/pinned-octocat-093da3e6fa40.svg',
-      name: 'GitHub Release',
-      desc: '海外用我',
-      link: 'https://github.com/KirisameVanilla/MajdataHub/releases/latest',
-      linkText: '前往 GitHub Release 页面'
-    },
-    {
-      image: 'https://cnb.cool/images/favicon.png',
-      name: '腾讯 CNB',
-      desc: '大陆用我. 腾讯总算干人事了',
-      link: 'https://cnb.cool/TeamMajdata/MajdataHub-Build',
-      linkText: '前往仓库页面'
+      name: 'Majplay-update-cli',
+      desc: '推荐的 Windows 下载 / 更新方式',
+      link: 'https://github.com/TeamMajdata/Majplay-update-cli',
+      linkText: '前往 GitHub 仓库'
     }
   ]"
 />
 
-如果你只需要下载和更新功能的话, 大概是不需要更新 Hub 的.
+使用方式：
 
-打开 Hub 后, 请先前往 Setting 页面更改游戏目录路径, 选择一个你想用于存放 MajdataPlay 的文件夹, 然后更改下载源. **最后请记得点击保存设置.**
+1. 从仓库获取 `Update-MajdataPlay.ps1` 和 `Start-MajdataPlay-Updater.cmd`。
+2. 将文件放在任意可写目录，双击 `Start-MajdataPlay-Updater.cmd`。
+3. 首次运行选择稳定版或 Nightly；游戏会安装到脚本目录下的 `MajdataPlay` 文件夹。
+4. 之后再运行会检查更新并启动游戏。
 
-修改好 Hub 的设置后, 请前往 Game 页面, 点击下载游戏, 等待下载完成后即可点击下方的启动游戏进行游玩.
+默认保留 `StreamingAssets` 中已有的自定义皮肤、音效和谱面资源。完整参数和说明见 [仓库 README](https://github.com/TeamMajdata/Majplay-update-cli#readme)。
 
 ### 直接下载
 
-直接下载分为稳定版和测试版. 其中稳定版有海外的 GitHub 源, 大陆的腾讯源和 LeZi 的源, 而测试版只有 GitHub 源.
+稳定版建议使用上面的 Majplay-update-cli 自动安装与更新。若只需要手动获取 Nightly：
 
 <Links
   :items="[
@@ -47,33 +41,6 @@ Majdata Hub (以下简称 Hub) 是一款基于浏览器的 MajdataPlay 小工具
       desc: '测试版',
       link: 'https://github.com/LingFeng-bbben/MajdataPlay/releases/tag/nightly',
       linkText: '前往 GitHub Release 页面'
-    }
-  ]"
-/>
-
-<Links
-  :grid="3"
-  :items="[
-    {
-      image: 'https://github.githubassets.com/assets/pinned-octocat-093da3e6fa40.svg',
-      name: 'MajdataPlay_Build',
-      desc: '稳定版',
-      link: 'https://github.com/TeamMajdata/MajdataPlay_Build',
-      linkText: '前往 GitHub 页面'
-    },
-    {
-      image: 'https://cnb.cool/images/favicon.png',
-      name: '腾讯 CNB',
-      desc: '依旧稳定版. 腾讯总算干人事了',
-      link: 'https://cnb.cool/TeamMajdata/MajdataPlay_Build/-/git/archive/LATEST.zip',
-      linkText: '立刻下载'
-    },
-    {
-      image: 'https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg',
-      name: 'LeZi 窝',
-      desc: '仍然稳定版. 你猜你连不连得进去',
-      link: 'https://storage.leziblog.com/MajdataPlay',
-      linkText: '前往刺杀 LeZi'
     }
   ]"
 />

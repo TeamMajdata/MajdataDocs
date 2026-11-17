@@ -29,6 +29,22 @@ How to use it:
 
 Existing custom skins, sounds, and chart assets under `StreamingAssets` are preserved by default. See the [repository README](https://github.com/TeamMajdata/Majplay-update-cli#readme) for all options.
 
+### Use RhythmHub
+
+RhythmHub is another download and launch entry point for MajdataPlay, useful if you prefer a web-based installer.
+
+<Links
+  :items="[
+    {
+      image: 'https://rhythmhub.sparkbarry.com/favicon.ico',
+      name: 'RhythmHub',
+      desc: 'Web download / launcher',
+      link: 'https://rhythmhub.sparkbarry.com/en/',
+      linkText: 'Open RhythmHub'
+    }
+  ]"
+/>
+
 ### Download directly
 
 Use Majplay-update-cli above for stable builds and automatic updates. To get a nightly build manually:

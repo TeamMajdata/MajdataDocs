@@ -29,6 +29,22 @@ Majplay-update-cli 是 MajdataPlay 的 Windows 下载与更新工具，支持稳
 
 默认保留 `StreamingAssets` 中已有的自定义皮肤、音效和谱面资源。完整参数和说明见 [仓库 README](https://github.com/TeamMajdata/Majplay-update-cli#readme)。
 
+### 使用 RhythmHub
+
+RhythmHub 是另一个 MajdataPlay 下载与启动入口，适合希望通过网页界面安装的用户。
+
+<Links
+  :items="[
+    {
+      image: 'https://rhythmhub.sparkbarry.com/favicon.ico',
+      name: 'RhythmHub',
+      desc: '网页下载 / 启动器',
+      link: 'https://rhythmhub.sparkbarry.com/en/',
+      linkText: '打开 RhythmHub'
+    }
+  ]"
+/>
+
 ### 直接下载
 
 稳定版建议使用上面的 Majplay-update-cli 自动安装与更新。若只需要手动获取 Nightly：

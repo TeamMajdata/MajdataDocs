@@ -34,9 +34,9 @@ GPL 协议意味着如果你对软件进行了二次修改并准备公开分发,
 
 ## 有关项目
 
-[![Readme Card](https://readme-stats.vanillaaaa.org/api/pin/?username=LingFeng-bbben&repo=MajdataPlay)](https://github.com/LingFeng-bbben/MajdataPlay)
-[![Readme Card](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=MajdataNet)](https://github.com/TeamMajdata/MajdataNet)
-[![Readme Card](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=MajdataProvider)](https://github.com/TeamMajdata/MajdataProvider)
+<a href="https://github.com/LingFeng-bbben/MajdataPlay"><img class="repo-card" src="/assets/repo-cards/majdataplay.png" alt="Readme Card" width="360" loading="lazy"></a>
+<a href="https://github.com/TeamMajdata/MajdataNet"><img class="repo-card" src="/assets/repo-cards/majdatanet.png" alt="Readme Card" width="360" loading="lazy"></a>
+<a href="https://github.com/TeamMajdata/MajdataProvider"><img class="repo-card" src="/assets/repo-cards/majdataprovider.png" alt="Readme Card" width="360" loading="lazy"></a>
 <Links
   :items="[
     {

@@ -28,6 +28,20 @@
     background-color: rgba(255, 138, 128, 0.3);
 }
 
+/* GitHub repository cards rendered from the repository OpenGraph image */
+.vp-doc img.repo-card {
+    display: inline-block;
+    width: 360px;
+    max-width: 100%;
+    height: auto;
+    margin: 4px 8px 4px 0;
+    border: 1px solid var(--vp-c-divider);
+    border-radius: 12px;
+    background: var(--vp-c-bg-soft);
+    box-shadow: var(--vp-shadow-1);
+    vertical-align: top;
+}
+
 /* 首页 Hero 图像轻微上下浮动 */
 .VPHomeHero .image .image-src {
     animation: hero-float 3.2s ease-in-out infinite;

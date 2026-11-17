@@ -14,4 +14,4 @@ Before using audio or video features, open a terminal and run `winget install ff
 
 ## Open source
 
-[![MajdataViewX repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=re-poem&repo=MajdataViewX)](https://github.com/re-poem/MajdataViewX)
+<a href="https://github.com/re-poem/MajdataViewX"><img class="repo-card" src="/assets/repo-cards/majdataviewx.png" alt="MajdataViewX repository card" width="360" loading="lazy"></a>

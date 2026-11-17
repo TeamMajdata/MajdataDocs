@@ -14,4 +14,4 @@ MajdataX は、高速で高機能な譜面編集体験を提供することを�
 
 ## オープンソース
 
-[![MajdataViewX リポジトリカード](https://readme-stats.vanillaaaa.org/api/pin/?username=re-poem&repo=MajdataViewX)](https://github.com/re-poem/MajdataViewX)
+<a href="https://github.com/re-poem/MajdataViewX"><img class="repo-card" src="/assets/repo-cards/majdataviewx.png" alt="MajdataViewX リポジトリカード" width="360" loading="lazy"></a>

@@ -9,7 +9,7 @@
 
 ## Open source
 
-[![MajdataPlay repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=LingFeng-bbben&repo=MajdataPlay)](https://github.com/LingFeng-bbben/MajdataPlay)
+<a href="https://github.com/LingFeng-bbben/MajdataPlay"><img class="repo-card" src="/assets/repo-cards/majdataplay.png" alt="MajdataPlay repository card" width="360" loading="lazy"></a>
 
 ## Privacy policy
 

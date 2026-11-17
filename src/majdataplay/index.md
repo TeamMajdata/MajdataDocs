@@ -9,7 +9,7 @@
 
 ## 开源
 
-[![Readme Card](https://readme-stats.vanillaaaa.org/api/pin/?username=LingFeng-bbben&repo=MajdataPlay)](https://github.com/LingFeng-bbben/MajdataPlay)
+<a href="https://github.com/LingFeng-bbben/MajdataPlay"><img class="repo-card" src="/assets/repo-cards/majdataplay.png" alt="Readme Card" width="360" loading="lazy"></a>
 
 ## 隐私政策
 

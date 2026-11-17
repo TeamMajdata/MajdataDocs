@@ -34,9 +34,9 @@ GPL は、ソフトウェアを改変したバージョンを公に配布する�
 
 ## プロジェクト
 
-[![MajdataPlay リポジトリカード](https://readme-stats.vanillaaaa.org/api/pin/?username=LingFeng-bbben&repo=MajdataPlay)](https://github.com/LingFeng-bbben/MajdataPlay)
-[![MajdataNet リポジトリカード](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=MajdataNet)](https://github.com/TeamMajdata/MajdataNet)
-[![MajdataProvider リポジトリカード](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=MajdataProvider)](https://github.com/TeamMajdata/MajdataProvider)
+<a href="https://github.com/LingFeng-bbben/MajdataPlay"><img class="repo-card" src="/assets/repo-cards/majdataplay.png" alt="MajdataPlay リポジトリカード" width="360" loading="lazy"></a>
+<a href="https://github.com/TeamMajdata/MajdataNet"><img class="repo-card" src="/assets/repo-cards/majdatanet.png" alt="MajdataNet リポジトリカード" width="360" loading="lazy"></a>
+<a href="https://github.com/TeamMajdata/MajdataProvider"><img class="repo-card" src="/assets/repo-cards/majdataprovider.png" alt="MajdataProvider リポジトリカード" width="360" loading="lazy"></a>
 <Links
   :items="[
     {

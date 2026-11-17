@@ -34,9 +34,9 @@ The GPL requires you to release the complete corresponding source code when you 
 
 ## Projects
 
-[![MajdataPlay repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=LingFeng-bbben&repo=MajdataPlay)](https://github.com/LingFeng-bbben/MajdataPlay)
-[![MajdataNet repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=MajdataNet)](https://github.com/TeamMajdata/MajdataNet)
-[![MajdataProvider repository card](https://readme-stats.vanillaaaa.org/api/pin/?username=TeamMajdata&repo=MajdataProvider)](https://github.com/TeamMajdata/MajdataProvider)
+<a href="https://github.com/LingFeng-bbben/MajdataPlay"><img class="repo-card" src="/assets/repo-cards/majdataplay.png" alt="MajdataPlay repository card" width="360" loading="lazy"></a>
+<a href="https://github.com/TeamMajdata/MajdataNet"><img class="repo-card" src="/assets/repo-cards/majdatanet.png" alt="MajdataNet repository card" width="360" loading="lazy"></a>
+<a href="https://github.com/TeamMajdata/MajdataProvider"><img class="repo-card" src="/assets/repo-cards/majdataprovider.png" alt="MajdataProvider repository card" width="360" loading="lazy"></a>
 <Links
   :items="[
     {

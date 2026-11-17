@@ -142,11 +142,34 @@ export const shared = defineConfig({
               },
             },
           },
+          ja: {
+            translations: {
+              button: {
+                buttonText: '検索',
+                buttonAriaLabel: '検索',
+              },
+              modal: {
+                displayDetails: '詳細リストを表示',
+                resetButtonTitle: '検索をリセット',
+                backButtonTitle: '検索を閉じる',
+                noResultsText: '結果が見つかりません',
+                footer: {
+                  selectText: '選択',
+                  selectKeyAriaLabel: 'Enter',
+                  navigateText: '移動',
+                  navigateUpKeyAriaLabel: '上矢印',
+                  navigateDownKeyAriaLabel: '下矢印',
+                  closeText: '閉じる',
+                  closeKeyAriaLabel: 'Escape',
+                },
+              },
+            },
+          },
         },
         miniSearch: {
           options: {
-            // 中文按字切分，英文和数字按词切分
-            tokenize: (text: string) => text.toLowerCase().match(/[\u4e00-\u9fff]|[a-z0-9]+/g) ?? [],
+            // 中文、日文按字切分，英文和数字按词切分
+            tokenize: (text: string) => text.toLowerCase().match(/[\u3040-\u30ff\u4e00-\u9fff]|[a-z0-9]+/g) ?? [],
           },
         },
       },

@@ -31,16 +31,24 @@ Existing custom skins, sounds, and chart assets under `StreamingAssets` are pres
 
 ### Use RhythmHub
 
-RhythmHub is another download and launch entry point for MajdataPlay, useful if you prefer a web-based installer.
+RhythmHub is a desktop launcher for MajdataPlay that can download, update, and launch the game.
 
 <Links
+  :grid="2"
   :items="[
     {
       image: 'https://rhythmhub.sparkbarry.com/favicon.ico',
       name: 'RhythmHub',
-      desc: 'Web download / launcher',
+      desc: 'Download the desktop launcher',
       link: 'https://rhythmhub.sparkbarry.com/en/',
       linkText: 'Open RhythmHub'
+    },
+    {
+      image: 'https://github.githubassets.com/assets/pinned-octocat-093da3e6fa40.svg',
+      name: 'RhythmHub on GitHub',
+      desc: 'Source code and releases',
+      link: 'https://github.com/sparkbarry/RhythmHub',
+      linkText: 'Open the GitHub repository'
     }
   ]"
 />

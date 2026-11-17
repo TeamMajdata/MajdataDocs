@@ -31,16 +31,24 @@ Majplay-update-cli 是 MajdataPlay 的 Windows 下载与更新工具，支持稳
 
 ### 使用 RhythmHub
 
-RhythmHub 是另一个 MajdataPlay 下载与启动入口，适合希望通过网页界面安装的用户。
+RhythmHub 是 MajdataPlay 的桌面启动器，可通过启动器下载、更新并启动游戏。
 
 <Links
+  :grid="2"
   :items="[
     {
       image: 'https://rhythmhub.sparkbarry.com/favicon.ico',
       name: 'RhythmHub',
-      desc: '网页下载 / 启动器',
+      desc: '下载桌面启动器',
       link: 'https://rhythmhub.sparkbarry.com/en/',
       linkText: '打开 RhythmHub'
+    },
+    {
+      image: 'https://github.githubassets.com/assets/pinned-octocat-093da3e6fa40.svg',
+      name: 'RhythmHub GitHub',
+      desc: '源代码与 Release',
+      link: 'https://github.com/sparkbarry/RhythmHub',
+      linkText: '前往 GitHub 仓库'
     }
   ]"
 />

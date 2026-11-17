@@ -1,31 +1,33 @@
 # 設定ファイル
 
 ::: tip
-このガイドに従う前に、一度ゲームを起動してください。設定の変更はゲームを終了した状態で行う必要があるため、バックグラウンドで起動したままになっていないことを確認してください。
+まず一度ゲームを手動で起動してください。設定の変更はゲームを終了した状態で行う必要があるため、<mark>バックグラウンドプロセスを終了</mark>してください。
 :::
 
-このページでは、各プラットフォームにおける MajdataPlay の設定ファイルの場所を説明します。ほかの設定ガイドは、このページを読んでいることを前提としています。
+本セクションでは、各プラットフォームにおける `MajdataPlay` の設定ファイルの場所を示します。設定関連のドキュメントを読む際は、本セクションを既に読んでいることを前提とします。
 
-**2.1.0-preview6** 以降、設定は同じディレクトリ内の 2 つのファイルに分割されています。
+**2.1.0-preview6** 以降、設定は 2 つのファイルに分割され、同じディレクトリに配置されます。
 
-- `settings.json`: **ユーザー設定**。`Game`、`Judge`、`Display`、`Volume`、`Touch` を含みます。オンラインアカウントにサインインすると、このグループはアカウントから読み込まれ、アカウントへアップロードされる場合があります。
-- `system-settings.json`: **システム設定**。`Common`、`Rendering`、`Audio`、`Encoding`、`Decoding`、`Debug`、`Network`、`IO` を含みます。このグループは現在のデバイスを表すもので、常にローカルに保持されます。
+- `settings.json`: **ユーザー設定**。`Game`、`Judge`、`Display`、`Volume`、`Touch` を含みます。オンラインアカウントにログインすると、この設定グループはアカウントから読み込まれ、アップロードされる場合があります。
+- `system-settings.json`: **システム設定**。`Common`、`Rendering`、`Audio`、`Encoding`、`Decoding`、`Debug`、`Network`、`IO` を含みます。この設定グループは現在のデバイスを表すもので、常にローカルに保存されます。
 
-プレイ内容、判定、表示の動作を変更したい場合は、通常 `settings.json` を編集するだけで十分です。外部デバイス、レンダリング、ネットワークなどのシステム設定は `system-settings.json` にあります。旧バージョンには `settings.json` が 1 つだけありましたが、新バージョンでは初回起動時に自動で分割・移行されます。詳しくは[設定リファレンス](/ja/majdataplay/configuration/configuration)を参照してください。
+プレイ、判定、画面表示のみを調整したい場合は、通常 `settings.json` を変更するだけで十分です。外付けデバイス、レンダリング、ネットワークなどのシステム設定は `system-settings.json` にあります。旧バージョンには `settings.json` が 1 つだけありましたが、新バージョンの初回起動時に自動で分割・移行されます。詳細は [設定リファレンス](/ja/majdataplay/configuration/configuration) を参照してください。
 
 ## Windows
 
-`MajdataPlay.exe` と同じディレクトリにある `settings.json` と `system-settings.json` を開いてください。
+`MajdataPlay.exe` と同じディレクトリにある `settings.json` と `system-settings.json` です。
 
 ## iOS
 
-<mark>iOS では通常、設定ファイルを手動で編集する必要はありません。**設定** を開いて **MajdataPlay** を検索するか、サイドバーの **アプリ** を選択してから **MajdataPlay** を選択してください。必要な設定はほぼすべてそこにあります。</mark>
+<mark>通常、iOS 版では設定ファイルを手動で変更する必要はありません。`設定` を開き、`MajdataPlay` を全体検索するか、左側のリストで `App` を見つけてタップして開き、右側で `MajdataPlay` を見つけてください。そこに必要なほぼすべての設定があります。</mark>
 
-ファイルを直接編集する場合は、**ファイル**アプリを開き、**このiPhone内**または**このiPad内**を選択してください。`MajdataPlay` フォルダを開くと、`settings.json` と `system-settings.json` があります。これらのファイルを変更するには JSON エディタが必要です。App Store から Koder などのエディタをインストールできます。
+`ファイル` App を開き、ディレクトリで `このデバイス` (例: `このiPad`) を選択すると、その中に `MajdataPlay` フォルダーがあります。開くと `settings.json` と `system-settings.json` があります。ファイルを変更するには専用の `json` エディターが必要です。`App Store` で `Koder` を検索してインストールできます。
 
 ## Android
 
-- APK 版: `/storage/emulated/0/Documents/MajdataPlay/`
-- Google Play 版: `/storage/emulated/0/Android/data/net.majdata.majdataplay/files/`
+- apk ファイル版: `/storage/emulated/0/Documents/MajdataPlay/`
+- Play ストア版: `/storage/emulated/0/Android/data/net.majdata.majdataplay/files/`
 
-どちらのディレクトリにも `settings.json` と `system-settings.json` があります。MT Manager など、エディタを内蔵したファイルマネージャーの使用をおすすめします。
+初回起動時、Android 版はストレージの読み取り / 書き込み権限を要求する場合があります。権限を許可すると、ゲームは `Documents/MajdataPlay` をデータディレクトリとして使用します。権限を拒否した場合は、アプリ専用の `Android/data/net.majdata.majdataplay/files` ディレクトリを使用します。
+
+初回起動時には内蔵リソースが展開されますが、カスタムスキン、楽曲、`settings.json` は引き続き手動で storage ディレクトリに配置する必要がある場合があります。上記 2 つのディレクトリにはいずれも `settings.json` と `system-settings.json` があるため、`MT管理器` などエディターを備えたファイル管理アプリで変更することをおすすめします。

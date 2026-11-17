@@ -71,6 +71,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           link: '/install'
         },
         {
+          text: '开始游玩',
+          link: '/getting-started'
+        },
+        {
           text: '配置',
           base: '/majdataplay/configuration',
           collapsed: true,
@@ -117,6 +121,14 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             {
               text: '练习模式',
               link: '/practice'
+            },
+            {
+              text: '段位',
+              link: '/dan'
+            },
+            {
+              text: '串流游玩',
+              link: '/streaming'
             },
             {
               text: '谱面',
@@ -191,6 +203,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
               link: '/collection'
             }
           ]
+        },
+        {
+          text: 'API 参考',
+          link: '/api'
         }
       ]
     },

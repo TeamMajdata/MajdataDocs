@@ -71,6 +71,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           link: '/install',
         },
         {
+          text: '基本操作',
+          link: '/getting-started',
+        },
+        {
           text: '設定',
           base: '/ja/majdataplay/configuration',
           collapsed: true,
@@ -117,6 +121,14 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             {
               text: '練習モード',
               link: '/practice',
+            },
+            {
+              text: '段位',
+              link: '/dan',
+            },
+            {
+              text: 'ストリーミングでプレイ',
+              link: '/streaming',
             },
             {
               text: '譜面',
@@ -191,6 +203,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
               link: '/collection',
             },
           ],
+        },
+        {
+          text: 'API リファレンス',
+          link: '/api',
         },
       ],
     },

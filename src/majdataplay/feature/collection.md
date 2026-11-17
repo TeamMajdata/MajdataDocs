@@ -17,3 +17,5 @@
 ![make_playlist_1](./collection/make_playlist_1.png)
 ![make_playlist_2](./collection/make_playlist_2.png)
 ![import_playlist](./collection/import_playlist.png)
+
+也可以手动制作歌单 JSON 文件, 详见 [段位与歌单文件](/majdataplay/feature/dan#歌单文件).

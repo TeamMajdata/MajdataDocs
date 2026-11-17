@@ -28,4 +28,6 @@
 - apk 文件版: `/storage/emulated/0/Documents/MajdataPlay/`
 - Play 商店版: `/storage/emulated/0/Android/data/net.majdata.majdataplay/files/`
 
-以上两个目录中均有 `settings.json` 和 `system-settings.json`. 建议使用`MT管理器`等其他带有编辑器的文件管理软件进行更改.
+首次启动时, Android 版可能会请求读写存储权限. 授予权限后游戏会使用 `Documents/MajdataPlay` 作为数据目录; 拒绝权限时则使用应用专属的 `Android/data/net.majdata.majdataplay/files` 目录.
+
+首次启动会解压内置资源, 但自定义皮肤、曲目和 `settings.json` 仍可能需要你手动放入 storage 目录. 以上两个目录中均有 `settings.json` 和 `system-settings.json`, 建议使用`MT管理器`等其他带有编辑器的文件管理软件进行更改.

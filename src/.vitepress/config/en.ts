@@ -71,6 +71,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           link: '/install',
         },
         {
+          text: 'Getting started',
+          link: '/getting-started',
+        },
+        {
           text: 'Configuration',
           base: '/en/majdataplay/configuration',
           collapsed: true,
@@ -117,6 +121,14 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             {
               text: 'Practice mode',
               link: '/practice',
+            },
+            {
+              text: 'Dan courses',
+              link: '/dan',
+            },
+            {
+              text: 'Play over streaming',
+              link: '/streaming',
             },
             {
               text: 'Charts',
@@ -191,6 +203,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
               link: '/collection',
             },
           ],
+        },
+        {
+          text: 'API reference',
+          link: '/api',
         },
       ],
     },

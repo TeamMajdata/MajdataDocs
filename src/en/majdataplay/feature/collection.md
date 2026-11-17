@@ -17,3 +17,5 @@ If you are not sure what to play, or keep forgetting the charts you enjoyed, use
 ![Create a playlist](/majdataplay/feature/collection/make_playlist_1.png)
 ![Add charts to a playlist](/majdataplay/feature/collection/make_playlist_2.png)
 ![Import a playlist](/majdataplay/feature/collection/import_playlist.png)
+
+You can also create a playlist JSON file manually; see [Playlist files](/en/majdataplay/feature/dan#playlist-files).

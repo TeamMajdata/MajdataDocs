@@ -8,12 +8,25 @@
 
 ## Deployment
 
-Pushes to `main` build the site and deploy it to Cloudflare Pages through `.github/workflows/deploy.yml`.
+The site is deployed to Cloudflare Pages from GitHub Actions.
 
-Configure these repository secrets and variables:
+### One-time setup
 
-- Secret `CLOUDFLARE_API_TOKEN`
-- Secret `CLOUDFLARE_ACCOUNT_ID`
-- Optional variable `CLOUDFLARE_PAGES_PROJECT` (defaults to `majdata-docs`)
+1. Create a Cloudflare API token at **My Profile > API Tokens > Create Token > Custom token** with:
+   - **Account > Cloudflare Pages > Edit**
+   - **Zone > DNS > Edit** for `majdata.net`
+   - **Zone > Zone > Read** for `majdata.net`
+2. Copy the Cloudflare account ID from the dashboard.
+3. In the GitHub repository, open **Settings > Secrets and variables > Actions** and add:
+   - Secret `CLOUDFLARE_API_TOKEN`
+   - Secret `CLOUDFLARE_ACCOUNT_ID`
+   - Optional variable `CLOUDFLARE_PAGES_PROJECT` (defaults to `majdata-docs`)
+4. Run the **Setup Cloudflare Pages** workflow once. It creates the Pages project, deploys the site, attaches `docs.majdata.net`, and points the DNS CNAME at `<project>.pages.dev`.
 
-The Cloudflare Pages project must exist beforehand, and `docs.majdata.net` should be attached to it in the Cloudflare dashboard. CI does not change DNS records.
+Wrangler does not expose a Pages custom-domain command, so the setup script uses Wrangler for the project and deployment, then the Cloudflare API for the custom domain and DNS record.
+
+### Continuous deployment
+
+Pushes to `main` build the site and deploy it through `.github/workflows/deploy.yml`. Manual runs are also available from the Actions tab.
+
+`docs.majdata.net` currently resolves to Vercel; the setup workflow replaces that CNAME with the Pages project hostname. DNS and certificate activation can take a few minutes.

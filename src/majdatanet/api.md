@@ -95,7 +95,7 @@ MajdataNet 服务器提供 REST API, 供 MajdataPlay 游戏客户端与网站前
 
 ### POST /api/account/register
 
-注册账号. 匿名调用; 已经登录返回 `403`.
+注册账号. 匿名调用.
 
 | Form 字段 | 类型 | 必填 | 说明 |
 | --- | --- | --- | --- |
@@ -107,7 +107,10 @@ MajdataNet 服务器提供 REST API, 供 MajdataPlay 游戏客户端与网站前
 | `challengeCode` | int | 是 | 邮件中的 8 位验证码 |
 | `cf-turnstile-response` | string | 是 | Turnstile token |
 
-**响应**: `200` —— [响应模型](#userprofile) —— 账号直接创建为正常状态, **不会自动登录**. 失败: `400`, 包括验证失败 (60003)、空密码、用户名无效 (40000)、用户名或邮箱重复 (60103/60104)
+**响应**:
+
+- `200 OK` —— [响应模型](#userprofile), 账号直接创建为正常状态, **不会自动登录**
+- `400 Bad Request` —— 包括验证失败 (60003)、空密码、用户名无效 (40000)、用户名或邮箱重复 (60103/60104)
 
 服务端直接比较提交的密码字符串, 本接口没有声明客户端必须使用的哈希算法.
 
@@ -137,7 +140,12 @@ _示例_:
 | `challengeKey` | string | 待激活账号需提供 | 邮箱验证接口返回的 key |
 | `challengeCode` | int | 待激活账号需提供 | 发送至账号原邮箱的验证码 |
 
-**响应**: `200` —— [响应模型](#status) —— 通过 `Set-Cookie` 设置 `token`, 响应体不返回 token. 失败: `401` 凭据错误; `403` 已登录、待激活且未提供完整邮箱验证信息、被封禁; `400` 验证码无效
+**响应**:
+
+- `200 OK` —— [响应模型](#status), 通过 `Set-Cookie` 设置 `token`, 响应体不返回 token
+- `400 Bad Request` —— 验证码无效
+- `401 Unauthorized` —— 凭据错误
+- `403 Forbidden` —— 已登录、待激活且未提供完整邮箱验证信息、被封禁
 
 _示例_:
 
@@ -155,7 +163,12 @@ _示例_:
 - 不传或传空值: 注销当前会话并删除 `token` Cookie; 存在机台会话时还会撤销该机台授权.
 - 指定 `sessionId`: 注销本人指定会话, 还需 `MANAGE_LOGIN_SESSIONS`.
 
-**响应**: `200` —— [响应模型](#status) —— 失败: `400` ID 无效, `404` 会话不存在, `403` 非本人会话或权限不足
+**响应**:
+
+- `200 OK` —— [响应模型](#status)
+- `400 Bad Request` —— ID 无效
+- `403 Forbidden` —— 非本人会话或权限不足
+- `404 Not Found` —— 会话不存在
 
 _示例_:
 
@@ -170,9 +183,13 @@ _示例_:
 
 Query: `username?: string`.
 
-指定用户名时可匿名获取; 不指定时读取当前用户, 未登录返回 `401`. 成功: `200 UserProfile` (见[响应模型](#userprofile)); 不存在: `404 Status`. 只有本人且拥有 `R_USER_PROFILE` 才返回邮箱, 其他调用的 `email` 为 `null`.
+指定用户名时可匿名获取; 不指定时读取当前用户. 只有本人且拥有 `R_USER_PROFILE` 才返回邮箱, 其他调用的 `email` 为 `null`.
 
-**响应**: `200` —— [响应模型](#userprofile)
+**响应**:
+
+- `200 OK` —— [响应模型](#userprofile)
+- `401 Unauthorized` —— 未登录且未指定 `username`
+- `404 Not Found` —— 用户不存在
 
 _示例_:
 
@@ -200,7 +217,11 @@ _示例_:
 
 请求总大小上限 6 MiB; multipart body 上限 5 MiB. 静态头像裁剪为 512×512 JPEG; 多帧图片按最大边 512 缩放并转成 WebP.
 
-**响应**: `200` —— [响应模型](#userprofile) —— 用户不存在; 显式空昵称为 `400`
+**响应**:
+
+- `200 OK` —— [响应模型](#userprofile)
+- `400 Bad Request` —— 显式空昵称
+- `404 Not Found` —— 用户不存在
 
 _示例_:
 
@@ -218,9 +239,11 @@ _示例_:
 
 ### GET /api/account/session
 
-鉴权: 登录. 无参数. 成功: `200 SessionInfo`, 见[响应模型](#sessioninfo).
+鉴权: 登录. 无参数.
 
-**响应**: `200` —— [响应模型](#sessioninfo)
+**响应**:
+
+- `200 OK` —— [响应模型](#sessioninfo)
 
 _示例_:
 
@@ -237,9 +260,11 @@ _示例_:
 
 ### GET /api/account/sessions
 
-鉴权: `MANAGE_LOGIN_SESSIONS`. 成功: `200 SessionInfo[]`, 包含当前用户所有会话.
+鉴权: `MANAGE_LOGIN_SESSIONS`.
 
-**响应**: `200` —— [响应模型](#sessioninfo)
+**响应**:
+
+- `200 OK` —— [响应模型](#sessioninfo), 包含当前用户所有会话
 
 _示例_:
 
@@ -260,23 +285,32 @@ _示例_:
 
 匿名. Query: `email: string`, 必填.
 
-邮箱格式无效返回 `400 Status` (60102). 邮箱未注册时仍返回 `200` 和一个随机字符串, 但不会发送邮件, 避免泄露账号是否存在. 邮箱已注册时创建 5 分钟有效的 8 位验证码并发送邮件, 成功返回 `200` 字符串 `challengeKey`.
+邮箱未注册时仍返回 `200` 和一个随机字符串, 但不会发送邮件, 避免泄露账号是否存在. 邮箱已注册时创建 5 分钟有效的 8 位验证码并发送邮件, 返回 `challengeKey` 字符串.
 
-**响应**: `200` —— (`challengeKey`)
+**响应**:
+
+- `200 OK` —— 返回 `challengeKey` 字符串
+- `400 Bad Request` —— 邮箱格式无效 (60102)
 
 ### POST /api/account/password-reset/confirm
 
 匿名. Form: `email`、`newPassword`、`challengeCode`、`challengeKey`, 均必填.
 
-验证码必须属于同一邮箱且在有效期内, 验证成功即一次性消费. 错误、过期、已使用或不属于该邮箱时返回 `400 Status` (40000). 账号存在时写入新密码, 删除该用户的全部登录会话以及由该用户授予的机台授权, 返回 `200 空`. 本接口没有额外的密码复杂度校验.
+验证码必须属于同一邮箱且在有效期内, 验证成功即一次性消费. 账号存在时写入新密码, 删除该用户的全部登录会话以及由该用户授予的机台授权. 本接口没有额外的密码复杂度校验.
 
-**响应**: `200` —— 空响应体
+**响应**:
+
+- `200 OK` —— 空响应体
+- `400 Bad Request` —— 验证码错误、过期、已使用或不属于该邮箱
 
 ### GET /api/account/recent
 
 匿名. Query: `username?: string`, 默认空字符串.
 
-**响应**: `200` —— [响应模型](#playerscoresummary) —— 最近 **30 天**游玩记录, 时间倒序; 已删除谱面的记录跳过, 无分页. 用户不存在返回 `404 Status`
+**响应**:
+
+- `200 OK` —— [响应模型](#playerscoresummary), 最近 **30 天**游玩记录, 时间倒序; 已删除谱面的记录跳过, 无分页
+- `404 Not Found` —— 用户不存在
 
 _示例_:
 
@@ -311,7 +345,10 @@ _示例_:
 | `matchMode` | string | `or` | 不同筛选字段间关系, 仅 `and` / `or` |
 | `fieldMatchMode` | string | `or` | 同字段内匹配关系, 仅 `and` / `or` |
 
-**响应**: `200` —— [响应模型](#onlinemaiscore) —— 全部筛选字段省略时返回本人所有仍可关联到谱面的成绩. 非法模式或 Guid 返回 `400 Status`
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinemaiscore), 全部筛选字段省略时返回本人所有仍可关联到谱面的成绩
+- `400 Bad Request` —— 非法模式或 Guid
 
 成绩按 `levelHash → 谱面元信息 → 谱面` 关联, 每条成绩只出现一次. 同一 level hash 属于多张谱面时, 按代表难度规则选择: 最早上传的谱面, 同时上传按谱面 ID, 再按难度序号. 关联不到任何谱面的成绩不返回.
 
@@ -358,7 +395,11 @@ _示例_:
 | `sort` | string | 否 | 仅 `new` (默认) 或 `top` |
 | `page` | int | 否 | 从 1 开始, 范围 1–10000, 默认 1, 每页 20 条 |
 
-**响应**: `200` —— [响应模型](#commentpages) —— 失败: `400 Status` (40000); `404 Status` (40400) 用户不存在
+**响应**:
+
+- `200 OK` —— [响应模型](#commentpages)
+- `400 Bad Request` —— 参数无效 (40000)
+- `404 Not Found` —— 用户不存在 (40400)
 
 _示例_:
 
@@ -401,7 +442,10 @@ _示例_:
 
 匿名. Form: `email: string`, 必填, 校验邮箱包含 `@` 且域名存在 MX 记录.
 
-**响应**: `200` —— 字符串 `challengeKey`; 8 位验证码发送到邮箱, 5 分钟有效. 邮箱无效返回 `400 Status` (60102)
+**响应**:
+
+- `200 OK` —— 字符串 `challengeKey`; 8 位验证码发送到邮箱, 5 分钟有效
+- `400 Bad Request` —— 邮箱无效 (60102)
 
 ::: info 限流未生效
 接口声明了每 IP 每分钟 10 次的限流策略, 但当前应用管线未启用限流中间件, **不能把此限制视为已生效**.
@@ -411,7 +455,10 @@ _示例_:
 
 匿名. Query: `username: string`, 必填.
 
-**响应**: `302` —— 为该用户头像的绝对地址 (未上传时跳转默认头像). 用户名为空或用户不存在时返回 `404`. 客户端缓存声明为 1 小时
+**响应**:
+
+- `302 Found` —— 为该用户头像的绝对地址 (未上传时跳转默认头像); 客户端缓存声明为 1 小时
+- `404 Not Found` —— 用户名为空或用户不存在
 
 已发布的 MajdataPlay (2.0.5 及更早) 通过此接口加载头像. 新客户端可以直接用响应里的 `avatarId` 请求 `GET /api/avatar/{avatarId}`.
 
@@ -419,7 +466,9 @@ _示例_:
 
 匿名. Path: `avatarId: string`.
 
-**响应**: `302` —— 为头像的绝对地址. 没有该 ID 时跳转默认头像; 可使用 `default` 获取默认头像
+**响应**:
+
+- `302 Found` —— 为头像的绝对地址; 没有该 ID 时跳转默认头像
 
 ## 游戏设置
 
@@ -427,7 +476,9 @@ _示例_:
 
 鉴权: 登录. 无参数.
 
-**响应**: `200` —— 返回解码后的 JSON **文本字符串**; 无设置或解码失败时为 `{}`. 默认内容协商下通常是 `text/plain`, 不是统一对象包装
+**响应**:
+
+- `200 OK` —— 返回解码后的 JSON **文本字符串**; 无设置或解码失败时为 `{}`. 默认内容协商下通常是 `text/plain`, 不是统一对象包装
 
 _示例_:
 
@@ -442,7 +493,11 @@ _示例_:
 
 鉴权: 登录. 请求体为原始 UTF-8 JSON, 最大 1 MiB. 接收任何合法 JSON 值.
 
-**响应**: `200` —— [响应模型](#anonymousobjects) —— `{ username: string, userSettingJson: string }`; `userSettingJson` 是本次 JSON 文本的 Base64. 失败: `400` 非法 JSON (40000) 或过大 (41300)
+**响应**:
+
+- `200 OK` —— [响应模型](#anonymousobjects) —— `{ username: string, userSettingJson: string }`; `userSettingJson` 是本次 JSON 文本的 Base64
+- `400 Bad Request` —— 非法 JSON (40000)
+- `413 Payload Too Large` —— 过大 (41300)
 
 ## 谱面与文件
 
@@ -470,7 +525,9 @@ _示例_:
 
 搜索前缀: `id:` (Guid)、`hash:`、`uploader:`、`tag:`、`level:`. 其他内容作为正则匹配标题、艺术家、谱师、上传者、难度和标签; 无效 `id:` 返回空数组.
 
-**响应**: `200` —— [响应模型](#onlinemaichart) —— 通常 `200 OnlineMaiChart[]`. `sort=scorep` 特别处理: 返回最近 7 天游玩最多的至多 10 个谱面, 提前返回并忽略 `search/page/isRanking`
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinemaichart); `sort=scorep` 特别处理: 返回最近 7 天游玩最多的至多 10 个谱面, 提前返回并忽略 `search/page/isRanking`
 
 _示例_:
 
@@ -496,7 +553,10 @@ _示例_:
 
 鉴权: 登录. Query: `hash: string`, 必填.
 
-**响应**: `200` —— [响应模型](#anonymousobjects) —— `{ hash, exists, hasHistoricalScores, hasHistoricalInteract, chart }`. 空白 Hash 返回 `400 Status`
+**响应**:
+
+- `200 OK` —— [响应模型](#anonymousobjects) —— `{ hash, exists, hasHistoricalScores, hasHistoricalInteract, chart }`
+- `400 Bad Request` —— 空白 Hash
 
 - `exists`: 谱面存在.
 - `hasHistoricalScores`: 谱面存在且其任一 level hash 下有成绩.
@@ -536,7 +596,10 @@ _示例_:
 | `from` | datetime | 是 | 范围起点 (含), 通常传上一次响应的 `to` |
 | `to` | datetime | 否 | 范围终点 (不含); 省略或晚于当前时间时取当前时间 |
 
-**响应**: `200` —— [响应模型](#chartchanges)
+**响应**:
+
+- `200 OK` —— [响应模型](#chartchanges)
+- `400 Bad Request` —— 缺少 `from`, 或 `from` 晚于范围终点 (40000); 时间格式无效
 
 ```json
 {
@@ -556,13 +619,14 @@ _示例_:
 
 新增只给出谱面 ID, 元信息和资源用 `POST /api/maichart/info` 批量获取. 变更记录默认保留 30 天, 早于最早记录的查询无法保证完整.
 
-失败: 缺少 `from`, 或 `from` 晚于范围终点: `400 Status` (40000); 时间格式无效: `400`.
-
 ### GET /api/maichart/{chartId}/summary
 
-匿名. 成功: `200 MaiChart`; 不存在: `404`.
+匿名.
 
-**响应**: `200` —— [响应模型](#maichart)
+**响应**:
+
+- `200 OK` —— [响应模型](#maichart)
+- `404 Not Found` —— 谱面不存在
 
 _示例_:
 
@@ -585,7 +649,7 @@ _示例_:
 
 ### GET /api/maichart/{chartId}/info
 
-匿名. 返回谱面元信息及各资源文件的信息. 不存在: `404`.
+匿名. 返回谱面元信息及各资源文件的信息.
 
 - `metadata`: `MaiChart`, 与 `summary` 相同.
 - `resources`: `maidata`、`track`、`video`、`coverArt`、`thumbnail`. 未存储的文件为 `null`.
@@ -606,13 +670,19 @@ _示例_:
 }
 ```
 
-**响应**: `200` —— [响应模型](#onlinechartinfo)
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinechartinfo)
+- `404 Not Found` —— 谱面不存在
 
 ### POST /api/maichart/info
 
 匿名. 批量查询多个谱面的 `info`. 请求体为谱面 ID 的 JSON 数组.
 
-**响应**: `200` —— [响应模型](#onlinechartinfo) —— 返回与 `GET /api/maichart/{chartId}/info` 结构相同的对象数组, 按各 ID 在请求中首次出现的顺序排列; 不存在的谱面直接省略. 空数组返回 `[]`. ID 格式无效: `400`. 重复 ID 只计一次, 数量不限
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinechartinfo) 数组, 按各 ID 在请求中首次出现的顺序排列; 不存在的谱面直接省略; 空数组返回 `[]`; 重复 ID 只计一次, 数量不限
+- `400 Bad Request` —— ID 格式无效
 
 _示例_:
 
@@ -654,31 +724,49 @@ _示例_:
 
 匿名. Query: `intent?: string`, 可选; 用户主动下载时传 `download`, 登录状态下会记为推荐下载转化; 预览和游戏内加载不传.
 
-**响应**: `302` —— 跳转到 `maidata.txt`, 附带文件 SHA-256 Base64 响应头 `hash`. 跳转前按谱面 ID 增加播放计数. 文件不存在: `404` (带 `no-store`)
+**响应**:
+
+- `302 Found` —— 跳转到 `maidata.txt`, 附带文件 SHA-256 Base64 响应头 `hash`; 跳转前按谱面 ID 增加播放计数
+- `404 Not Found` —— 文件不存在 (带 `no-store`)
 
 ### GET /api/maichart/{chartId}/track
 
-匿名. 成功: `302` 跳转到 `track.mp3`, 带 `hash`; Range 请求由存储服务处理. 不存在: `404`.
+匿名. Range 请求由存储服务处理.
 
-**响应**: `302` —— 无响应体, `Location` 指向 `track.mp3`
+**响应**:
+
+- `302 Found` —— 无响应体, `Location` 指向 `track.mp3`
+- `404 Not Found` —— 文件不存在
 
 ### GET /api/maichart/{chartId}/image
 
 匿名. Query: `fullImage?: bool = false`.
 
-**响应**: `302` —— 跳转到第一个存在的封面, 带 `hash`. 默认依次尝试 `bg-compress.jpg`、`bg.png`、`bg.jpg`; `fullImage=true` 时依次尝试原图. 均不存在返回 `404`
+**响应**:
+
+- `302 Found` —— 跳转到第一个存在的封面, 带 `hash`; 默认依次尝试 `bg-compress.jpg`、`bg.png`、`bg.jpg`; `fullImage=true` 时依次尝试原图
+- `404 Not Found` —— 均不存在
 
 ### GET /api/maichart/{chartId}/video
 
-匿名. 成功: `302` 跳转到 `bg.mp4`, 带 `hash`. 不存在: `404`.
+匿名.
 
-**响应**: `302` —— 无响应体, `Location` 指向 `bg.mp4`
+**响应**:
+
+- `302 Found` —— 无响应体, `Location` 指向 `bg.mp4`
+- `404 Not Found` —— 文件不存在
 
 ### GET /api/maichart/{chartId}/radar
 
 匿名. Query: `chartLevel: int`, 必填, 范围 **0–6**, 与成绩接口和游戏的难度编号一致 (`0` 对应 `inote_1`, `4` 为 Master, `6` 对应 `inote_7`).
 
-**响应**: `200` —— [响应模型](#onlinechartradar) —— 按 `featureOrder` 读取 `feature` 字典. 前六项为雷达值 (0–250 刻度), `fitted_constant` 为拟合定数, 使用自身量纲
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinechartradar); 前六项为雷达值 (0–250 刻度), `fitted_constant` 为拟合定数, 使用自身量纲
+- `400 Bad Request` —— 缺少或非法参数
+- `404 Not Found` —— 谱面、文件或该难度不存在 (40400)
+- `409 Conflict` —— 文件内容与数据库 Hash 不一致 (40000)
+- `422 Unprocessable Content` —— 该难度无法完整分析 (40000)
 
 ```json
 {
@@ -697,8 +785,6 @@ _示例_:
 
 首次访问缺失或过期的缓存时, 请求会等待分析完成后直接返回 JSON, 不使用 `202` 或轮询.
 
-失败: `400` 缺少或非法参数; `404 Status` (40400) 谱面、文件或该难度不存在; `409 Status` (40000) 文件内容与数据库 Hash 不一致; `422 Status` (40000) 该难度无法完整分析.
-
 ### POST /api/maichart/upload
 
 鉴权: `MANAGE_CHART_LIST`. 请求为 multipart; 所有文件均使用字段名 **`formfiles`**, 服务端按上传文件名识别用途.
@@ -710,7 +796,12 @@ _示例_:
 | `track.mp3` | 是 | 音频 |
 | `bg.mp4` 或 `pv.mp4` | 否 | 视频; 上限 50 MiB |
 
-**响应**: `200` —— 文本 `上传成功！`, **不返回 chartId**; 可通过谱面列表查询. 失败: `400` 缺文件、元信息不完整、相同 MD5 谱面已存在; `409 Status` 表示相同 SHA-256 上传正在处理; `413 Status` 表示视频过大
+**响应**:
+
+- `200 OK` —— 文本 `上传成功！`, **不返回 chartId**; 可通过谱面列表查询
+- `400 Bad Request` —— 缺文件、元信息不完整、相同 MD5 谱面已存在
+- `409 Conflict` —— 相同 SHA-256 上传正在处理
+- `413 Payload Too Large` —— 视频过大
 
 文件和谱面记录保存成功后记录一条新增变更, 并在后台触发全部难度的雷达分析; 上传响应不等待分析完成.
 
@@ -718,7 +809,11 @@ _示例_:
 
 鉴权: `MANAGE_CHART_LIST`, 且只能删除本人上传的谱面. Query: `chartId: Guid`, 必填.
 
-**响应**: `200` —— 空响应体 —— 删除谱面记录、文件与该谱面的雷达缓存, 保留按 level hash 关联的历史成绩和互动. 不存在: `404 Status`; 非上传者: `403`
+**响应**:
+
+- `200 OK` —— 空响应体; 删除谱面记录、文件与该谱面的雷达缓存, 保留按 level hash 关联的历史成绩和互动
+- `403 Forbidden` —— 非上传者
+- `404 Not Found` —— 谱面不存在
 
 ### PUT /api/maichart/{chartId}/tags
 
@@ -726,9 +821,14 @@ _示例_:
 
 标签先规范化: 去掉首尾空白, 丢弃空字符串和 `null`, 按第一次出现的位置去重 (区分大小写). 规范化后与当前标签相同时不写库, 因此可以安全重试.
 
-数量上限: 每种标签最多 **32** 个. 超过时返回 `400 Status` (40002).
+数量上限: 每种标签最多 **32** 个.
 
-**响应**: `200` —— (请求后的 tags); 超过上限: `400 Status` (40002); 不存在: `404`; 非上传者: `403`
+**响应**:
+
+- `200 OK` —— 请求后的 `tags`
+- `400 Bad Request` —— 超过上限 (40002)
+- `403 Forbidden` —— 非上传者
+- `404 Not Found` —— 谱面不存在
 
 _示例_:
 
@@ -746,7 +846,13 @@ _示例_:
 - 数量上限同上; 上限生效前已超过 32 个的谱面仍可删除标签.
 - 并发冲突持续 3 次时返回 `409 Status`, 客户端可直接重试.
 
-**响应**: `200` —— 请求后的 `tags`
+**响应**:
+
+- `200 OK` —— 请求后的 `tags`
+- `400 Bad Request` —— 同一标签既增又删, 或超过上限 (40002)
+- `403 Forbidden` —— 非上传者
+- `404 Not Found` —— 谱面不存在
+- `409 Conflict` —— 持续并发冲突, 客户端可直接重试
 
 _示例_:
 
@@ -758,7 +864,12 @@ _示例_:
 
 鉴权: 登录即可, **不要求是上传者** (与只允许上传者修改的 tags 不同). 请求体、规范化、幂等与数量上限规则同 `PUT /api/maichart/{chartId}/tags`, 全量替换公共标签.
 
-**响应**: `200` —— 超过上限: `400 Status` (40002); 不存在: `404`; 未登录: `401`
+**响应**:
+
+- `200 OK` —— 请求后的 `publicTags`
+- `400 Bad Request` —— 超过上限 (40002)
+- `401 Unauthorized` —— 未登录
+- `404 Not Found` —— 谱面不存在
 
 _示例_:
 
@@ -770,7 +881,13 @@ _示例_:
 
 鉴权同 `PUT /api/maichart/{chartId}/publictags`; 请求体与规则同 `PATCH /api/maichart/{chartId}/tags`. 多个用户同时增删不同标签不会互相覆盖, 因此多人编辑公共标签时推荐用它代替整体替换.
 
-**响应**: `200` —— 同一标签既增又删: `400 Status`; 超过上限: `400 Status` (40002)
+**响应**:
+
+- `200 OK` —— 请求后的 `publicTags`
+- `400 Bad Request` —— 同一标签既增又删, 或超过上限 (40002)
+- `401 Unauthorized` —— 未登录
+- `404 Not Found` —— 谱面不存在
+- `409 Conflict` —— 持续并发冲突, 客户端可直接重试
 
 ## 谱面互动
 
@@ -800,9 +917,12 @@ _示例_:
 
 鉴权: `COMMIT_CHART_INTERACTION`. JSON 请求体 `{ "value": 1 | 0 | -1 }`.
 
-**响应**: `200` —— [响应模型](#onlinevoteresult) —— 即 `{ score, upvotes, downvotes, myVote }`. 撤销不存在的票也返回 `200`
+**响应**:
 
-失败: `400` 值非法或请求体不可解析; `403` 上传者禁用了该谱面的互动; `404` 谱面不存在.
+- `200 OK` —— [响应模型](#onlinevoteresult) —— `{ score, upvotes, downvotes, myVote }`; 撤销不存在的票也返回 `200`
+- `400 Bad Request` —— 值非法或请求体不可解析
+- `403 Forbidden` —— 上传者禁用了该谱面的互动
+- `404 Not Found` —— 谱面不存在
 
 _示例_:
 
@@ -826,7 +946,11 @@ _示例_:
 
 每页 20 条顶层评论, 并带上这些顶层评论之下最多 1500 条回复; 回复嵌入各自父评论的 `replies`. 每条评论的 `authorProfile` 为作者的公开资料, 网页可直接显示昵称和头像.
 
-**响应**: `200` —— [响应模型](#commentpages) —— 即 `{ items, total, commentCount, page, pageSize: 20, sort }`; `total` 为该谱面的顶层评论数 (含占位符)
+**响应**:
+
+- `200 OK` —— [响应模型](#commentpages) —— `{ items, total, commentCount, page, pageSize: 20, sort }`; `total` 为该谱面的顶层评论数 (含占位符)
+- `400 Bad Request` —— `sort`、`page` 或谱面 ID 无效 (40000)
+- `404 Not Found` —— 谱面不存在 (40400)
 
 ::: warning 已废弃字段
 `commentCount` 为存活评论数, **已废弃**: 没有客户端读取, Swagger 中标记为 deprecated. 请改用 `GET /api/maichart/{chartId}/interactsum` 的 `comments` (同一个计数).
@@ -894,9 +1018,14 @@ _示例_:
 
 鉴权: `COMMIT_CHART_INTERACTION`. JSON 请求体 `{ "body": string, "parentId"?: ObjectId }`; `parentId` 省略或 null 为顶层评论, 否则必须是**同一谱面**上的存活评论.
 
-**响应**: `201` —— [响应模型](#onlinecomment) —— (不含 `replies`), `Location` 指向 `GET /api/comment/{id}`. 发表后会异步发送邮件与群通知, 失败只记日志
+**响应**:
 
-失败: `400` 正文不合规、回复过深或请求体不可解析; `403` 上传者禁用互动; `404` 谱面或父评论不存在; `409` 父评论已删除; `429` 超出限流.
+- `201 Created` —— [响应模型](#onlinecomment) (不含 `replies`), `Location` 指向 `GET /api/comment/{id}`; 发表后会异步发送邮件与群通知, 失败只记日志
+- `400 Bad Request` —— 正文不合规、回复过深或请求体不可解析
+- `403 Forbidden` —— 上传者禁用互动
+- `404 Not Found` —— 谱面或父评论不存在
+- `409 Conflict` —— 父评论已删除
+- `429 Too Many Requests` —— 超出限流
 
 _示例_:
 
@@ -931,9 +1060,13 @@ _示例_:
 
 匿名; 评论的永久链接视图. Query: `sort`, 取值同上, 默认 `best`.
 
-返回该评论 (即使它是占位符) 及其之下的全部回复. 成功: `200 OnlineCommentThread`, 即 `{ item, sort }`. `commentId` 非法或 `sort` 无效: `400 Status`; 不存在: `404 Status`.
+返回该评论 (即使它是占位符) 及其之下的全部回复.
 
-**响应**: `200` —— [响应模型](#commentpages)
+**响应**:
+
+- `200 OK` —— [响应模型](#commentpages)
+- `400 Bad Request` —— `commentId` 非法或 `sort` 无效
+- `404 Not Found` —— 评论不存在
 
 _示例_:
 
@@ -967,7 +1100,13 @@ _示例_:
 
 鉴权: `COMMIT_CHART_INTERACTION`, 只有作者本人可以编辑. JSON 请求体 `{ "body": string }`, 正文规则同发表.
 
-**响应**: `200` —— [响应模型](#onlinecomment) —— 正文有变化时设置 `editedAt`. 失败: `400` 正文不合规; `403` 非本人评论; `404` 不存在; `409` 评论已删除
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinecomment); 正文有变化时设置 `editedAt`
+- `400 Bad Request` —— 正文不合规
+- `403 Forbidden` —— 非本人评论
+- `404 Not Found` —— 评论不存在
+- `409 Conflict` —— 评论已删除
 
 _示例_:
 
@@ -997,7 +1136,12 @@ _示例_:
 
 鉴权: `COMMIT_CHART_INTERACTION`. 作者删除自己的评论; 管理员可移除任何人的评论.
 
-**响应**: `200` —— [响应模型](#commentpages) —— 即 `{ ok: true, purged }`; `purged=true` 表示评论没有回复、已物理删除, `false` 表示变为占位符. 失败: `400` ID 非法; `403` 非本人评论; `404` 不存在
+**响应**:
+
+- `200 OK` —— [响应模型](#commentpages) —— `{ ok: true, purged }`; `purged=true` 表示评论没有回复、已物理删除, `false` 表示变为占位符
+- `400 Bad Request` —— ID 非法
+- `403 Forbidden` —— 非本人评论
+- `404 Not Found` —— 评论不存在
 
 _示例_:
 
@@ -1012,7 +1156,12 @@ _示例_:
 
 鉴权: `COMMIT_CHART_INTERACTION`. JSON 请求体 `{ "value": 1 | 0 | -1 }`.
 
-**响应**: `200` —— [响应模型](#onlinevoteresult) —— 评论只返回 `{ score, myVote }`. 失败: `400` 值非法; `404` 不存在; `409` 占位符不能投票
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinevoteresult), 评论只返回 `{ score, myVote }`
+- `400 Bad Request` —— 值非法
+- `404 Not Found` —— 评论不存在
+- `409 Conflict` —— 占位符不能投票
 
 _示例_:
 
@@ -1025,9 +1174,12 @@ _示例_:
 
 ### GET /api/maichart/{chartId}/interactsum
 
-匿名. 成功: `200 ChartInteractSummary`, 即 `{ chartId, plays, score, upvotes, downvotes, comments, myVote }`; 没有互动记录时各项为 0; 谱面不存在: `404` (无响应体). 响应禁止缓存.
+匿名. 响应禁止缓存.
 
-**响应**: `200` —— [响应模型](#chartinteractsummary)
+**响应**:
+
+- `200 OK` —— [响应模型](#chartinteractsummary); 没有互动记录时各项为 0
+- `404 Not Found` —— 谱面不存在 (无响应体)
 
 _示例_:
 
@@ -1045,9 +1197,11 @@ _示例_:
 
 ### POST /api/maichart/interactsum
 
-匿名. JSON 请求体为 `Guid[]`. 成功: `200 ChartInteractSummary[]`, 按请求顺序返回, 重复 ID 只回答一次, 不存在的谱面省略. 响应禁止缓存.
+匿名. JSON 请求体为 `Guid[]`. 响应禁止缓存.
 
-**响应**: `200` —— [响应模型](#chartinteractsummary)
+**响应**:
+
+- `200 OK` —— [响应模型](#chartinteractsummary) 数组, 按请求顺序返回, 重复 ID 只回答一次, 不存在的谱面省略
 
 ### 游戏客户端兼容接口
 
@@ -1057,7 +1211,7 @@ _示例_:
 
 #### GET /api/maichart/{chartId}/interact
 
-匿名; 登录后附带当前用户的票. 成功: `200 ChartInteractFull`: `isLiked`/`isDisLiked` 为当前用户是否投了赞/踩, `likes` 为投赞用户的用户名数组 (客户端自行计数), `disLikeCount` 为踩数, `comments` 为存活评论树 (按发表顺序, 占位符及其下的回复都不返回).
+匿名; 登录后附带当前用户的票.
 
 #### POST /api/maichart/{chartId}/interact
 
@@ -1137,9 +1291,11 @@ _示例_:
 | `dxScore` | int64 | 默认 0 | 非负 |
 | `comboState` | int | 默认 0 | ComboState 数值 |
 
-失败: `400` 缺少 `chartId`、level hash 非法或成绩不合法; `404` 谱面不存在 (`No such song on server`)、该谱面没有这个 level hash 的难度 (`No such level on server`, 客户端应刷新谱面) 或用户不存在.
+**响应**:
 
-**响应**: `200` —— 空响应体
+- `200 OK` —— 空响应体
+- `400 Bad Request` —— 缺少 `chartId`、level hash 非法或成绩不合法
+- `404 Not Found` —— 谱面不存在、该谱面没有这个 level hash 的难度或用户不存在
 
 ### POST /api/maichart/{chartId}/score
 
@@ -1153,13 +1309,15 @@ _示例_:
 | `dxScore` | int64 | 默认 0 | 非负 |
 | `comboState` | int | 默认 0 | ComboState 数值 |
 
-失败: `400` 成绩不合法; `404` 谱面不存在、`hash` 与当前谱面不一致 (客户端应刷新谱面)、该难度没有 level hash 或用户不存在.
-
 ::: info 推荐
 本接口保留供已发布客户端使用. 新客户端请改用 `POST /api/maiscore/level/{levelHash}`, 不再依赖谱面 Hash.
 :::
 
-**响应**: `200` —— 空响应体
+**响应**:
+
+- `200 OK` —— 空响应体
+- `400 Bad Request` —— 成绩不合法
+- `404 Not Found` —— 谱面不存在、`hash` 与当前谱面不一致、该难度没有 level hash 或用户不存在
 
 ## 谱单
 
@@ -1178,7 +1336,10 @@ _示例_:
 | `page` | int | 0 | 从 0 开始 |
 | `pageSize` | int | 30 | 每页数量 |
 
-**响应**: `200` —— [响应模型](#playlistlistitem) —— 谱单列表项数组, 按最后活跃时间倒序. 负 page/pageSize 返回 `400`
+**响应**:
+
+- `200 OK` —— [响应模型](#playlistlistitem) 数组, 按最后活跃时间倒序
+- `400 Bad Request` —— 负 page/pageSize
 
 _示例_:
 
@@ -1204,7 +1365,9 @@ _示例_:
 | `description` | string | 否 | 描述 |
 | `visibility` | int | 是 | 0 私有、1 公开 |
 
-**响应**: `200` —— [响应模型](#onlinesongcollection) —— 初始 items 为空、count 为 0
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinesongcollection), 初始 items 为空、count 为 0
 
 _示例_:
 
@@ -1222,9 +1385,12 @@ _示例_:
 
 ### GET /api/collection/{collectionId}/hashlist
 
-公开谱单匿名可读; 私有谱单仅登录所有者可读. 成功: `200 OnlineDanInfo` (见[响应模型](#onlinedaninfo)), `songHashs` (保留原拼写) 为谱单中仍存在的谱面的 Hash. **该字段是无序集合**, 需要顺序请用 songlist. 不存在或不可见: `404`.
+公开谱单匿名可读; 私有谱单仅登录所有者可读. **`songHashs` 是无序集合**, 需要顺序请用 songlist.
 
-**响应**: `200` —— [响应模型](#onlinedaninfo)
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinedaninfo); `songHashs` 为谱单中仍存在的谱面的 Hash, **该字段是无序集合**
+- `404 Not Found` —— 谱单不存在或不可见
 
 _示例_:
 
@@ -1242,11 +1408,14 @@ _示例_:
 
 ### GET /api/collection/{collectionId}/songlist
 
-权限与 hashlist 相同. 成功: `200 OnlineSongCollection`, `items` 为仍存在的谱面的 ID (`Guid[]`), 按谱单顺序.
+权限与 hashlist 相同. `items` 不内嵌谱面信息; 客户端把它原样提交给 `POST /api/maichart/info` 一次取回元信息. 空谱单无需请求.
 
 `items` 不内嵌谱面信息; 客户端把它原样提交给 `POST /api/maichart/info` 一次取回元信息. 空谱单无需请求.
 
-**响应**: `200` —— [响应模型](#onlinesongcollection)
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinesongcollection); `items` 为仍存在的谱面的 ID (`Guid[]`), 按谱单顺序
+- `404 Not Found` —— 谱单不存在或不可见
 
 _示例_:
 
@@ -1266,7 +1435,11 @@ _示例_:
 
 鉴权: `W_USER_CHART_COLLECTIONS`, 且为谱单所有者. 无请求体.
 
-**响应**: `200` —— 空响应体 —— 不存在或不可见: `404`; 访问到公开但非本人谱单: `403 Status`
+**响应**:
+
+- `200 OK` —— 空响应体
+- `403 Forbidden` —— 访问到公开但非本人谱单
+- `404 Not Found` —— 谱单不存在或不可见
 
 ### PUT /api/collection/{collectionId}/modify
 
@@ -1279,7 +1452,12 @@ _示例_:
 | `visibility` | int | 否 | 非 null 时更新 |
 | `items` | Guid[] | 否 | 谱面 ID 数组, 全量替换并按请求顺序保存; 空数组清空; 不存在的谱面被过滤, 重复 ID 只保留一个 |
 
-**响应**: `200` —— [响应模型](#onlinesongcollection) —— `{ code: 114514, message: "Ok", collection: OnlineSongCollection }`. 谱单 ID 无效或请求体无法解析: `400 Status`, 不做任何修改. 不存在或不可见: `404`; 非本人公开谱单: `403`
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinesongcollection) —— `{ code: 114514, message: "Ok", collection: OnlineSongCollection }`
+- `400 Bad Request` —— 谱单 ID 无效或请求体无法解析, 不做任何修改
+- `403 Forbidden` —— 非本人公开谱单
+- `404 Not Found` —— 谱单不存在或不可见
 
 增删单个谱面时, 客户端先读 songlist 的 `items`, 在本地增删后把完整列表交给 modify.
 
@@ -1311,7 +1489,9 @@ _示例_:
 
 鉴权: `R_USER_CHART_COLLECTIONS`. Query: `isExtra?: bool = false`.
 
-**响应**: `200` —— [响应模型](#onlinedaninfo) —— 默认返回已收藏谱单; `isExtra=true` 附加"我赞过的""大家都在玩""最近受欢迎/被讨论/被下载""今日课题"等系统谱单
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinedaninfo) 数组; 默认返回已收藏谱单, `isExtra=true` 附加"我赞过的""大家都在玩""最近受欢迎/被讨论/被下载""今日课题"等系统谱单
 
 当 User-Agent 以 `MajdataPlay` 开头时, 还合并自己创建的谱单并启用附加谱单.
 
@@ -1345,9 +1525,12 @@ _示例_:
 
 鉴权: `W_USER_CHART_COLLECTIONS`. JSON 请求体为 ObjectId 字符串数组.
 
-添加收藏, 只处理公开谱单或本人拥有的谱单. 成功: `200 Status`, message `Ok`; 空数组也成功. 非空请求中没有任何符合条件的谱单: `404`.
+添加收藏, 只处理公开谱单或本人拥有的谱单. 空数组也成功.
 
-**响应**: `200` —— [响应模型](#status)
+**响应**:
+
+- `200 OK` —— [响应模型](#status), message `Ok`; 空数组也成功
+- `404 Not Found` —— 非空请求中没有任何符合条件的谱单
 
 _示例_:
 
@@ -1360,9 +1543,11 @@ _示例_:
 
 ### DELETE /api/account/favorite/collection/diff
 
-鉴权同上, JSON 请求体同上. 移除收藏. 成功: `200 Status`, message `Ok`; 空数组或未收藏 ID 也可成功.
+鉴权同上, JSON 请求体同上. 移除收藏.
 
-**响应**: `200` —— [响应模型](#status)
+**响应**:
+
+- `200 OK` —— [响应模型](#status), message `Ok`; 空数组或未收藏 ID 也可成功
 
 _示例_:
 
@@ -1381,9 +1566,11 @@ _示例_:
 
 无需用户登录. 必须提供以 **`MajdataPlay`** 开头的 `User-Agent`. JSON: `name: string` 必填、`description?: string`.
 
-**响应**: `200` —— [响应模型](#anonymousobjects) —— `{ id, name, description, place, remoteIP }`; 其中 `id` 是创建的机台**会话 ID**; 真正机台 ID 在 `machine-id` Cookie. 设置 `machine-token` 和 `machine-id`
+**响应**:
 
-失败: `403 Status` User-Agent 缺失或不符合要求; `400 Status` 名称缺失或无法获得 IP.
+- `200 OK` —— [响应模型](#anonymousobjects) —— `{ id, name, description, place, remoteIP }`; `id` 是创建的机台**会话 ID**, 真正机台 ID 在 `machine-id` Cookie; 设置 `machine-token` 和 `machine-id`
+- `400 Bad Request` —— 名称缺失或无法获得 IP
+- `403 Forbidden` —— `User-Agent` 缺失或不符合要求
 
 机台是临时的, 生命周期与它自己的机台会话绑定: 机台会话过期或被删除后, 机台视为不存在.
 
@@ -1403,7 +1590,10 @@ _示例_:
 
 Query: `machine-id?: ObjectId`. 指定 ID 时查询对应机台; 省略时查询当前机台会话. 无需用户登录.
 
-**响应**: `200` —— [响应模型](#anonymousobjects) —— `{ name, description, place, remoteIP }`; 机台或所需会话不存在: `404 Status`. 声明缓存 30 分钟
+**响应**:
+
+- `200 OK` —— [响应模型](#anonymousobjects) —— `{ name, description, place, remoteIP }`; 声明缓存 30 分钟
+- `404 Not Found` —— 机台或所需会话不存在
 
 _示例_:
 
@@ -1420,13 +1610,20 @@ _示例_:
 
 要求当前机台会话, 无参数.
 
-**响应**: `200` —— 空响应体 —— 删除机台、撤销授权、移除机台会话, 并把 `machine-token`、`machine-id`、`token` Cookie 设置为空. 无机台会话: `401 Status`
+**响应**:
+
+- `200 OK` —— 空响应体; 删除机台、撤销授权、移除机台会话, 并把 `machine-token`、`machine-id`、`token` Cookie 设置为空
+- `401 Unauthorized` —— 无机台会话
 
 ### POST /api/machine/auth/request
 
 鉴权: 有效机台会话, 无参数. 创建有效期 5 分钟的授权请求. 每台机台同时最多一条请求.
 
-**响应**: `201` —— [响应模型](#anonymousobjects) —— `{ requestId: string }`; `Location` 为 `https://majdata.net/qrauth?auth-id={requestId}`. 已有有效请求: `403 Status`; 注册信息找不到: `401 Status`
+**响应**:
+
+- `201 Created` —— [响应模型](#anonymousobjects) —— `{ requestId: string }`; `Location` 为 `https://majdata.net/qrauth?auth-id={requestId}`
+- `401 Unauthorized` —— 注册信息找不到
+- `403 Forbidden` —— 已有有效请求
 
 _示例_:
 
@@ -1440,7 +1637,10 @@ _示例_:
 
 匿名. Query: `auth-id: string`, 必填.
 
-**响应**: `200` —— [响应模型](#anonymousobjects) —— `{ grantee: "machine", granteeInfo: { name, description, place, remoteIP } }`. 请求、机台或对应会话无效: `404 Status`. 禁止存储缓存
+**响应**:
+
+- `200 OK` —— [响应模型](#anonymousobjects) —— `{ grantee: "machine", granteeInfo: { name, description, place, remoteIP } }`; 禁止存储缓存
+- `404 Not Found` —— 请求、机台或对应会话无效
 
 _示例_:
 
@@ -1462,7 +1662,11 @@ _示例_:
 
 成功批准: `200 空`, 为当前用户创建游戏权限临时会话, 并向有邮箱的用户发送通知; 请求存在但未再次成功授权 (例如已批准): `204`; 请求不存在: `404 Status`.
 
-**响应**: `200` —— 空响应体 (`204` 表示已批准过)
+**响应**:
+
+- `200 OK` —— 空响应体, 为当前用户创建游戏权限临时会话
+- `204 No Content` —— 请求存在但未再次成功授权 (例如已批准)
+- `404 Not Found` —— 请求不存在
 
 ### GET /api/machine/auth/check
 
@@ -1477,7 +1681,12 @@ _示例_:
 
 成功获取会消费请求, 不能重复领取. 禁止存储缓存.
 
-**响应**: `200` —— [响应模型](#anonymousobjects) —— `匿名对象`
+**响应**:
+
+- `200 OK` —— [响应模型](#anonymousobjects) —— `{ token: Guid, userInfo: UserProfile }`, 同时设置 `token` Cookie
+- `202 Accepted` —— 尚未批准, 无响应体, 可继续轮询
+- `403 Forbidden` —— 请求不属于当前机台
+- `404 Not Found` —— 请求不存在、已消费或机台不存在
 
 _示例_:
 
@@ -1500,7 +1709,11 @@ _示例_:
 
 鉴权: 有效机台会话. Query: `auth-id: string`, 必填.
 
-**响应**: `200` —— 空响应体 —— 请求不存在: `404 Status`; 非发起机台: `403 Status`. check 消费请求后再使用相同请求 ID 可能返回 `404`
+**响应**:
+
+- `200 OK` —— 空响应体
+- `403 Forbidden` —— 非发起机台
+- `404 Not Found` —— 请求不存在
 
 ## 成绩排行与统计
 
@@ -1526,17 +1739,19 @@ _示例_:
 
 ### GET /api/maiscore/leaderboard/chart/by-id/{chartId}
 
-匿名. 成功: `200 ChartScoreSummary { hash, levelHashes, scores }`. `levelHashes` 固定 7 项, 没有 inote 的难度为 `null`; `scores` 长度为 **8**, `scores[level]` (level 0–6) 为该难度的榜单, 最后一项始终为空数组.
+匿名. `levelHashes` 固定 7 项, 没有 inote 的难度为 `null`; `scores` 长度为 **8**, `scores[level]` (level 0–6) 为该难度的榜单, 最后一项始终为空数组.
 
 每个难度的榜单取 `levelHash` 等于该难度 level hash 的成绩, 按 DX 达成率倒序最多 10 条, 每位玩家一条. 没有 level hash 的难度榜单为空数组.
-
-失败: 谱面不存在 `404 Status`; `chartId` 不是合法 Guid `400`.
 
 ::: info 玩家资料
 本接口的 `scores[][].player` 为完整的 `UserProfile` (为已发布的 MajdataPlay 保留), 其中 `id` 为真实用户 ObjectId, `avatarId` 已填充, 邮箱为 null.
 :::
 
-**响应**: `200` —— [响应模型](#leaderboards)
+**响应**:
+
+- `200 OK` —— [响应模型](#leaderboards)
+- `400 Bad Request` —— `chartId` 不是合法 Guid
+- `404 Not Found` —— 谱面不存在
 
 _示例_:
 
@@ -1575,7 +1790,10 @@ _示例_:
 
 匿名. Path: `levelHash` 为 64 位小写十六进制.
 
-**响应**: `200` —— [响应模型](#leaderboards) —— `{ levelHash, scores: ScoreSummary[] }`; 规则与 by-id 的单个难度相同. 只查成绩, 不查谱面, 因此 level hash 可以属于已删除的谱面, 或不属于任何谱面. 没有成绩时 `scores` 为空数组
+**响应**:
+
+- `200 OK` —— [响应模型](#leaderboards) —— `{ levelHash, scores: ScoreSummary[] }`; 规则与 by-id 的单个难度相同. 只查成绩, 不查谱面, 因此 level hash 可以属于已删除的谱面, 或不属于任何谱面; 没有成绩时 `scores` 为空数组
+- `400 Bad Request` —— `levelHash` 不是 64 位小写十六进制
 
 `levelHash` 不是 64 位小写十六进制 (含大写) 时返回 `400 Status`.
 
@@ -1617,11 +1835,14 @@ _示例_:
 
 游玩和成绩一样按 level hash 归属: 取所请求谱面各难度的 level hash, 匹配这些难度上的游玩, 不论这次游玩记在哪张谱面上; 多张请求谱面共用的难度在 `best` 时只计一次.
 
-`sortBy`/`scoreType` 忽略首尾空白及大小写, null/空字符串使用默认值. 成功: `200 PlayHistoryRankingEntry[]`, 按所选指标倒序, 无分页.
+`sortBy`/`scoreType` 忽略首尾空白及大小写, null/空字符串使用默认值.
 
-失败: 空 `songIds` 为 `400` (40001), 时间或模式错误为 `400` (40000); 完全省略 `songIds` 或其中有非法 Guid 时由框架返回 ProblemDetails. 旧字段 `songhashes` 不再接受.
+旧字段 `songhashes` 不再接受.
 
-**响应**: `200` —— [响应模型](#statisticsandrating)
+**响应**:
+
+- `200 OK` —— [响应模型](#statisticsandrating) 数组, 按所选指标倒序, 无分页
+- `400 Bad Request` —— 空 `songIds` (40001), 时间或模式错误 (40000)
 
 _示例_:
 
@@ -1652,7 +1873,10 @@ _示例_:
 | `page` | int | 0 | 从 0 开始, 要求 ≥0 |
 | `pageSize` | int | 30 | 验证要求 ≥1 |
 
-**响应**: `200` —— [响应模型](#statisticsandrating) —— 按每位玩家累计 DX 达成率倒序. 服务端缓存完整榜单 10 分钟, `geneTime` 为快照生成时间. 省略 `page` 或显式传 `page=0` 均返回第一页. 负页码或小于 1 的 `pageSize` 返回 `400`
+**响应**:
+
+- `200 OK` —— [响应模型](#statisticsandrating), 按每位玩家累计 DX 达成率倒序. 服务端缓存完整榜单 10 分钟, `geneTime` 为快照生成时间; 省略 `page` 或显式传 `page=0` 均返回第一页
+- `400 Bad Request` —— 负页码或小于 1 的 `pageSize`
 
 _示例_:
 
@@ -1681,7 +1905,10 @@ _示例_:
 
 不存在的上传者或无人游玩时返回空 `players`, 不返回 `404`.
 
-**响应**: `200` —— [响应模型](#statisticsandrating)
+**响应**:
+
+- `200 OK` —— [响应模型](#statisticsandrating)
+- `400 Bad Request` —— 负页码或小于 1 的 `pageSize`
 
 _示例_:
 
@@ -1703,7 +1930,10 @@ _示例_:
 
 匿名. Path: `chartId: Guid`. 只汇总该谱面 (全部难度) 上的成绩. 谱面已删除时仍按其已存储的 level hash 汇总; 完全未知的谱面返回 `200` 空 `players`.
 
-**响应**: `200` —— [响应模型](#statisticsandrating)
+**响应**:
+
+- `200 OK` —— [响应模型](#statisticsandrating)
+- `400 Bad Request` —— `chartId` 不是合法 Guid、负页码或小于 1 的 `pageSize`
 
 _示例_:
 
@@ -1729,7 +1959,10 @@ _示例_:
 Hash 中的 `/` **必须**编码为 `%2F`, 否则路由不匹配并返回 `404`; `+`、`=` 可原样传递, 也可编码为 `%2B`、`%3D`. 建议对整个 Hash 做 URL 编码.
 :::
 
-**响应**: `200` —— [响应模型](#statisticsandrating)
+**响应**:
+
+- `200 OK` —— [响应模型](#statisticsandrating)
+- `400 Bad Request` —— 负页码或小于 1 的 `pageSize`
 
 _示例_:
 
@@ -1744,7 +1977,11 @@ _示例_:
 
 匿名. Path: `userId: ObjectId`.
 
-**响应**: `200` —— [响应模型](#statisticsandrating) —— 为该玩家全部最佳成绩的累计达成率, `player` 为该玩家的公开资料; 没有成绩的玩家返回零值. 用户不存在返回 `404 Status`; `userId` 不是合法 ObjectId 返回 `400` ProblemDetails
+**响应**:
+
+- `200 OK` —— [响应模型](#statisticsandrating), 为该玩家全部最佳成绩的累计达成率, `player` 为该玩家的公开资料; 没有成绩的玩家返回零值
+- `400 Bad Request` —— `userId` 不是合法 ObjectId (ProblemDetails)
+- `404 Not Found` —— 用户不存在
 
 _示例_:
 
@@ -1766,7 +2003,10 @@ _示例_:
 
 匿名. Path: `username: string`. 返回与错误同 by-id.
 
-**响应**: `200` —— [响应模型](#statisticsandrating)
+**响应**:
+
+- `200 OK` —— [响应模型](#statisticsandrating)
+- `404 Not Found` —— 用户不存在
 
 _示例_:
 
@@ -1790,7 +2030,10 @@ _示例_:
 
 参与计算的条件: 谱面的赞数必须大于 5; 难度序号不能是 6 (宴谱); 难度文本必须是纯数字或数字加号 (如 `13`、`14+`); 成绩的 DX 达成率不能低于 97.
 
-**响应**: `200` —— [响应模型](#statisticsandrating) —— `featureOrder` 固定为 `note`、`peak`、`sweep`、`slide_tricky`、`slide_sequence`、`jack`、`fitted_constant`; `feature` 为各特征的平均值; `charts` 为实际参与平均的谱面 ID 列表; `best` 为同一批"谱面 + 难度"的明细 (按达成率降序), 供前端直接渲染 Best 50. 没有可用成绩时 `feature` 为 `{}`、`charts` 为 `[]`. 用户不存在返回 `404 Status`
+**响应**:
+
+- `200 OK` —— [响应模型](#statisticsandrating); `featureOrder` 固定为 `note`、`peak`、`sweep`、`slide_tricky`、`slide_sequence`、`jack`、`fitted_constant`; `feature` 为各特征的平均值; `charts` 为实际参与平均的谱面 ID 列表; `best` 为同一批"谱面 + 难度"的明细 (按达成率降序); 没有可用成绩时 `feature` 为 `{}`、`charts` 为 `[]`
+- `404 Not Found` —— 用户不存在
 
 ```json
 {
@@ -1807,7 +2050,10 @@ _示例_:
 
 匿名. Query: `userId: ObjectId` (目标用户 ID)、`days?: int = 365`, days 范围 1–3650.
 
-**响应**: `200` —— [响应模型](#playheatmap) —— `{ total: int64, daily: [{ date: "YYYY-MM-DD", count: int }] }`. `total` 是该用户**全部历史**计数, 不受 days 限制; daily 仅包含时间窗口内有记录的日期, 按日期升序, 不自动补零
+**响应**:
+
+- `200 OK` —— [响应模型](#playheatmap) —— `{ total: int64, daily: [{ date: "YYYY-MM-DD", count: int }] }`; `total` 是该用户**全部历史**计数, 不受 days 限制; daily 仅包含时间窗口内有记录的日期, 按日期升序, 不自动补零
+- `400 Bad Request` —— days 超出范围或不是整数、userId 不是 24 位十六进制 ObjectId (ProblemDetails)
 
 时间窗口起点为服务器**本地时间**当前时刻减去 days 天, daily 则按游玩时间的 **UTC 日期**分组, 服务器不在 UTC 时区时首个日期的计数可能不完整.
 
@@ -1835,7 +2081,11 @@ _示例_:
 
 登录时额外排除当前用户全部游玩、点赞和点踩过的谱面; 匿名时不做个人过滤. 响应设置 `Cache-Control: no-store`.
 
-**响应**: `200` —— [响应模型](#onlinemaichart) —— 按相似度分数降序; 同分按谱面 ID 升序. 源谱面不存在返回 `404 Status`; Hash 缺失、空白或 limit 越界返回 `400`. 旧 `chartId` 参数不再支持, 调用方需改传 `hash`. 源谱面存在但没有可用近邻时返回 `200 []`
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinemaichart) 数组, 按相似度分数降序; 同分按谱面 ID 升序; 源谱面存在但没有可用近邻时返回 `[]`
+- `400 Bad Request` —— Hash 缺失、空白或 limit 越界
+- `404 Not Found` —— 源谱面不存在
 
 _示例_:
 
@@ -1869,7 +2119,12 @@ _示例_:
 
 **feed 构造**: 相似谱面流以用户的点赞与最近游玩为种子, 读取近邻后按相似度排序; 随机探索流按 **3:1** 混合新谱与热门. 两路按 **6:4** 交错混合, 所有池均排除用户全部游玩、点赞及点踩记录. 没有种子或没有模型近邻时仍可通过探索冷启动.
 
-**响应**: `200` —— [响应模型](#onlinemaichart) —— 每个元素是完整的对外谱面对象, 响应不包含推荐分数或额外的包装字段. 空结果为 `[]`
+**响应**:
+
+- `200 OK` —— [响应模型](#onlinemaichart) 数组, 每个元素是完整的对外谱面对象, 响应不包含推荐分数或额外的包装字段; 空结果为 `[]`
+- `400 Bad Request` —— 非法参数
+- `401 Unauthorized` —— 未登录
+- `403 Forbidden` —— 指定了其他用户
 
 _示例_:
 
@@ -1899,7 +2154,11 @@ _示例_:
 
 非法 `source`、`chartHashes` 为空或超过 100 个返回 `400 Status`; 未登录返回 `401`. 空字符串或长度超过 128 的 Hash 静默忽略. 曝光时间取服务端时间, 合法请求一律返回 `204`.
 
-**响应**: `204` —— 空响应体 (`204`)
+**响应**:
+
+- `204 No Content` —— 空响应体
+- `400 Bad Request` —— 非法 `source`、`chartHashes` 为空或超过 100 个
+- `401 Unauthorized` —— 未登录
 
 ## 活动
 
@@ -1917,9 +2176,12 @@ _示例_:
 | `category` | int | 无 | 只返回该类别 |
 | `status` | string[] | 无 | 只返回处于任一所列状态的活动, 可重复: `upcoming`、`ongoing`、`ended` |
 
-`type`、`status` 不区分大小写. 成功: `200 OnlineEvent[]`, 按开始时间倒序, 开始时间相同时按 ID 升序. 参数取值无效: `400 Status`.
+`type`、`status` 不区分大小写.
 
-**响应**: `200` —— [响应模型](#onlineevent)
+**响应**:
+
+- `200 OK` —— [响应模型](#onlineevent) 数组, 按开始时间倒序, 开始时间相同时按 ID 升序
+- `400 Bad Request` —— 参数取值无效
 
 _示例_:
 
@@ -1942,9 +2204,12 @@ _示例_:
 
 ### GET /api/event/{eventId}
 
-匿名. 成功: `200 OnlineEvent`; 不存在: `404 Status`.
+匿名.
 
-**响应**: `200` —— [响应模型](#onlineevent)
+**响应**:
+
+- `200 OK` —— [响应模型](#onlineevent)
+- `404 Not Found` —— 活动不存在
 
 _示例_:
 
@@ -1982,7 +2247,11 @@ _示例_:
 
 除 `id` 外的字符串不能为空或全为空白. 时间按所带时区换算为 UTC 存储, 响应中以 `Z` 结尾返回. 纯日期 (如 `2026-10-24`) 会被拒绝, 需补全时间和时区.
 
-**响应**: `201` —— [响应模型](#onlineevent) —— `Location` 为该活动的地址. 字段无效: `400 Status`; 请求体不是合法 JSON: `400 Status`; 无请求体: `400 Status` (40001); ID 已存在: `409 Status` (40900)
+**响应**:
+
+- `201 Created` —— [响应模型](#onlineevent), `Location` 为该活动的地址
+- `400 Bad Request` —— 字段无效、请求体不是合法 JSON, 或无请求体 (40001)
+- `409 Conflict` —— ID 已存在 (40900)
 
 _示例_:
 
@@ -2005,7 +2274,11 @@ _示例_:
 
 鉴权: 用户组 `eventManager`. JSON 与 POST 相同, 替换除 ID 外的全部字段; `id` 可省略, 提供时必须与路由一致.
 
-**响应**: `200` —— [响应模型](#onlineevent) —— 无效: `400 Status`; 不存在: `404 Status`
+**响应**:
+
+- `200 OK` —— [响应模型](#onlineevent)
+- `400 Bad Request` —— 字段或请求体无效
+- `404 Not Found` —— 活动不存在
 
 _示例_:
 
@@ -2026,9 +2299,12 @@ _示例_:
 
 ### DELETE /api/event/{eventId}
 
-鉴权: 用户组 `eventManager`. 无请求体. 成功: `200 Status`; 不存在: `404 Status`.
+鉴权: 用户组 `eventManager`. 无请求体.
 
-**响应**: `200` —— [响应模型](#status)
+**响应**:
+
+- `200 OK` —— [响应模型](#status)
+- `404 Not Found` —— 活动不存在
 
 _示例_:
 
@@ -2045,7 +2321,9 @@ _示例_:
 
 ### GET /api/admin/groups
 
-**响应**: `200` —— 所有用户组名称, 按数值排序: `["administrator","eventManager"]`
+**响应**:
+
+- `200 OK` —— 所有用户组名称 (`string[]`), 按数值排序: `["administrator","eventManager"]`
 
 _示例_:
 
@@ -2055,7 +2333,10 @@ _示例_:
 
 ### GET /api/admin/groups/{group}/members
 
-**响应**: `200` —— [响应模型](#onlineusergroups) —— 直接属于该组的账号, 按用户名排序. 未加入该组的管理员不会列出, 尽管他们能通过该组的要求
+**响应**:
+
+- `200 OK` —— [响应模型](#onlineusergroups) 数组, 直接属于该组的账号, 按用户名排序; 未加入该组的管理员不会列出
+- `400 Bad Request` —— 未知的用户组名称
 
 _示例_:
 
@@ -2071,7 +2352,10 @@ _示例_:
 
 ### GET /api/admin/users/{username}/groups
 
-**响应**: `200` —— [响应模型](#onlineusergroups) —— 用户组功能上线前创建的账号 `groups` 为空数组
+**响应**:
+
+- `200 OK` —— [响应模型](#onlineusergroups); 用户组功能上线前创建的账号 `groups` 为空数组
+- `404 Not Found` —— 用户不存在
 
 _示例_:
 
@@ -2085,9 +2369,13 @@ _示例_:
 
 ### PUT /api/admin/users/{username}/groups/{group}
 
-把账号加入用户组, 无请求体; 已在组内时不变. 成功: `200 OnlineUserGroups`.
+把账号加入用户组, 无请求体; 已在组内时不变.
 
-**响应**: `200` —— [响应模型](#onlineusergroups)
+**响应**:
+
+- `200 OK` —— [响应模型](#onlineusergroups), 变更后的用户组
+- `400 Bad Request` —— 未知的用户组名称
+- `404 Not Found` —— 用户不存在
 
 _示例_:
 
@@ -2101,9 +2389,12 @@ _示例_:
 
 ### DELETE /api/admin/users/{username}/groups/{group}
 
-把账号移出用户组, 无请求体; 不在组内时不变. 成功: `200 OnlineUserGroups`. 管理员不能把自己移出 `administrator` 组, 否则返回 `409 Status`.
+把账号移出用户组, 无请求体; 不在组内时不变.
 
-**响应**: `200` —— [响应模型](#onlineusergroups)
+**响应**:
+
+- `200 OK` —— [响应模型](#onlineusergroups), 变更后的用户组
+- `409 Conflict` —— 管理员不能把自己移出 `administrator` 组
 
 _示例_:
 
@@ -2119,9 +2410,11 @@ _示例_:
 
 ### GET /api/Ping
 
-匿名. 无参数. 成功: `200 {"code":114514,"message":"Pong"}`. 禁止存储缓存.
+匿名. 无参数. 禁止存储缓存.
 
-**响应**: `200` —— [响应模型](#status)
+**响应**:
+
+- `200 OK` —— [响应模型](#status), message `Pong`
 
 _示例_:
 
@@ -2134,9 +2427,11 @@ _示例_:
 
 ### GET /api/info
 
-匿名. 无参数. 成功: `200 {"id":"...","name":"..."}`, 返回本服务器实例的标识与显示名称; 未配置时为空字符串.
+匿名. 无参数. 返回本服务器实例的标识与显示名称; 未配置时为空字符串.
 
-**响应**: `200` —— [响应模型](#serverinfo)
+**响应**:
+
+- `200 OK` —— [响应模型](#serverinfo)
 
 _示例_:
 

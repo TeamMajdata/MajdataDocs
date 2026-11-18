@@ -107,7 +107,10 @@ Registers an account. Anonymous; a signed-in caller gets `403`.
 | `challengeCode` | int | Yes | 8-digit code from the email |
 | `cf-turnstile-response` | string | Yes | Turnstile token |
 
-**Response**: `200` —— [response models](#userprofile) —— the account is created active and is **not signed in automatically**. Failure: `400`, including verification failure (60003), empty password, invalid username (40000), and duplicate username or email (60103/60104)
+**Response**:
+
+- `200 OK` —— [response models](#userprofile); the account is created active and is **not signed in automatically**
+- `400 Bad Request` —— verification failure (60003), empty password, invalid username (40000), or duplicate username or email (60103/60104)
 
 The server compares the submitted password string directly; this endpoint does not declare a hash algorithm that clients must use.
 
@@ -137,7 +140,12 @@ Anonymous.
 | `challengeKey` | string | Pending accounts only | Key returned by the email challenge endpoint |
 | `challengeCode` | int | Pending accounts only | Code sent to the account's original email |
 
-**Response**: `200` —— [response models](#status) —— returns `200 Status` with `token` set through `Set-Cookie`; the body does not contain the token. Failure: `401` invalid credentials; `403` already signed in, pending activation without complete email verification, or banned; `400` invalid verification code
+**Response**:
+
+- `200 OK` —— [response models](#status); `token` is set through `Set-Cookie` and the body does not contain it
+- `400 Bad Request` —— invalid verification code
+- `401 Unauthorized` —— invalid credentials
+- `403 Forbidden` —— already signed in, pending activation without complete email verification, or banned
 
 _Example_:
 
@@ -155,7 +163,12 @@ Auth: signed in. Query: `sessionId?: ObjectId`.
 - Omitted or empty: revokes the current session, deletes the `token` cookie, and also revokes that machine's authorization when a machine session exists.
 - With `sessionId`: revokes the caller's own session with that ID; also requires `MANAGE_LOGIN_SESSIONS`.
 
-**Response**: `200` —— [response models](#status) —— `400` invalid ID, `404` no such session, `403` someone else's session or insufficient permission
+**Response**:
+
+- `200 OK` —— [response models](#status)
+- `400 Bad Request` —— invalid ID
+- `403 Forbidden` —— someone else's session or insufficient permission
+- `404 Not Found` —— no such session
 
 _Example_:
 
@@ -170,9 +183,13 @@ _Example_:
 
 Query: `username?: string`.
 
-With a username the endpoint is anonymous; without one it reads the current user and returns `401` when signed out. Success: `200 UserProfile` (see [response models](#userprofile)); no such user: `404 Status`. The email is returned only to the owner holding `R_USER_PROFILE`; other callers get `email: null`.
+With a username the endpoint is anonymous; without one it reads the current user. The email is returned only to the owner holding `R_USER_PROFILE`; other callers get `email: null`.
 
-**Response**: `200` —— [response models](#userprofile)
+**Response**:
+
+- `200 OK` —— [response models](#userprofile)
+- `401 Unauthorized` —— not signed in and no `username` given
+- `404 Not Found` —— no such user
 
 _Example_:
 
@@ -200,7 +217,11 @@ Auth: `W_USER_PROFILE`. Uses Form; use multipart when sending a file.
 
 Total request size is capped at 6 MiB and the multipart body at 5 MiB. Static avatars are cropped to 512×512 JPEG; animated images are scaled to a 512 longest side and converted to WebP.
 
-**Response**: `200` —— [response models](#userprofile) —— `404` no such user; an explicitly empty nickname returns `400`
+**Response**:
+
+- `200 OK` —— [response models](#userprofile)
+- `400 Bad Request` —— an explicitly empty nickname
+- `404 Not Found` —— no such user
 
 _Example_:
 
@@ -218,9 +239,11 @@ _Example_:
 
 ### GET /api/account/session
 
-Auth: signed in. No parameters. Success: `200 SessionInfo`, see [response models](#sessioninfo).
+Auth: signed in. No parameters. See [response models](#sessioninfo).
 
-**Response**: `200` —— [response models](#sessioninfo)
+**Response**:
+
+- `200 OK` —— [response models](#sessioninfo)
 
 _Example_:
 
@@ -237,9 +260,11 @@ _Example_:
 
 ### GET /api/account/sessions
 
-Auth: `MANAGE_LOGIN_SESSIONS`. Success: `200 SessionInfo[]` with every session of the current user.
+Auth: `MANAGE_LOGIN_SESSIONS`.
 
-**Response**: `200` —— [response models](#sessioninfo)
+**Response**:
+
+- `200 OK` —— [response models](#sessioninfo) with every session of the current user
 
 _Example_:
 
@@ -262,7 +287,10 @@ Anonymous. Query: `email: string`, required.
 
 An invalid email format returns `400 Status` (60102). An unregistered email still returns `200` with a random string but sends no mail, so the endpoint does not leak whether an account exists. A registered email gets an 8-digit code valid for 5 minutes, and the response body is the `challengeKey` string.
 
-**Response**: `200` —— (`challengeKey`)
+**Response**:
+
+- `200 OK` —— the `challengeKey` string
+- `400 Bad Request` —— invalid email format (60102)
 
 ### POST /api/account/password-reset/confirm
 
@@ -270,13 +298,19 @@ Anonymous. Form: `email`, `newPassword`, `challengeCode`, `challengeKey`, all re
 
 The code must belong to the same email and still be valid; a successful check consumes it once. A wrong, expired, already used, or mismatched code returns `400 Status` (40000). When the account exists, the new password is written, all of the user's sessions and every machine authorization they granted are deleted, and the endpoint returns `200 empty`. There is no additional password complexity check.
 
-**Response**: `200` —— 空响应体
+**Response**:
+
+- `200 OK` —— empty body
+- `400 Bad Request` —— the code is wrong, expired, already used, or belongs to another email
 
 ### GET /api/account/recent
 
 Anonymous. Query: `username?: string`, default empty string.
 
-**Response**: `200` —— [response models](#playerscoresummary) —— with the **last 30 days** of plays in reverse chronological order; records of deleted charts are skipped; no pagination. No such user: `404 Status`
+**Response**:
+
+- `200 OK` —— [response models](#playerscoresummary); the **last 30 days** of plays in reverse chronological order, with records of deleted charts skipped and no pagination
+- `404 Not Found` —— no such user
 
 _Example_:
 
@@ -311,7 +345,10 @@ Auth: `R_USER_MAI_SCORES`.
 | `matchMode` | string | `or` | Relation between filter fields; only `and` or `or` |
 | `fieldMatchMode` | string | `or` | Relation within one field; only `and` or `or` |
 
-**Response**: `200` —— [response models](#onlinemaiscore) —— `200` with every filter omitted it returns all of the caller's scores that still resolve to a chart. An invalid mode or Guid returns `400 Status`
+**Response**:
+
+- `200 OK` —— [response models](#onlinemaiscore); with every filter omitted it returns all of the caller's scores that still resolve to a chart
+- `400 Bad Request` —— invalid mode or Guid
 
 Scores relate through `levelHash → chart metadata → chart`, and each score appears once. When one level hash belongs to several charts, a representative difficulty is chosen: the earliest uploaded chart, then chart ID, then difficulty index. Scores that resolve to no chart are omitted.
 
@@ -358,7 +395,11 @@ Anonymous. Lists a user's live comments, flattened without `replies`, each carry
 | `sort` | string | No | Only `new` (default) or `top` |
 | `page` | int | No | 1-based, 1–10000, default 1, 20 per page |
 
-**Response**: `200` —— [response models](#commentpages) —— `400 Status` (40000); `404 Status` (40400) no such user
+**Response**:
+
+- `200 OK` —— [response models](#commentpages)
+- `400 Bad Request` —— invalid parameter (40000)
+- `404 Not Found` —— no such user (40400)
 
 _Example_:
 
@@ -401,7 +442,10 @@ _Example_:
 
 Anonymous. Form: `email: string`, required; the address must contain `@` and its domain must have an MX record.
 
-**Response**: `200` —— (`challengeKey`) —— with the `challengeKey` string; an 8-digit code is sent to the address and stays valid for 5 minutes. Invalid email: `400 Status` (60102)
+**Response**:
+
+- `200 OK` —— the `challengeKey` string; an 8-digit code is sent to the address and stays valid for 5 minutes
+- `400 Bad Request` —— invalid email (60102)
 
 ::: info Rate limiting is not active
 The endpoint declares a limit of 10 requests per IP per minute, but the current pipeline does not enable the rate limiting middleware, so **do not treat that limit as enforced**.
@@ -411,7 +455,10 @@ The endpoint declares a limit of 10 requests per IP per minute, but the current 
 
 Anonymous. Query: `username: string`, required.
 
-**Response**: `302` —— 无响应体, `Location` 为头像地址 —— with a `Location` pointing at the user's avatar (the default avatar when none was uploaded). An empty username or unknown user returns `404`. The response declares a 1-hour client cache
+**Response**:
+
+- `302 Found` —— the absolute address of that user's avatar (the default avatar when none was uploaded); the client cache is declared as 1 hour
+- `404 Not Found` —— empty username or no such user
 
 Published MajdataPlay builds (2.0.5 and earlier) load avatars through this endpoint. Newer clients can request `GET /api/avatar/{avatarId}` with the `avatarId` from a response instead.
 
@@ -419,7 +466,9 @@ Published MajdataPlay builds (2.0.5 and earlier) load avatars through this endpo
 
 Anonymous. Path: `avatarId: string`.
 
-**Response**: `302` —— 无响应体, `Location` 为头像地址 —— with a `Location` pointing at the avatar. An unknown ID redirects to the default avatar; use `default` to fetch it directly
+**Response**:
+
+- `302 Found` —— the absolute address of the avatar; an unknown ID redirects to the default avatar
 
 ## Game settings
 
@@ -427,7 +476,9 @@ Anonymous. Path: `avatarId: string`.
 
 Auth: signed in. No parameters.
 
-**Response**: `200` —— `text/plain` —— returns the decoded JSON **text string**; `{}` when there is no setting or decoding fails. Under default content negotiation this is usually `text/plain`, not a wrapped object
+**Response**:
+
+- `200 OK` —— the decoded JSON **text string**; `{}` when there is no setting or decoding fails. Under default content negotiation this is usually `text/plain`, not a wrapped object
 
 _Example_:
 
@@ -442,7 +493,11 @@ _Example_:
 
 Auth: signed in. The body is raw UTF-8 JSON, at most 1 MiB. Any valid JSON value is accepted.
 
-**Response**: `200` —— [response models](#anonymousobjects) —— `userSettingJson` is the Base64 of the submitted JSON text. Failure: `400` invalid JSON (40000) or too large (41300)
+**Response**:
+
+- `200 OK` —— [response models](#anonymousobjects) —— `{ username: string, userSettingJson: string }`; `userSettingJson` is the Base64 of the submitted JSON text
+- `400 Bad Request` —— invalid JSON (40000)
+- `413 Payload Too Large` —— too large (41300)
 
 ## Charts and files
 
@@ -470,7 +525,9 @@ Anonymous.
 
 Search prefixes: `id:` (Guid), `hash:`, `uploader:`, `tag:`, `level:`. Anything else is treated as a regular expression matched against title, artist, designer, uploader, levels, and tags; an invalid `id:` returns an empty array.
 
-**Response**: `200` —— [response models](#onlinemaichart) —— usually `200 OnlineMaiChart[]`. `sort=scorep` is special: it returns at most 10 charts with the most plays in the last 7 days, returns early, and ignores `search/page/isRanking`
+**Response**:
+
+- `200 OK` —— [response models](#onlinemaichart); `sort=scorep` is special: it returns at most 10 charts with the most plays in the last 7 days, returns early, and ignores `search/page/isRanking`
 
 _Example_:
 
@@ -496,7 +553,10 @@ _Example_:
 
 Auth: signed in. Query: `hash: string`, required.
 
-**Response**: `200` —— [response models](#anonymousobjects) —— blank hash returns `400 Status`
+**Response**:
+
+- `200 OK` —— [response models](#anonymousobjects) —— `{ hash, exists, hasHistoricalScores, hasHistoricalInteract, chart }`
+- `400 Bad Request` —— blank hash
 
 - `exists`: the chart exists.
 - `hasHistoricalScores`: the chart exists and at least one of its level hashes has scores.
@@ -536,7 +596,10 @@ Anonymous. Lists charts added, changed, or deleted in a time window, so clients 
 | `from` | datetime | Yes | Inclusive start, usually the previous response's `to` |
 | `to` | datetime | No | Exclusive end; defaults to now, also used when later than now |
 
-**Response**: `200` —— [response models](#chartchanges)
+**Response**:
+
+- `200 OK` —— [response models](#chartchanges)
+- `400 Bad Request` —— missing `from`, or `from` later than the window end (40000); invalid time format
 
 ```json
 {
@@ -560,9 +623,12 @@ Failure: missing `from`, or `from` later than the window end: `400 Status` (4000
 
 ### GET /api/maichart/{chartId}/summary
 
-Anonymous. Success: `200 MaiChart`; no such chart: `404`.
+Anonymous.
 
-**Response**: `200` —— [response models](#maichart)
+**Response**:
+
+- `200 OK` —— [response models](#maichart)
+- `404 Not Found` —— no such chart
 
 _Example_:
 
@@ -606,13 +672,19 @@ Anonymous. Returns chart metadata plus information about each resource file. No 
 }
 ```
 
-**Response**: `200` —— [response models](#onlinechartinfo)
+**Response**:
+
+- `200 OK` —— [response models](#onlinechartinfo)
+- `404 Not Found` —— no such chart
 
 ### POST /api/maichart/info
 
 Anonymous. Looks up `info` for several charts at once. The body is a JSON array of chart IDs.
 
-**Response**: `200` —— [response models](#onlinechartinfo) —— returns `200` with an array of objects shaped like `GET /api/maichart/{chartId}/info`, ordered by each ID's first appearance in the request; charts that do not exist are omitted. An empty array returns `[]`. An invalid ID returns `400`. Duplicate IDs count once, and there is no length limit
+**Response**:
+
+- `200 OK` —— an array of [response models](#onlinechartinfo), ordered by each ID's first appearance in the request; charts that do not exist are omitted; an empty array returns `[]`; duplicate IDs count once, with no length limit
+- `400 Bad Request` —— invalid ID format
 
 _Example_:
 
@@ -654,31 +726,49 @@ _Example_:
 
 Anonymous. Query: `intent?: string`, optional; pass `download` for an explicit user download, which is attributed as a recommendation conversion when signed in. Preview and in-game loading omit it.
 
-**Response**: `302` —— 无响应体, `Location` 指向 `maidata.txt` —— redirecting to `maidata.txt`, with a SHA-256 Base64 `hash` header. The play count is incremented before the redirect. A missing file returns `404` with `no-store`
+**Response**:
+
+- `302 Found` —— redirects to `maidata.txt` with a SHA-256 Base64 `hash` header; the play count is incremented before the redirect
+- `404 Not Found` —— missing file (with `no-store`)
 
 ### GET /api/maichart/{chartId}/track
 
-Anonymous. Success: `302` redirecting to `track.mp3` with `hash`; Range requests are handled by the storage service. Missing: `404`.
+Anonymous. Range requests are handled by the storage service.
 
-**Response**: `302` —— 无响应体, `Location` 指向 `track.mp3`
+**Response**:
+
+- `302 Found` —— empty body, `Location` points at `track.mp3`
+- `404 Not Found` —— missing file
 
 ### GET /api/maichart/{chartId}/image
 
 Anonymous. Query: `fullImage?: bool = false`.
 
-**Response**: `302` —— 无响应体, `Location` 指向封面文件 —— redirecting to the first available cover, with `hash`. By default the order is `bg-compress.jpg`, `bg.png`, `bg.jpg`; with `fullImage=true` the original image is tried first. None present returns `404`
+**Response**:
+
+- `302 Found` —— redirects to the first available cover with `hash`; by default the order is `bg-compress.jpg`, `bg.png`, `bg.jpg`, and with `fullImage=true` the original image is tried first
+- `404 Not Found` —— none of them exists
 
 ### GET /api/maichart/{chartId}/video
 
-Anonymous. Success: `302` redirecting to `bg.mp4` with `hash`. Missing: `404`.
+Anonymous.
 
-**Response**: `302` —— 无响应体, `Location` 指向 `bg.mp4`
+**Response**:
+
+- `302 Found` —— empty body, `Location` points at `bg.mp4`
+- `404 Not Found` —— missing file
 
 ### GET /api/maichart/{chartId}/radar
 
 Anonymous. Query: `chartLevel: int`, required, range **0–6**, matching the score endpoints and the game's difficulty numbering (`0` is `inote_1`, `4` is Master, `6` is `inote_7`).
 
-**Response**: `200` —— [response models](#onlinechartradar) —— `feature` is read in `featureOrder`. The first six entries are radar values on a 0–250 scale; `fitted_constant` is the fitted constant on its own scale
+**Response**:
+
+- `200 OK` —— [response models](#onlinechartradar); the first six entries are radar values on a 0–250 scale, and `fitted_constant` is the fitted constant on its own scale
+- `400 Bad Request` —— missing or invalid parameters
+- `404 Not Found` —— no such chart, file, or difficulty (40400)
+- `409 Conflict` —— the file content does not match the stored hash (40000)
+- `422 Unprocessable Content` —— the difficulty cannot be analyzed completely (40000)
 
 ```json
 {
@@ -710,7 +800,12 @@ Auth: `MANAGE_CHART_LIST`. The request is multipart and **every** file uses the 
 | `track.mp3` | Yes | Audio |
 | `bg.mp4` or `pv.mp4` | No | Video; capped at 50 MiB |
 
-**Response**: `200` —— `text/plain` —— with the text `上传成功！`, which **does not include the chartId**; query the chart list to find it. Failure: `400` missing files, incomplete metadata, or an identical MD5 chart already exists; `409 Status` means an upload with the same SHA-256 is in progress; `413 Status` means the video is too large
+**Response**:
+
+- `200 OK` —— the text `上传成功！`, which **does not include the chartId**; query the chart list to find it
+- `400 Bad Request` —— missing files, incomplete metadata, or an identical MD5 chart already exists
+- `409 Conflict` —— an upload with the same SHA-256 is in progress
+- `413 Payload Too Large` —— the video is too large
 
 After the files and chart record are saved, an "added" change is recorded and radar analysis is triggered in the background for every difficulty; the upload response does not wait for it.
 
@@ -718,7 +813,11 @@ After the files and chart record are saved, an "added" change is recorded and ra
 
 Auth: `MANAGE_CHART_LIST`, and only for charts you uploaded. Query: `chartId: Guid`, required.
 
-**Response**: `200` —— 空响应体 —— Removes the chart record, its files, and its radar cache, while keeping historical scores and interactions, which are keyed by level hash. No such chart: `404 Status`; not the uploader: `403`
+**Response**:
+
+- `200 OK` —— empty body; removes the chart record, its files, and its radar cache, while keeping historical scores and interactions keyed by level hash
+- `403 Forbidden` —— not the uploader
+- `404 Not Found` —— no such chart
 
 ### PUT /api/maichart/{chartId}/tags
 
@@ -728,7 +827,12 @@ Tags are normalized first: surrounding whitespace is trimmed, empty strings and 
 
 Limit: at most **32** tags. Exceeding it returns `400 Status` (40002).
 
-**Response**: `200` —— with the resulting tags; over the limit: `400 Status` (40002); no such chart: `404`; not the uploader: `403`
+**Response**:
+
+- `200 OK` —— the resulting `tags`
+- `400 Bad Request` —— over the limit (40002)
+- `403 Forbidden` —— not the uploader
+- `404 Not Found` —— no such chart
 
 _Example_:
 
@@ -746,7 +850,13 @@ Auth as for `PUT`. The JSON body is `{ "add"?: string[], "remove"?: string[] }`.
 - The same 32-tag limit applies; charts already above it can still remove tags.
 - Persistent concurrent conflicts return `409 Status` after 3 attempts; the client may retry directly.
 
-**Response**: `200` —— the resulting `tags`
+**Response**:
+
+- `200 OK` —— the resulting `tags`
+- `400 Bad Request` —— the same tag added and removed, or over the limit (40002)
+- `403 Forbidden` —— not the uploader
+- `404 Not Found` —— no such chart
+- `409 Conflict` —— persistent concurrent conflict; the client may retry directly
 
 _Example_:
 
@@ -758,7 +868,12 @@ _Example_:
 
 Auth: only signed in, **the uploader is not required** (unlike tags, which only the uploader may change). The body, normalization, idempotence, and limit rules match `PUT /api/maichart/{chartId}/tags`, replacing all public tags.
 
-**Response**: `200` —— over the limit: `400 Status` (40002); no such chart: `404`; not signed in: `401`
+**Response**:
+
+- `200 OK` —— the resulting `publicTags`
+- `400 Bad Request` —— over the limit (40002)
+- `401 Unauthorized` —— not signed in
+- `404 Not Found` —— no such chart
 
 _Example_:
 
@@ -770,7 +885,13 @@ _Example_:
 
 Auth as for `PUT /api/maichart/{chartId}/publictags`; the body and rules match `PATCH /api/maichart/{chartId}/tags`. Several users adding and removing different tags at the same time do not overwrite each other, so prefer it over a wholesale replace when editing shared public tags.
 
-**Response**: `200` —— the same tag added and removed: `400 Status`; over the limit: `400 Status` (40002)
+**Response**:
+
+- `200 OK` —— the resulting `publicTags`
+- `400 Bad Request` —— the same tag added and removed, or over the limit (40002)
+- `401 Unauthorized` —— not signed in
+- `404 Not Found` —— no such chart
+- `409 Conflict` —— persistent concurrent conflict; the client may retry directly
 
 ## Chart interactions
 
@@ -800,7 +921,12 @@ _Example_:
 
 Auth: `COMMIT_CHART_INTERACTION`. JSON body `{ "value": 1 | 0 | -1 }`.
 
-**Response**: `200` —— [response models](#onlinevoteresult) —— returns `200 OnlineVoteResult`, which is `{ score, upvotes, downvotes, myVote }`. Removing a vote that does not exist also returns `200`
+**Response**:
+
+- `200 OK` —— [response models](#onlinevoteresult) —— `{ score, upvotes, downvotes, myVote }`; removing a vote that does not exist also returns `200`
+- `400 Bad Request` —— invalid value or unparsable body
+- `403 Forbidden` —— the uploader disabled interactions on the chart
+- `404 Not Found` —— no such chart
 
 Failure: `400` invalid value or unparsable body; `403` the uploader disabled interactions on the chart; `404` no such chart.
 
@@ -826,7 +952,11 @@ Anonymous; when signed in, `myVote` on every comment reflects the current user's
 
 Each page holds 20 top-level comments plus at most 1500 replies beneath them, embedded in each parent's `replies`. Every comment's `authorProfile` holds the author's public profile, so the website can show nickname and avatar directly.
 
-**Response**: `200` —— [response models](#commentpages) —— returns `200 OnlineCommentPage`, which is `{ items, total, commentCount, page, pageSize: 20, sort }`; `total` is the number of top-level comments, placeholders included
+**Response**:
+
+- `200 OK` —— [response models](#commentpages) —— `{ items, total, commentCount, page, pageSize: 20, sort }`; `total` is the number of top-level comments, placeholders included
+- `400 Bad Request` —— invalid `sort`, `page`, or chart ID (40000)
+- `404 Not Found` —— no such chart (40400)
 
 ::: warning Deprecated field
 `commentCount` is the number of live comments and is **deprecated**: no client reads it and Swagger marks it deprecated. Use `comments` from `GET /api/maichart/{chartId}/interactsum` instead, which carries the same count.
@@ -894,7 +1024,14 @@ _Example_:
 
 Auth: `COMMIT_CHART_INTERACTION`. JSON body `{ "body": string, "parentId"?: ObjectId }`; an omitted or null `parentId` creates a top-level comment, otherwise it must be a live comment on the **same chart**.
 
-**Response**: `201` —— [response models](#onlinecomment) —— (without `replies`), with `Location` pointing at `GET /api/comment/{id}`. Mail and group notifications are sent asynchronously after publishing; failures are only logged
+**Response**:
+
+- `201 Created` —— [response models](#onlinecomment) (without `replies`), with `Location` pointing at `GET /api/comment/{id}`; mail and group notifications are sent asynchronously afterwards, and failures are only logged
+- `400 Bad Request` —— invalid body, reply too deep, or unparsable body
+- `403 Forbidden` —— the uploader disabled interactions
+- `404 Not Found` —— no such chart or parent comment
+- `409 Conflict` —— the parent comment is deleted
+- `429 Too Many Requests` —— rate limited
 
 Failure: `400` invalid body, reply too deep, or unparsable body; `403` the uploader disabled interactions; `404` no such chart or parent comment; `409` the parent comment is deleted; `429` rate limited.
 
@@ -931,9 +1068,13 @@ _Example_:
 
 Anonymous; the permalink view of a comment. Query: `sort`, as above, default `best`.
 
-Returns the comment (even a placeholder) and every reply beneath it. Success: `200 OnlineCommentThread`, that is `{ item, sort }`. An invalid `commentId` or `sort`: `400 Status`; no such comment: `404 Status`.
+Returns the comment (even a placeholder) and every reply beneath it.
 
-**Response**: `200` —— [response models](#commentpages)
+**Response**:
+
+- `200 OK` —— [response models](#commentpages)
+- `400 Bad Request` —— invalid `commentId` or `sort`
+- `404 Not Found` —— no such comment
 
 _Example_:
 
@@ -967,7 +1108,13 @@ _Example_:
 
 Auth: `COMMIT_CHART_INTERACTION`, and only the author may edit. JSON body `{ "body": string }` with the same body rules as publishing.
 
-**Response**: `200` —— [response models](#onlinecomment) —— returns `200 OnlineComment`; `editedAt` is set when the body changed. Failure: `400` invalid body; `403` not the author; `404` no such comment; `409` the comment is deleted
+**Response**:
+
+- `200 OK` —— [response models](#onlinecomment); `editedAt` is set when the body changed
+- `400 Bad Request` —— invalid body
+- `403 Forbidden` —— not the author
+- `404 Not Found` —— no such comment
+- `409 Conflict` —— the comment is deleted
 
 _Example_:
 
@@ -997,7 +1144,12 @@ _Example_:
 
 Auth: `COMMIT_CHART_INTERACTION`. Authors delete their own comments; administrators can remove anyone's.
 
-**Response**: `200` —— [response models](#commentpages) —— returns `200 OnlineCommentDeletion`, which is `{ ok: true, purged }`; `purged=true` means the comment had no replies and was deleted physically, `false` means it became a placeholder. Failure: `400` invalid ID; `403` not the author; `404` no such comment
+**Response**:
+
+- `200 OK` —— [response models](#commentpages) —— `{ ok: true, purged }`; `purged=true` means the comment had no replies and was deleted physically, `false` means it became a placeholder
+- `400 Bad Request` —— invalid ID
+- `403 Forbidden` —— not the author
+- `404 Not Found` —— no such comment
 
 _Example_:
 
@@ -1012,7 +1164,12 @@ _Example_:
 
 Auth: `COMMIT_CHART_INTERACTION`. JSON body `{ "value": 1 | 0 | -1 }`.
 
-**Response**: `200` —— [response models](#onlinevoteresult) —— a comment returns only `{ score, myVote }`. Failure: `400` invalid value; `404` no such comment; `409` placeholders cannot be voted on
+**Response**:
+
+- `200 OK` —— [response models](#onlinevoteresult); a comment returns only `{ score, myVote }`
+- `400 Bad Request` —— invalid value
+- `404 Not Found` —— no such comment
+- `409 Conflict` —— placeholders cannot be voted on
 
 _Example_:
 
@@ -1025,9 +1182,12 @@ _Example_:
 
 ### GET /api/maichart/{chartId}/interactsum
 
-Anonymous. Success: `200 ChartInteractSummary`, that is `{ chartId, plays, score, upvotes, downvotes, comments, myVote }`; every field is 0 when there is no interaction record; no such chart: `404` with no body. The response must not be cached.
+Anonymous. The response must not be cached.
 
-**Response**: `200` —— [response models](#chartinteractsummary)
+**Response**:
+
+- `200 OK` —— [response models](#chartinteractsummary); every field is 0 when there is no interaction record
+- `404 Not Found` —— no such chart (no body)
 
 _Example_:
 
@@ -1045,9 +1205,11 @@ _Example_:
 
 ### POST /api/maichart/interactsum
 
-Anonymous. The JSON body is a `Guid[]`. Success: `200 ChartInteractSummary[]` in request order, duplicate IDs answered once, missing charts omitted. The response must not be cached.
+Anonymous. The JSON body is a `Guid[]`. The response must not be cached.
 
-**Response**: `200` —— [response models](#chartinteractsummary)
+**Response**:
+
+- `200 OK` —— an array of [response models](#chartinteractsummary) in request order; duplicate IDs are answered once and missing charts are omitted
 
 ### Game client compatibility endpoints
 
@@ -1057,7 +1219,7 @@ The three endpoints below keep the request and response shapes that published Ma
 
 #### GET /api/maichart/{chartId}/interact
 
-Anonymous; includes the caller's own vote when signed in. Success: `200 ChartInteractFull`: `isLiked`/`isDisLiked` say whether the caller upvoted or downvoted, `likes` is the array of upvoters' usernames (the client counts them itself), `disLikeCount` is the downvote count, and `comments` is the live comment tree in publish order (placeholders and everything under them are omitted).
+Anonymous; includes the caller's own vote when signed in.
 
 #### POST /api/maichart/{chartId}/interact
 
@@ -1139,7 +1301,11 @@ Auth: `W_USER_MAI_SCORES`. `{levelHash}` in the path is the level hash of the di
 
 Failure: `400` missing `chartId`, invalid level hash, or invalid score; `404` no such chart (`No such song on server`), the chart has no difficulty with this level hash (`No such level on server`, so the client should refresh the chart), or no such user.
 
-**Response**: `200` —— 空响应体
+**Response**:
+
+- `200 OK` —— empty body
+- `400 Bad Request` —— missing `chartId`, invalid level hash, or invalid score
+- `404 Not Found` —— no such chart, the chart has no difficulty with this level hash, or no such user
 
 ### POST /api/maichart/{chartId}/score
 
@@ -1159,7 +1325,11 @@ Failure: `400` invalid score; `404` no such chart, `hash` does not match the cur
 This endpoint remains for published clients. New clients should use `POST /api/maiscore/level/{levelHash}` and no longer depend on the chart hash.
 :::
 
-**Response**: `200` —— 空响应体
+**Response**:
+
+- `200 OK` —— empty body
+- `400 Bad Request` —— invalid score
+- `404 Not Found` —— no such chart, `hash` does not match the current chart, the difficulty has no level hash, or no such user
 
 ## Playlists
 
@@ -1178,7 +1348,10 @@ Anonymous can read public playlists; when signed in with `R_USER_CHART_COLLECTIO
 | `page` | int | 0 | 0-based |
 | `pageSize` | int | 30 | Page size |
 
-**Response**: `200` —— [response models](#playlistlistitem) —— `200` with an array of playlist list items (see below), ordered by last activity, descending. Negative `page` or `pageSize` returns `400`
+**Response**:
+
+- `200 OK` —— an array of [response models](#playlistlistitem), ordered by last activity, descending
+- `400 Bad Request` —— negative page/pageSize
 
 _Example_:
 
@@ -1204,7 +1377,9 @@ Auth: `W_USER_CHART_COLLECTIONS`. JSON:
 | `description` | string | No | Description |
 | `visibility` | int | Yes | 0 private, 1 public |
 
-**Response**: `200` —— [response models](#onlinesongcollection) —— empty items and count 0
+**Response**:
+
+- `200 OK` —— [response models](#onlinesongcollection) with empty items and count 0
 
 _Example_:
 
@@ -1222,9 +1397,12 @@ _Example_:
 
 ### GET /api/collection/{collectionId}/hashlist
 
-Public playlists are anonymous; private ones need the signed-in owner. Success: `200 OnlineDanInfo`, where `songHashs` (spelling preserved) holds the hashes of charts that still exist, in playlist order. Missing or invisible: `404`.
+Public playlists are anonymous; private ones need the signed-in owner. **`songHashs` is unordered**, so use songlist when order matters.
 
-**Response**: `200` —— [response models](#onlinedaninfo)
+**Response**:
+
+- `200 OK` —— [response models](#onlinedaninfo); `songHashs` holds the hashes of charts that still exist, and **the field is unordered**
+- `404 Not Found` —— no such playlist, or it is not visible
 
 _Example_:
 
@@ -1242,11 +1420,14 @@ _Example_:
 
 ### GET /api/collection/{collectionId}/songlist
 
-Same permissions as hashlist. Success: `200 OnlineSongCollection`, where `items` holds the IDs (`Guid[]`) of charts that still exist, in playlist order.
+Same permissions as hashlist. `items` does not embed chart details; submit it as-is to `POST /api/maichart/info` to fetch metadata in one call. An empty playlist needs no request.
 
 `items` does not embed chart details; submit it as-is to `POST /api/maichart/info` to fetch metadata in one call. An empty playlist needs no request.
 
-**Response**: `200` —— [response models](#onlinesongcollection)
+**Response**:
+
+- `200 OK` —— [response models](#onlinesongcollection); `items` holds the IDs (`Guid[]`) of charts that still exist, in playlist order
+- `404 Not Found` —— no such playlist, or it is not visible
 
 _Example_:
 
@@ -1266,7 +1447,11 @@ _Example_:
 
 Auth: `W_USER_CHART_COLLECTIONS`, and you must own the playlist. No body.
 
-**Response**: `200` —— 空响应体 —— `200 empty`; missing or invisible: `404`; a public playlist you do not own: `403 Status`
+**Response**:
+
+- `200 OK` —— empty body
+- `403 Forbidden` —— a public playlist you do not own
+- `404 Not Found` —— no such playlist, or it is not visible
 
 ### PUT /api/collection/{collectionId}/modify
 
@@ -1279,7 +1464,12 @@ Auth: both `R_USER_CHART_COLLECTIONS` and `W_USER_CHART_COLLECTIONS`, and you mu
 | `visibility` | int | No | Updated when not null |
 | `items` | Guid[] | No | Chart IDs, replacing the whole list in request order; an empty array clears it; unknown charts are filtered out and duplicates collapse to one |
 
-**Response**: `200` —— [response models](#onlinesongcollection) —— invalid playlist ID or an unparsable body: `400 Status`, with no change made. Missing or invisible: `404`; a public playlist you do not own: `403`
+**Response**:
+
+- `200 OK` —— [response models](#onlinesongcollection) —— `{ code: 114514, message: "Ok", collection: OnlineSongCollection }`
+- `400 Bad Request` —— invalid playlist ID or unparsable body; nothing is changed
+- `403 Forbidden` —— a public playlist you do not own
+- `404 Not Found` —— no such playlist, or it is not visible
 
 To add or remove a single chart, read `items` from songlist, edit the list locally, and submit the whole list to modify.
 
@@ -1311,7 +1501,9 @@ _Example_:
 
 Auth: `R_USER_CHART_COLLECTIONS`. Query: `isExtra?: bool = false`.
 
-**Response**: `200` —— [response models](#onlinedaninfo) —— By default it returns favorited playlists; `isExtra=true` also appends system playlists such as "My Thumbs", "Hot", "Recently liked/discussed/downloaded", and "Today's Challenge"
+**Response**:
+
+- `200 OK` —— an array of [response models](#onlinedaninfo); by default it returns favorited playlists, and `isExtra=true` also appends system playlists such as "My Thumbs", "Hot", "Recently liked/discussed/downloaded", and "Today's Challenge"
 
 When the User-Agent starts with `MajdataPlay`, playlists the caller created are merged in as well and extra playlists are enabled.
 
@@ -1345,9 +1537,12 @@ _Example_:
 
 Auth: `W_USER_CHART_COLLECTIONS`. The JSON body is an array of ObjectId strings.
 
-Adds favorites, handling only public playlists and the caller's own. Success: `200 Status` with message `Ok`; an empty array also succeeds. A non-empty request matching no playlist returns `404`.
+Adds favorites, handling only public playlists and the caller's own. An empty array also succeeds.
 
-**Response**: `200` —— [response models](#status)
+**Response**:
+
+- `200 OK` —— [response models](#status) with message `Ok`; an empty array also succeeds
+- `404 Not Found` —— a non-empty request matching no playlist
 
 _Example_:
 
@@ -1360,9 +1555,11 @@ _Example_:
 
 ### DELETE /api/account/favorite/collection/diff
 
-Same auth and body. Removes favorites. Success: `200 Status` with message `Ok`; an empty array or IDs that were never favorited also succeed.
+Same auth and body. Removes favorites.
 
-**Response**: `200` —— [response models](#status)
+**Response**:
+
+- `200 OK` —— [response models](#status) with message `Ok`; an empty array or IDs that were never favorited also succeed
 
 _Example_:
 
@@ -1381,7 +1578,11 @@ The normal call order is: register the machine → start an authorization reques
 
 No user sign-in required. The `User-Agent` must start with **`MajdataPlay`**. JSON: `name: string` required, `description?: string`.
 
-**Response**: `200` —— [response models](#anonymousobjects) —— `id` is the created machine **session ID**; the actual machine ID lives in the `machine-id` cookie. Sets `machine-token` and `machine-id`
+**Response**:
+
+- `200 OK` —— [response models](#anonymousobjects) —— `{ id, name, description, place, remoteIP }`; `id` is the created machine **session ID** while the actual machine ID lives in the `machine-id` cookie; sets `machine-token` and `machine-id`
+- `400 Bad Request` —— missing name or the IP cannot be determined
+- `403 Forbidden` —— the `User-Agent` is missing or wrong
 
 Failure: `403 Status` when the User-Agent is missing or wrong; `400 Status` when the name is missing or the IP cannot be determined.
 
@@ -1403,7 +1604,10 @@ _Example_:
 
 Query: `machine-id?: ObjectId`. With an ID it looks up that machine; without one it uses the current machine session. No user sign-in required.
 
-**Response**: `200` —— [response models](#anonymousobjects) —— `404 Status` when the machine or the required session does not exist. Declares a 30-minute cache
+**Response**:
+
+- `200 OK` —— [response models](#anonymousobjects) —— `{ name, description, place, remoteIP }`; declares a 30-minute cache
+- `404 Not Found` —— no such machine or required session
 
 _Example_:
 
@@ -1420,13 +1624,20 @@ _Example_:
 
 Requires the current machine session; no parameters.
 
-**Response**: `200` —— 空响应体 —— Deletes the machine, revokes authorization, removes the machine session, and blanks the `machine-token`, `machine-id`, and `token` cookies. No machine session: `401 Status`
+**Response**:
+
+- `200 OK` —— empty body; deletes the machine, revokes authorization, removes the machine session, and blanks the `machine-token`, `machine-id`, and `token` cookies
+- `401 Unauthorized` —— no machine session
 
 ### POST /api/machine/auth/request
 
 Auth: a valid machine session; no parameters. Creates an authorization request valid for 5 minutes. A machine may have at most one outstanding request.
 
-**Response**: `201` —— [response models](#anonymousobjects) —— `Location` set to `https://majdata.net/qrauth?auth-id={requestId}`. An outstanding request already exists: `403 Status`; registration info not found: `401 Status`
+**Response**:
+
+- `201 Created` —— [response models](#anonymousobjects) —— `{ requestId: string }`; `Location` is `https://majdata.net/qrauth?auth-id={requestId}`
+- `401 Unauthorized` —— registration info not found
+- `403 Forbidden` —— an outstanding request already exists
 
 _Example_:
 
@@ -1440,7 +1651,10 @@ _Example_:
 
 Anonymous. Query: `auth-id: string`, required.
 
-**Response**: `200` —— [response models](#anonymousobjects) —— `404 Status` when the request, machine, or machine session is invalid. Caching must not be stored
+**Response**:
+
+- `200 OK` —— [response models](#anonymousobjects) —— `{ grantee: "machine", granteeInfo: { name, description, place, remoteIP } }`; caching must not be stored
+- `404 Not Found` —— invalid request, machine, or machine session
 
 _Example_:
 
@@ -1462,7 +1676,11 @@ Auth: `AUTHORIZE`. Query: `auth-id: string`, required.
 
 Approved successfully: `200 empty`, which creates a temporary game-permission session for the user and mails users who have an email; the request exists but could not be authorized again (for example it was already approved): `204`; no such request: `404 Status`.
 
-**Response**: `200` —— 空响应体 (`204` 表示已批准过)
+**Response**:
+
+- `200 OK` —— empty body; creates a temporary game-permission session for the current user
+- `204 No Content` —— the request exists but could not be authorized again (for example, already approved)
+- `404 Not Found` —— no such request
 
 ### GET /api/machine/auth/check
 
@@ -1477,7 +1695,12 @@ Auth: a valid machine session. Query: `auth-id: string`, required. Only the mach
 
 A successful fetch consumes the request, so it cannot be claimed twice. Caching must not be stored.
 
-**Response**: `200` —— [response models](#anonymousobjects) —— `匿名对象`
+**Response**:
+
+- `200 OK` —— [response models](#anonymousobjects) —— `{ token: Guid, userInfo: UserProfile }`, and the `token` cookie is set
+- `202 Accepted` —— not approved yet, no body, keep polling
+- `403 Forbidden` —— the request belongs to another machine
+- `404 Not Found` —— no such request, already consumed, or no such machine
 
 _Example_:
 
@@ -1500,7 +1723,11 @@ _Example_:
 
 Auth: a valid machine session. Query: `auth-id: string`, required.
 
-**Response**: `200` —— 空响应体 —— `200 empty`; no such request: `404 Status`; not the originating machine: `403 Status`. After check consumes the request, reusing the same ID may return `404`
+**Response**:
+
+- `200 OK` —— empty body
+- `403 Forbidden` —— not the originating machine
+- `404 Not Found` —— no such request
 
 ## Leaderboards and statistics
 
@@ -1526,7 +1753,7 @@ These endpoints replaced the old `GET /api/maichart/{chartId}/score`, `/api/stat
 
 ### GET /api/maiscore/leaderboard/chart/by-id/{chartId}
 
-Anonymous. Success: `200 ChartScoreSummary { hash, levelHashes, scores }`. `levelHashes` always has 7 entries, with `null` for difficulties without inote text; `scores` has **8** entries, where `scores[level]` (level 0–6) is that difficulty's leaderboard and the last entry is always an empty array.
+Anonymous. `levelHashes` always has 7 entries, with `null` for difficulties without inote text; `scores` has **8** entries, where `scores[level]` (level 0–6) is that difficulty's leaderboard and the last entry is always an empty array.
 
 Each difficulty's leaderboard takes scores whose `levelHash` equals that difficulty's level hash, at most 10 by DX achievement rate descending, one per player. Difficulties with no level hash get an empty array.
 
@@ -1536,7 +1763,11 @@ Failure: no such chart `404 Status`; `chartId` is not a valid Guid `400`.
 `scores[][].player` here is a full `UserProfile` (kept for published MajdataPlay builds), where `id` is the real user ObjectId, `avatarId` is populated, and the email is null.
 :::
 
-**Response**: `200` —— [response models](#leaderboards)
+**Response**:
+
+- `200 OK` —— [response models](#leaderboards)
+- `400 Bad Request` —— `chartId` is not a valid Guid
+- `404 Not Found` —— no such chart
 
 _Example_:
 
@@ -1575,7 +1806,10 @@ _Example_:
 
 Anonymous. The path `levelHash` is 64-character lowercase hex.
 
-**Response**: `200` —— [response models](#leaderboards) —— follows the same rules as a single difficulty of by-id. It reads only scores, not charts, so the level hash may belong to a deleted chart or to no chart at all. With no scores, `scores` is an empty array
+**Response**:
+
+- `200 OK` —— [response models](#leaderboards) —— `{ levelHash, scores: ScoreSummary[] }`; follows the same rules as a single difficulty of by-id. It reads only scores, not charts, so the level hash may belong to a deleted chart or to no chart at all; with no scores, `scores` is an empty array
+- `400 Bad Request` —— `levelHash` is not 64-character lowercase hex
 
 A `levelHash` that is not 64-character lowercase hex (uppercase included) returns `400 Status`.
 
@@ -1617,11 +1851,14 @@ Anonymous. JSON:
 
 Plays belong to level hashes just like scores: the endpoint takes the level hashes of every requested chart's difficulties and matches plays on them, no matter which chart a play was recorded on; a difficulty shared by several requested charts counts once under `best`.
 
-`sortBy`/`scoreType` ignore surrounding whitespace and case, and null or an empty string means the default. Success: `200 PlayHistoryRankingEntry[]`, ordered by the chosen metric, descending, without pagination.
+`sortBy`/`scoreType` ignore surrounding whitespace and case, and null or an empty string means the default.
 
 Failure: empty `songIds` is `400` (40001), a bad time or mode is `400` (40000); omitting `songIds` entirely or including an invalid Guid produces ProblemDetails from the framework. The legacy `songhashes` field is no longer accepted.
 
-**Response**: `200` —— [response models](#statisticsandrating)
+**Response**:
+
+- `200 OK` —— an array of [response models](#statisticsandrating), ordered by the chosen metric, descending, without pagination
+- `400 Bad Request` —— empty `songIds` (40001), or a bad time or mode (40000)
 
 _Example_:
 
@@ -1652,7 +1889,10 @@ Anonymous. The site-wide total leaderboard: it aggregates each player's stored b
 | `page` | int | 0 | 0-based, must be ≥0 |
 | `pageSize` | int | 30 | Must be ≥1 |
 
-**Response**: `200` —— [response models](#statisticsandrating) —— ordered by each player's cumulative DX achievement rate, descending. The server caches the full leaderboard for 10 minutes and `geneTime` is when the snapshot was generated. Omitting `page` or passing `page=0` both return the first page. A negative page or a `pageSize` below 1 returns `400`
+**Response**:
+
+- `200 OK` —— [response models](#statisticsandrating), ordered by each player's cumulative DX achievement rate, descending. The server caches the full leaderboard for 10 minutes and `geneTime` is when the snapshot was generated; omitting `page` or passing `page=0` both return the first page
+- `400 Bad Request` —— a negative page or a `pageSize` below 1
 
 _Example_:
 
@@ -1681,7 +1921,10 @@ Anonymous. The path `uploader` is an uploader username. It aggregates only score
 
 An unknown uploader or a chart nobody played returns an empty `players` rather than `404`.
 
-**Response**: `200` —— [response models](#statisticsandrating)
+**Response**:
+
+- `200 OK` —— [response models](#statisticsandrating)
+- `400 Bad Request` —— a negative page or a `pageSize` below 1
 
 _Example_:
 
@@ -1703,7 +1946,10 @@ _Example_:
 
 Anonymous. The path `chartId` is a Guid. It aggregates only scores on that chart's difficulties. A deleted chart still aggregates by its stored level hashes; a completely unknown chart returns `200` with empty `players`.
 
-**Response**: `200` —— [response models](#statisticsandrating)
+**Response**:
+
+- `200 OK` —— [response models](#statisticsandrating)
+- `400 Bad Request` —— `chartId` is not a valid Guid, a negative page, or a `pageSize` below 1
 
 _Example_:
 
@@ -1729,7 +1975,10 @@ Anonymous. The path `hash` is the chart MD5 Base64. It finds the chart by hash a
 The `/` in a hash **must** be encoded as `%2F`, otherwise the route does not match and returns `404`; `+` and `=` may be sent as-is or encoded as `%2B` and `%3D`. Encoding the whole hash is recommended.
 :::
 
-**Response**: `200` —— [response models](#statisticsandrating)
+**Response**:
+
+- `200 OK` —— [response models](#statisticsandrating)
+- `400 Bad Request` —— a negative page or a `pageSize` below 1
 
 _Example_:
 
@@ -1744,7 +1993,11 @@ _Example_:
 
 Anonymous. The path `userId` is an ObjectId.
 
-**Response**: `200` —— [response models](#statisticsandrating) —— cumulative achievement rate over all of the player's best scores, with `player` holding the player's public profile; a player with no scores gets zero values. No such user returns `404 Status`; an invalid ObjectId returns `400` ProblemDetails
+**Response**:
+
+- `200 OK` —— [response models](#statisticsandrating), the cumulative achievement rate over all of the player's best scores, with `player` holding the player's public profile; a player with no scores gets zero values
+- `400 Bad Request` —— `userId` is not a valid ObjectId (ProblemDetails)
+- `404 Not Found` —— no such user
 
 _Example_:
 
@@ -1766,7 +2019,10 @@ _Example_:
 
 Anonymous. The path `username` is a string. Response and errors match by-id.
 
-**Response**: `200` —— [response models](#statisticsandrating)
+**Response**:
+
+- `200 OK` —— [response models](#statisticsandrating)
+- `404 Not Found` —— no such user
 
 _Example_:
 
@@ -1790,7 +2046,10 @@ Anonymous. The path `username` is a string. Returns the player's rating radar in
 
 A score participates only when: the chart has more than 5 upvotes; the difficulty index is not 6 (deluxe charts); the difficulty text is purely numeric or numeric with a plus, such as `13` or `14+`; and its DX achievement rate is at least 97.
 
-**Response**: `200` —— [response models](#statisticsandrating) —— is always `note`, `peak`, `sweep`, `slide_tricky`, `slide_sequence`, `jack`, and `fitted_constant`; `feature` holds the per-feature averages; `charts` lists the chart IDs that actually contributed; and `best` holds the same set of chart-and-difficulty entries sorted by achievement rate descending, so the frontend can render a Best 50 directly. With no usable scores, `feature` is `{}` and `charts` is `[]`. No such user returns `404 Status`
+**Response**:
+
+- `200 OK` —— [response models](#statisticsandrating); `featureOrder` is always `note`, `peak`, `sweep`, `slide_tricky`, `slide_sequence`, `jack`, and `fitted_constant`; `feature` holds the per-feature averages; `charts` lists the chart IDs that actually contributed; `best` holds the same chart-and-difficulty entries ordered by achievement rate, descending; with no usable scores, `feature` is `{}` and `charts` is `[]`
+- `404 Not Found` —— no such user
 
 ```json
 {
@@ -1807,7 +2066,10 @@ A score participates only when: the chart has more than 5 upvotes; the difficult
 
 Anonymous. Query: `userId: ObjectId` (the target user), `days?: int = 365` in the range 1–3650.
 
-**Response**: `200` —— [response models](#playheatmap) —— `total` counts the user's **entire history** and is not limited by `days`; `daily` includes only dates with records inside the window, ascending, with no zero-filled gaps
+**Response**:
+
+- `200 OK` —— [response models](#playheatmap) —— `{ total: int64, daily: [{ date: "YYYY-MM-DD", count: int }] }`; `total` counts the user's **entire history** and is not limited by `days`; `daily` includes only dates with records inside the window, ascending, with no zero-filled gaps
+- `400 Bad Request` —— `days` out of range or not an integer, or `userId` is not a 24-character hexadecimal ObjectId (ProblemDetails)
 
 The window starts at the server's **local time** minus `days`, while `daily` groups plays by **UTC date**, so on a server outside UTC the window boundary and date grouping can differ by hours and the first date's count may be incomplete.
 
@@ -1835,7 +2097,11 @@ Anonymous. Query: `hash: string` required, the source chart's hash (case-sensiti
 
 When signed in, charts the user has played, upvoted, or downvoted are excluded; anonymous callers get no personal filtering. The response sets `Cache-Control: no-store`.
 
-**Response**: `200` —— [response models](#onlinemaichart) —— ordered by similarity score descending, ties broken by chart ID ascending. No such source chart returns `404 Status`; a missing or blank hash or an out-of-range limit returns `400`. The legacy `chartId` parameter is no longer supported; callers must send `hash`. An existing source chart with no usable neighbors returns `200 []`
+**Response**:
+
+- `200 OK` —— an array of [response models](#onlinemaichart), ordered by similarity score descending, ties broken by chart ID ascending; an existing source chart with no usable neighbors returns `[]`
+- `400 Bad Request` —— missing or blank hash, or an out-of-range limit
+- `404 Not Found` —— no such source chart
 
 _Example_:
 
@@ -1869,7 +2135,12 @@ Pagination follows the chart list: pages are 0-based, no total is returned, and 
 
 **Feed construction**: the similar-chart stream seeds from the user's upvotes and recent plays and sorts neighbors by similarity; the exploration stream mixes new and popular charts **3:1**. The two streams interleave **6:4**, and every pool excludes charts the user has played, upvoted, or downvoted. With no seeds or no model neighbors, the exploration stream still provides a cold start.
 
-**Response**: `200` —— [response models](#onlinemaichart) —— each element is a complete external chart object, with no recommendation score or extra wrapper fields. An empty result is `[]`
+**Response**:
+
+- `200 OK` —— an array of [response models](#onlinemaichart); each element is a complete external chart object, with no recommendation score or extra wrapper fields; an empty result is `[]`
+- `400 Bad Request` —— invalid parameters
+- `401 Unauthorized` —— not signed in
+- `403 Forbidden` —— another user was requested
 
 _Example_:
 
@@ -1899,7 +2170,11 @@ The website reports in bulk once a chart card enters the viewport; MajdataPlay r
 
 An invalid `source`, or an empty `chartHashes` or one with more than 100 entries, returns `400 Status`; signing out returns `401`. Empty hashes and hashes longer than 128 characters are silently ignored. Impression times come from the server, and valid requests always return `204`.
 
-**Response**: `204` —— 空响应体 (`204`)
+**Response**:
+
+- `204 No Content` —— empty body
+- `400 Bad Request` —— invalid `source`, or an empty `chartHashes` or one with more than 100 entries
+- `401 Unauthorized` —— not signed in
 
 ## Events
 
@@ -1917,9 +2192,12 @@ Anonymous.
 | `category` | int | None | Only that category |
 | `status` | string[] | None | Only events in any listed status, repeatable: `upcoming`, `ongoing`, `ended` |
 
-`type` and `status` are case-insensitive. Success: `200 OnlineEvent[]`, by start time descending and then by ID ascending. Invalid values: `400 Status`.
+`type` and `status` are case-insensitive.
 
-**Response**: `200` —— [response models](#onlineevent)
+**Response**:
+
+- `200 OK` —— an array of [response models](#onlineevent), by start time descending and then by ID ascending
+- `400 Bad Request` —— invalid parameter values
 
 _Example_:
 
@@ -1942,9 +2220,12 @@ _Example_:
 
 ### GET /api/event/{eventId}
 
-Anonymous. Success: `200 OnlineEvent`; missing: `404 Status`.
+Anonymous.
 
-**Response**: `200` —— [response models](#onlineevent)
+**Response**:
+
+- `200 OK` —— [response models](#onlineevent)
+- `404 Not Found` —— no such event
 
 _Example_:
 
@@ -1982,7 +2263,11 @@ Auth: the `eventManager` group. JSON:
 
 Every string except `id` must be non-empty and not all whitespace. Times are converted to UTC on storage and returned with a `Z` suffix. A bare date such as `2026-10-24` is rejected; supply a full time and offset.
 
-**Response**: `201` —— [response models](#onlineevent) —— `Location` pointing at the event. Invalid fields: `400 Status`; an unparsable body: `400 Status`; no body: `400 Status` (40001); duplicate ID: `409 Status` (40900)
+**Response**:
+
+- `201 Created` —— [response models](#onlineevent) with `Location` pointing at the event
+- `400 Bad Request` —— invalid fields, an unparsable body, or no body (40001)
+- `409 Conflict` —— duplicate ID (40900)
 
 _Example_:
 
@@ -2005,7 +2290,11 @@ _Example_:
 
 Auth: the `eventManager` group. The JSON matches POST and replaces every field except the ID; `id` may be omitted but must match the route when present.
 
-**Response**: `200` —— [response models](#onlineevent) —— `400 Status`; missing: `404 Status`
+**Response**:
+
+- `200 OK` —— [response models](#onlineevent)
+- `400 Bad Request` —— invalid fields or body
+- `404 Not Found` —— no such event
 
 _Example_:
 
@@ -2026,9 +2315,12 @@ _Example_:
 
 ### DELETE /api/event/{eventId}
 
-Auth: the `eventManager` group. No body. Success: `200 Status`; missing: `404 Status`.
+Auth: the `eventManager` group. No body.
 
-**Response**: `200` —— [response models](#status)
+**Response**:
+
+- `200 OK` —— [response models](#status)
+- `404 Not Found` —— no such event
 
 _Example_:
 
@@ -2045,7 +2337,9 @@ These endpoints require the `administrator` group. `{group}` is a group name (`a
 
 ### GET /api/admin/groups
 
-**Response**: `200` —— every group name sorted by value: `["administrator","eventManager"]`
+**Response**:
+
+- `200 OK` —— every group name (`string[]`) sorted by value: `["administrator","eventManager"]`
 
 _Example_:
 
@@ -2055,7 +2349,10 @@ _Example_:
 
 ### GET /api/admin/groups/{group}/members
 
-**Response**: `200` —— [response models](#onlineusergroups) —— `200` with the accounts directly in that group, sorted by username. Administrators who are not members are not listed even though they satisfy the group's requirements
+**Response**:
+
+- `200 OK` —— an array of [response models](#onlineusergroups) with the accounts directly in that group, sorted by username; administrators who are not members are not listed
+- `400 Bad Request` —— unknown group name
 
 _Example_:
 
@@ -2071,7 +2368,10 @@ _Example_:
 
 ### GET /api/admin/users/{username}/groups
 
-**Response**: `200` —— [response models](#onlineusergroups) —— accounts created before groups existed have an empty `groups` array
+**Response**:
+
+- `200 OK` —— [response models](#onlineusergroups); accounts created before groups existed have an empty `groups` array
+- `404 Not Found` —— no such user
 
 _Example_:
 
@@ -2085,9 +2385,13 @@ _Example_:
 
 ### PUT /api/admin/users/{username}/groups/{group}
 
-Adds the account to the group; no body; a no-op when already a member. Success: `200 OnlineUserGroups`.
+Adds the account to the group; no body; a no-op when already a member.
 
-**Response**: `200` —— [response models](#onlineusergroups)
+**Response**:
+
+- `200 OK` —— [response models](#onlineusergroups), the groups after the change
+- `400 Bad Request` —— unknown group name
+- `404 Not Found` —— no such user
 
 _Example_:
 
@@ -2101,9 +2405,12 @@ _Example_:
 
 ### DELETE /api/admin/users/{username}/groups/{group}
 
-Removes the account from the group; no body; a no-op when not a member. Success: `200 OnlineUserGroups`. Administrators cannot remove themselves from `administrator`, which returns `409 Status`.
+Removes the account from the group; no body; a no-op when not a member.
 
-**Response**: `200` —— [response models](#onlineusergroups)
+**Response**:
+
+- `200 OK` —— [response models](#onlineusergroups), the groups after the change
+- `409 Conflict` —— administrators cannot remove themselves from `administrator`
 
 _Example_:
 
@@ -2119,9 +2426,11 @@ _Example_:
 
 ### GET /api/Ping
 
-Anonymous. No parameters. Success: `200 {"code":114514,"message":"Pong"}`. Caching must not be stored.
+Anonymous. No parameters. Caching must not be stored.
 
-**Response**: `200` —— [response models](#status)
+**Response**:
+
+- `200 OK` —— [response models](#status) with message `Pong`
 
 _Example_:
 
@@ -2134,9 +2443,11 @@ _Example_:
 
 ### GET /api/info
 
-Anonymous. No parameters. Success: `200 {"id":"...","name":"..."}`, the server instance's identifier and display name, empty strings when unconfigured.
+Anonymous. No parameters. The server instance's identifier and display name, empty strings when unconfigured.
 
-**Response**: `200` —— [response models](#serverinfo)
+**Response**:
+
+- `200 OK` —— [response models](#serverinfo)
 
 _Example_:
 

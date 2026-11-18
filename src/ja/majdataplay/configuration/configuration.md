@@ -120,7 +120,7 @@
 | `SlideJudgeType` | 列挙型 | `"All"` | **スライド判定表示レベル**、スライド判定を表示する条件を設定します。このレベルより下の場合にのみ判定文字が表示されます |
 | `BreakJudgeType` | 列挙型 | `"All"` | **Break 判定表示レベル**、Break 判定を表示する条件を設定します。このレベルより下の場合にのみ判定文字が表示されます |
 | `BreakFastLateType` | 列挙型 | `"Disable"` | **Break Fast / Late 表示レベル**、Break の Fast / Late を表示する条件を設定します。このレベルより下の場合にのみ判定文字が表示されます |
-| `SlideSortOrder` | 列挙型 | `"Modern"` | **スライドの並び順**、スライドの順序です。Classic では古いノートが下、Modern では古いノートが上になります (スターの発色に影響します) |
+| `SlideSortOrder` | 列挙型 | `"Modern"` | **スライドの並び順**、スライドが重なったときにどちらが手前になるかを決めます。`"Classic"` では古いスライドが手前 (上)、`"Modern"` では古いスライドが奥 (下) になります。スターの発色に影響します |
 | `OuterJudgeDistance` | 浮動小数点 | `1.0` | **外側判定表示距離**、外側の判定文字の表示距離を調整します (小さいほど中心に近づきます)。範囲 `0`–`1`、刻み `0.05`、`0` で無効になります |
 | `InnerJudgeDistance` | 浮動小数点 | `1.0` | **内側判定表示距離**、タッチ判定文字の表示距離を調整します (小さいほど中心に近づきます)。範囲 `0`–`1`、刻み `0.05`、`0` で無効になります |
 | `DisplayHoldHeadJudgeResult` | 真偽値 | `false` | **ホールド頭の判定を表示**、ホールド頭の判定結果を表示します |
@@ -137,8 +137,8 @@
 | | `Frame` | フレーム |
 | `Mode` | `Classic` | Classic (旧フレーム) |
 | | `Modern` | Modern (新フレーム) |
-| `SlideSortOrder` | `Classic` | Classic 順 (古いノートが下) |
-| | `Modern` | Modern 順 (古いノートが上) |
+| `SlideSortOrder` | `Classic` | Classic 順 (古いスライドが手前 / 上) |
+| | `Modern` | Modern 順 (古いスライドが奥 / 下) |
 | `FastLateType` / `NoteJudgeType` / `TouchJudgeType` / `SlideJudgeType` / `BreakJudgeType` / `BreakFastLateType` | `All` | すべて |
 | | `BelowCP` | Critical 未満 |
 | | `BelowP` | Perfect 未満 |
@@ -782,7 +782,7 @@
 | `SlideJudgeType` | 列挙型 | `"All"` | **スライド判定表示レベル**、スライド判定を表示する条件を設定します。このレベル未満のときのみ判定文字が表示されます |
 | `BreakJudgeType` | 列挙型 | `"All"` | **Break 判定表示レベル**、Break 判定を表示する条件を設定します。このレベル未満のときのみ判定文字が表示されます |
 | `BreakFastLateType` | 列挙型 | `"Disable"` | **Break Fast / Late 表示レベル**、Break の Fast / Late を表示する条件を設定します。このレベル未満のときのみ判定文字が表示されます |
-| `SlideSortOrder` | 列挙型 | `"Modern"` | **スライドの並び順**、スライドの並び順: クラシックでは古いノートが下、モダンでは古いノートが上になります (スターの発色に影響します) |
+| `SlideSortOrder` | 列挙型 | `"Modern"` | **スライドの並び順**、スライドが重なったときにどちらが手前になるかを決めます。クラシックでは古いスライドが手前 (上)、モダンでは古いスライドが奥 (下) になります。スターの発色に影響します |
 | `OuterJudgeDistance` | 浮動小数点数 | `1.0` | **外側判定表示距離**、外側の判定文字の表示距離を調整します (小さいほど中央に近づきます)。範囲 `0`–`1`、ステップ `0.05`、`0` で無効になります |
 | `InnerJudgeDistance` | 浮動小数点数 | `1.0` | **内側判定表示距離**、タッチ判定文字の表示距離を調整します (小さいほど中央に近づきます)。範囲 `0`–`1`、ステップ `0.05`、`0` で無効になります |
 | `DisplayHoldHeadJudgeResult` | 真偽値 | `false` | **ホールド頭判定を表示**、ホールドの頭の判定結果を表示します |
@@ -816,8 +816,8 @@
 | | `BelowGR` | Great 未満 |
 | | `MissOnly` | Miss のみ |
 | | `Disable` | 無効 |
-| `SlideSortOrder` | `Classic` | クラシック順 (古いノートが下) |
-| | `Modern` | モダン順 (古いノートが上) |
+| `SlideSortOrder` | `Classic` | クラシック順 (古いスライドが手前 / 上) |
+| | `Modern` | モダン順 (古いスライドが奥 / 下) |
 | `TouchFeedback` | `All` | すべて |
 | | `Outer_Only` | 外側のみ |
 | | `Inner_Only` | 内側のみ |

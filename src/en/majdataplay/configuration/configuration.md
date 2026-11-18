@@ -120,7 +120,7 @@ See [Upgrading from an older version](#upgrading-from-an-older-version) at the e
 | `SlideJudgeType` | Enum | `"All"` | **Slide judgment display level**, sets the condition for showing Slide judgments. The text is only shown below this level |
 | `BreakJudgeType` | Enum | `"All"` | **Break judgment display level**, sets the condition for showing Break judgments. The text is only shown below this level |
 | `BreakFastLateType` | Enum | `"Disable"` | **Break Fast / Late display level**, sets the condition for showing a Break's Fast / Late. The text is only shown below this level |
-| `SlideSortOrder` | Enum | `"Modern"` | **Slide sort order**, Slide ordering: with Classic, older notes are on the bottom; with Modern, older notes are on top (affects star coloring) |
+| `SlideSortOrder` | Enum | `"Modern"` | **Slide sort order**, decides which Slide is in front when they overlap: `"Classic"` puts the older Slide in front (on top), `"Modern"` puts the older Slide behind (at the bottom). Affects star coloring |
 | `OuterJudgeDistance` | Float | `1.0` | **Outer judgment display distance**, adjusts the display distance of outer judgment text (the smaller, the closer to the center). Range `0`–`1`, step `0.05`, `0` disables it |
 | `InnerJudgeDistance` | Float | `1.0` | **Inner judgment display distance**, adjusts the display distance of Touch judgment text (the smaller, the closer to the center). Range `0`–`1`, step `0.05`, `0` disables it |
 | `DisplayHoldHeadJudgeResult` | Boolean | `false` | **Show Hold head judgment**, shows the judgment result of the Hold head |
@@ -137,8 +137,8 @@ The step of `AudioOffset`, `JudgeOffset`, `AnswerOffset`, `TouchPanelOffset`, `S
 | | `Frame` | Frame |
 | `Mode` | `Classic` | Classic (old frame) |
 | | `Modern` | Modern (new frame) |
-| `SlideSortOrder` | `Classic` | Classic order (older notes on the bottom) |
-| | `Modern` | Modern order (older notes on top) |
+| `SlideSortOrder` | `Classic` | Classic order (the older Slide is in front / on top) |
+| | `Modern` | Modern order (the older Slide is behind / at the bottom) |
 | `FastLateType` / `NoteJudgeType` / `TouchJudgeType` / `SlideJudgeType` / `BreakJudgeType` / `BreakFastLateType` | `All` | All |
 | | `BelowCP` | Below Critical |
 | | `BelowP` | Below Perfect |
@@ -782,7 +782,7 @@ This section keeps the single-file `settings.json` reference for versions **befo
 | `SlideJudgeType` | Enum | `"All"` | **Slide judgment display level**, sets the condition for showing Slide judgments. The text is only shown below this level |
 | `BreakJudgeType` | Enum | `"All"` | **Break judgment display level**, sets the condition for showing Break judgments. The text is only shown below this level |
 | `BreakFastLateType` | Enum | `"Disable"` | **Break Fast / Late display level**, sets the condition for showing a Break's Fast / Late. The text is only shown below this level |
-| `SlideSortOrder` | Enum | `"Modern"` | **Slide sort order**, Slide ordering: with Classic, older notes are on the bottom; with Modern, older notes are on top (affects star coloring) |
+| `SlideSortOrder` | Enum | `"Modern"` | **Slide sort order**, decides which Slide is in front when they overlap: `"Classic"` puts the older Slide in front (on top), `"Modern"` puts the older Slide behind (at the bottom). Affects star coloring |
 | `OuterJudgeDistance` | Float | `1.0` | **Outer judgment display distance**, adjusts the display distance of outer judgment text (the smaller, the closer to the center). Range `0`–`1`, step `0.05`, `0` disables it |
 | `InnerJudgeDistance` | Float | `1.0` | **Inner judgment display distance**, adjusts the display distance of Touch judgment text (the smaller, the closer to the center). Range `0`–`1`, step `0.05`, `0` disables it |
 | `DisplayHoldHeadJudgeResult` | Boolean | `false` | **Show Hold head judgment**, shows the judgment result of the Hold head |
@@ -816,8 +816,8 @@ This section keeps the single-file `settings.json` reference for versions **befo
 | | `BelowGR` | Below Great |
 | | `MissOnly` | Miss only |
 | | `Disable` | Disabled |
-| `SlideSortOrder` | `Classic` | Classic order (older notes on the bottom) |
-| | `Modern` | Modern order (older notes on top) |
+| `SlideSortOrder` | `Classic` | Classic order (the older Slide is in front / on top) |
+| | `Modern` | Modern order (the older Slide is behind / at the bottom) |
 | `TouchFeedback` | `All` | All |
 | | `Outer_Only` | Outer only |
 | | `Inner_Only` | Inner only |

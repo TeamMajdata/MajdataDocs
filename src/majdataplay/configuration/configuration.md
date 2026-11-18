@@ -120,7 +120,7 @@
 | `SlideJudgeType` | 枚举 | `"All"` | **Slide 判定显示等级**, 设置 Slide 判定显示条件, 低于此级别才显示判定文字 |
 | `BreakJudgeType` | 枚举 | `"All"` | **Break 判定显示等级**, 设置 Break 判定显示条件, 低于此级别才显示判定文字 |
 | `BreakFastLateType` | 枚举 | `"Disable"` | **Break Fast / Late 显示等级**, 设置 Break 的 Fast / Late 显示条件, 低于此级别才显示判定文字 |
-| `SlideSortOrder` | 枚举 | `"Modern"` | **Slide 排列顺序**, Slide 排序: Classic 旧在下, Modern 旧在上 (影响星星变色) |
+| `SlideSortOrder` | 枚举 | `"Modern"` | **Slide 排列顺序**, 决定 Slide 重叠时谁在前: `"Classic"` 较旧的 Slide 在前 (在上), `"Modern"` 较旧的 Slide 在后 (在下). 影响星星变色 |
 | `OuterJudgeDistance` | 浮点 | `1.0` | **外圈判定显示距离**, 调整外部判定文字显示距离 (越小越靠中心). 范围 `0`~`1`, 步进 `0.05`, `0` 为关闭 |
 | `InnerJudgeDistance` | 浮点 | `1.0` | **内圈判定显示距离**, 调整 Touch 判定文字显示距离 (越小越靠中心). 范围 `0`~`1`, 步进 `0.05`, `0` 为关闭 |
 | `DisplayHoldHeadJudgeResult` | 布尔 | `false` | **显示 Hold 头判判定**, 显示 Hold 头的判定结果 |
@@ -137,8 +137,8 @@
 | | `Frame` | 帧 |
 | `Mode` | `Classic` | 旧框 (Classic) |
 | | `Modern` | 新框 (Modern) |
-| `SlideSortOrder` | `Classic` | 旧框排序 (旧音符在下) |
-| | `Modern` | 新框排序 (旧音符在上) |
+| `SlideSortOrder` | `Classic` | 旧框排序 (较旧的 Slide 在前 / 在上) |
+| | `Modern` | 新框排序 (较旧的 Slide 在后 / 在下) |
 | `FastLateType` / `NoteJudgeType` / `TouchJudgeType` / `SlideJudgeType` / `BreakJudgeType` / `BreakFastLateType` | `All` | 全部 |
 | | `BelowCP` | Critical 以下 |
 | | `BelowP` | Perfect 以下 |
@@ -782,7 +782,7 @@
 | `SlideJudgeType` | 枚举 | `"All"` | **Slide 判定显示等级**, 设置 Slide 判定显示条件, 低于此级别才显示判定文字 |
 | `BreakJudgeType` | 枚举 | `"All"` | **Break 判定显示等级**, 设置 Break 判定显示条件, 低于此级别才显示判定文字 |
 | `BreakFastLateType` | 枚举 | `"Disable"` | **Break Fast / Late 显示等级**, 设置 Break 的 Fast / Late 显示条件, 低于此级别才显示判定文字 |
-| `SlideSortOrder` | 枚举 | `"Modern"` | **Slide 排列顺序**, Slide 排序: Classic 旧在下, Modern 旧在上 (影响星星变色) |
+| `SlideSortOrder` | 枚举 | `"Modern"` | **Slide 排列顺序**, 决定 Slide 重叠时谁在前: `"Classic"` 较旧的 Slide 在前 (在上), `"Modern"` 较旧的 Slide 在后 (在下). 影响星星变色 |
 | `OuterJudgeDistance` | 浮点 | `1.0` | **外圈判定显示距离**, 调整外部判定文字显示距离 (越小越靠中心). 范围 `0`~`1`, 步进 `0.05`, `0` 为关闭 |
 | `InnerJudgeDistance` | 浮点 | `1.0` | **内圈判定显示距离**, 调整 Touch 判定文字显示距离 (越小越靠中心). 范围 `0`~`1`, 步进 `0.05`, `0` 为关闭 |
 | `DisplayHoldHeadJudgeResult` | 布尔 | `false` | **显示 Hold 头判判定**, 显示 Hold 头的判定结果 |
@@ -816,8 +816,8 @@
 | | `BelowGR` | Great 以下 |
 | | `MissOnly` | 仅 Miss |
 | | `Disable` | 禁用 |
-| `SlideSortOrder` | `Classic` | 旧框排序 (旧音符在下) |
-| | `Modern` | 新框排序 (旧音符在上) |
+| `SlideSortOrder` | `Classic` | 旧框排序 (较旧的 Slide 在前 / 在上) |
+| | `Modern` | 新框排序 (较旧的 Slide 在后 / 在下) |
 | `TouchFeedback` | `All` | 全部 |
 | | `Outer_Only` | 仅外部 |
 | | `Inner_Only` | 仅内部 |

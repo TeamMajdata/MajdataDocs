@@ -1,12 +1,19 @@
 # Configuration reference
 
-::: tip Two configuration files
-Starting with **2.1.0-preview6**, the MajdataPlay configuration is split into two files:
+::: tip Configuration is split into two files
+In **2.1.0** and **2.1.0 preview**, the MajdataPlay configuration is split into two files, which live in the same directory:
 
-- `settings.json`: **user settings**, containing `Game`, `Judge`, `Display`, `Volume` and `Touch`. When you sign in to an online account, this group may be read from and uploaded to the account instead.
+- `settings.json`: **user settings**, containing `Game`, `Judge`, `Display`, `Volume` and `Touch`. This group follows the player and may be read from and uploaded to an online account once you sign in.
 - `system-settings.json`: **system settings**, containing `Common`, `Rendering`, `Audio`, `Encoding`, `Decoding`, `Debug`, `Network` and `IO`. This group describes the current device and always stays local.
 
-This page explains every setting in both files and gives the default value of each one **when it is generated automatically on first run**. The single-file `settings.json` reference for versions before 2.1.0-preview6 is kept in the [legacy configuration reference](/en/majdataplay/configuration/legacy).
+After the split, every setting appears in exactly one file instead of being mixed into a single file as in older versions:
+
+| File | What it holds | Typical use |
+| --- | --- | --- |
+| `settings.json` | Gameplay feel, judgment, display, volume, touch simulation | Note speed, judgment offsets, skins |
+| `system-settings.json` | Device-dependent rendering, audio backend, encoding/decoding, debug, networking, external IO | Cabinets, render backend, servers |
+
+This page covers both in two parts: [part one](#new-configuration) describes the split configuration, and [part two](#legacy-configuration) keeps the single-file `settings.json` reference for older versions. A new install migrates an older configuration automatically; see [Upgrading from an older version](#upgrading-from-an-older-version).
 :::
 
 ::: warning
@@ -22,9 +29,13 @@ Before reading the tables below, note the following:
 - Enum values are written to JSON as strings, such as `"Modern"` or `"TrackSkip"`; booleans are written as `true` / `false`.
 - A missing category or item uses its built-in default. When a file cannot be read, the game backs it up as `.bak` and regenerates it with defaults.
 
-## File locations and upgrades
+## New configuration (2.1.0 and later) {#new-configuration}
 
-Both files are located in the same directory described in [Configuration file](/en/majdataplay/configuration/index). On the first launch of 2.1.0-preview6 or later:
+This section describes the split `settings.json` and `system-settings.json`. If you run 2.1.0, 2.1.0 preview or later, follow this section.
+
+### File locations and upgrades
+
+Both files are located in the same directory described in [Configuration file](/en/majdataplay/configuration/index). On the first launch of **2.1.0**, **2.1.0 preview** or later:
 
 - If `system-settings.json` does not exist, the game creates it; system settings from an older `settings.json` are migrated while reading it and removed from `settings.json` on the next save.
 - If a setting in an older `settings.json` changed category (for example `Audio.Volume` became `Volume`, or `Display.RenderQuality` became `Rendering.RenderQuality`), the game moves it to the new location automatically. A current key wins over the legacy key with the same name.
@@ -32,7 +43,7 @@ Both files are located in the same directory described in [Configuration file](/
 
 See [Upgrading from an older version](#upgrading-from-an-older-version) at the end of this page for the full migration rules.
 
-## settings.json — user settings
+### settings.json — user settings
 
 | Section | Meaning | Contents |
 | --- | --- | --- |
@@ -42,7 +53,7 @@ See [Upgrading from an older version](#upgrading-from-an-older-version) at the e
 | `Volume` | Volume settings | The volume of each track |
 | `Touch` | Touch settings | Simulated touch radius and the judgment range of areas A–E |
 
-## Game — game settings
+### Game — game settings
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
@@ -66,7 +77,7 @@ See [Upgrading from an older version](#upgrading-from-an-older-version) at the e
 | `ManualStartGame` | Boolean | `false` | **Manual start**, press a key to start after loading (used for competitions) |
 | `NoteAppearRate` | Float | `0.265` | **Note fade-in offset**, adjusts the note fade-in effect. Step `0.001` |
 
-### Game enum values
+#### Game enum values
 
 | Item | Value | Meaning |
 | --- | --- | --- |
@@ -90,7 +101,7 @@ See [Upgrading from an older version](#upgrading-from-an-older-version) at the e
 | | `RANDOM` | Random by track |
 | | `S_RANDOM` | Random for each note independently |
 
-## Judge — judgment settings
+### Judge — judgment settings
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
@@ -118,7 +129,7 @@ See [Upgrading from an older version](#upgrading-from-an-older-version) at the e
 The step of `AudioOffset`, `JudgeOffset`, `AnswerOffset`, `TouchPanelOffset`, `SlideFadeInOffset` and `Debug.DisplayOffset` follows `OffsetUnit`: `0.001` for `"Second"` and `0.1` for `"Frame"`. The setting UI aligns these values to the current unit; when you edit JSON directly, you may write any value.
 :::
 
-### Judge enum values
+#### Judge enum values
 
 | Item | Value | Meaning |
 | --- | --- | --- |
@@ -135,7 +146,7 @@ The step of `AudioOffset`, `JudgeOffset`, `AnswerOffset`, `TouchPanelOffset`, `S
 | | `MissOnly` | Miss only |
 | | `Disable` | Disabled |
 
-## Display — display settings
+### Display — display settings
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
@@ -156,7 +167,7 @@ The step of `AudioOffset`, `JudgeOffset`, `AnswerOffset`, `TouchPanelOffset`, `S
 | `SensorStyle` | Enum | `"RedGreen"` | **Sensor display style**, selects how the sensor areas are shown |
 | `SensorOpacity` | Integer | `20` | **Sensor opacity**, adjusts the display strength. Range `10`–`90`, step `10` |
 
-### Display enum values
+#### Display enum values
 
 | Item | Value | Meaning |
 | --- | --- | --- |
@@ -192,7 +203,7 @@ The step of `AudioOffset`, `JudgeOffset`, `AnswerOffset`, `TouchPanelOffset`, `S
 | | `RedGreen` | Red-green |
 | | `Classic` | Classic |
 
-## Volume — volume settings
+### Volume — volume settings
 
 All items have a range of `0`–`2` with a step of `0.05`.
 
@@ -214,7 +225,7 @@ All items have a range of `0`–`2` with a step of `0.05`.
 Older versions stored the volumes under `Audio.Volume`. In the new version, `Volume` is a top-level category; old values are migrated automatically at startup. The volume menu in the setting UI also corresponds to this category.
 :::
 
-## Touch — touch settings
+### Touch — touch settings
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
@@ -226,7 +237,7 @@ Older versions stored the volumes under `Audio.Volume`. In the new version, `Vol
 | `TouchEAreaExtraRadius` | Float | `0.1` | **Simulated touch area E radius**, expands the trigger radius of touch area E. Range `0`–`2`, step `0.05` |
 | `TouchRadiusAdjust` | Float | `0.0` | **Touch area ratio**, adjusts the touch trigger range according to the finger contact area; `0` disables it. Range `0`–`2`, step `0.05` |
 
-## system-settings.json — system settings
+### system-settings.json — system settings
 
 | Section | Meaning | Contents |
 | --- | --- | --- |
@@ -240,7 +251,7 @@ Older versions stored the volumes under `Audio.Volume`. In the new version, `Vol
 | `IO` | Input / output devices | Arcade controller, touch panel and LED. Hidden in the setting UI |
 | `Mod` | Mod | <mark>Not written</mark>, applies only to the current chart |
 
-## Common — common settings
+### Common — common settings
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
@@ -250,7 +261,7 @@ Older versions stored the volumes under `Audio.Volume`. In the new version, `Vol
 | `NoteFolding` | Boolean | `true` | **Note folding** <mark>Hidden</mark>, folds the note display. Not written on iOS |
 | `DJAutoPolicy` | Enum | `"Strict"` | **DJAuto policy**, Strict: only one of keys or touch may be used. Permissive: the two may be mixed |
 
-### Common enum values
+#### Common enum values
 
 | Item | Value | Meaning |
 | --- | --- | --- |
@@ -260,7 +271,7 @@ Older versions stored the volumes under `Audio.Volume`. In the new version, `Vol
 | `DJAutoPolicy` | `Strict` | Strict |
 | | `Permissive` | Permissive |
 
-## Rendering — rendering settings
+### Rendering — rendering settings
 
 `Rendering` offers five quality presets. `"EnergySaving"`, `"Performance"`, `"Beautiful"` and `"Refined"` write a fixed set of parameters; only `"Custom"` shows and allows changing the anti-aliasing, texture quality, UI style, output mode and render scale below. Switching back to a named preset overwrites those custom parameters.
 
@@ -293,7 +304,7 @@ Older versions stored the volumes under `Audio.Volume`. In the new version, `Vol
 
 `SystemScalingStatus`, `DisplayBufferResolution`, `SceneRenderResolution` and `CurrentOutputPath` are read-only diagnostics. They are not written to JSON and cannot be changed.
 
-### Rendering enum values
+#### Rendering enum values
 
 | Item | Value | Meaning |
 | --- | --- | --- |
@@ -326,7 +337,7 @@ Older versions stored the volumes under `Audio.Volume`. In the new version, `Vol
 | | `_180` | 180° |
 | | `_270` | 270° |
 
-## Audio — audio settings
+### Audio — audio settings
 
 This section is <mark>Hidden</mark> in the setting UI but still applies. The volumes have moved to the [Volume](#volume-—-volume-settings) category in `settings.json`.
 
@@ -339,7 +350,7 @@ This section is <mark>Hidden</mark> in the setting UI but still applies. The vol
 | `Bass` | Object | See below | **BASS audio buffer settings**, present on all platforms |
 | `Backend` | Enum | `"Wasapi"` | **Audio backend**. Defaults to `"Wasapi"` on desktop and `"BassSimple"` on mobile |
 
-### Audio.Wasapi — WASAPI settings (Windows only)
+#### Audio.Wasapi — WASAPI settings (Windows only)
 
 | Item | Default value | Meaning |
 | --- | --- | --- |
@@ -349,14 +360,14 @@ This section is <mark>Hidden</mark> in the setting UI but still applies. The vol
 | `BufferSize` | `0.02` | **Buffer size**, in seconds |
 | `Period` | `0.005` | **Period**, in seconds |
 
-### Audio.Asio — ASIO settings (Windows only)
+#### Audio.Asio — ASIO settings (Windows only)
 
 | Item | Default value | Meaning |
 | --- | --- | --- |
 | `DeviceIndex` | `0` | **Device index**, the ASIO device number |
 | `SampleRate` | `44100` | **Sample rate**, the audio sample rate (Hz) |
 
-### Audio.Channel — channel volume (desktop only)
+#### Audio.Channel — channel volume (desktop only)
 
 | Item | Default value | Meaning |
 | --- | --- | --- |
@@ -365,7 +376,7 @@ This section is <mark>Hidden</mark> in the setting UI but still applies. The vol
 | `SideVolume` | `1.0` | **Side channel** (LS / RS) volume |
 | `RearVolume` | `1.0` | **Rear channel** (LR / RR) volume |
 
-### Audio.Bass — BASS buffer settings
+#### Audio.Bass — BASS buffer settings
 
 | Item | Default value | Meaning |
 | --- | --- | --- |
@@ -375,7 +386,7 @@ This section is <mark>Hidden</mark> in the setting UI but still applies. The vol
 | `DeviceUpdatePeriodMs` | `16` | **Device update period**, in milliseconds. Defaults to `8` on mobile |
 | `EnableAAudio` | `true` | **Enable AAudio**, only present on Android |
 
-### Audio enum values
+#### Audio enum values
 
 | Item | Value | Meaning |
 | --- | --- | --- |
@@ -384,7 +395,7 @@ This section is <mark>Hidden</mark> in the setting UI but still applies. The vol
 | | `Asio` | ASIO (low latency for professional sound cards) |
 | | `BassSimple` | BASS simplified backend (default on mobile) |
 
-## Encoding — encoding settings
+### Encoding — encoding settings
 
 This menu is only shown when `Common.RecordMode` is `"FFmpeg"`.
 
@@ -399,7 +410,7 @@ This menu is only shown when `Common.RecordMode` is `"FFmpeg"`.
 | `ResolutionScale` | Float | `1.0` | **Resolution scale**, the actual resolution multiplier of the recording. Range `0.25`–`1`, step `0.25` |
 | `ContainerFormat` | Enum | `"MP4"` | **Container format** <mark>Hidden</mark> |
 
-### Encoding enum values
+#### Encoding enum values
 
 | Item | Value | Meaning |
 | --- | --- | --- |
@@ -415,21 +426,21 @@ This menu is only shown when `Common.RecordMode` is `"FFmpeg"`.
 | `ContainerFormat` | `MP4` | MP4 |
 | | `Matroska` | Matroska (MKV) |
 
-## Decoding — decoding settings
+### Decoding — decoding settings
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
 | `PreferredDecoder` | Enum | `"Hardware"` | **Preferred decoder**, prefers this decoder for decoding when available |
 | `IOTimeoutSeconds` | Integer | `15` | **I/O timeout**, the read timeout of the video player in seconds. Minimum `1` |
 
-### Decoding enum values
+#### Decoding enum values
 
 | Item | Value | Meaning |
 | --- | --- | --- |
 | `PreferredDecoder` | `Software` | Software decoding |
 | | `Hardware` | Hardware decoding |
 
-## Debug — debug
+### Debug — debug
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
@@ -443,7 +454,7 @@ This menu is only shown when `Common.RecordMode` is `"FFmpeg"`.
 | `EachLinePoolCapacity` | Integer | `48` | **Object pool capacity per track** <mark>Hidden</mark>, defaults to `24` on mobile |
 | `DebugLevel` | Enum | `"Info"` | **Log level** <mark>Hidden</mark>, the minimum level of the logs that are output. Not written on iOS |
 
-### Debug enum values
+#### Debug enum values
 
 | Item | Value | Meaning |
 | --- | --- | --- |
@@ -453,7 +464,7 @@ This menu is only shown when `Common.RecordMode` is `"FFmpeg"`.
 | | `Error` | Error |
 | | `Fatal` | Fatal |
 
-## Network — networking
+### Network — networking
 
 This section is <mark>Hidden</mark> in the in-game settings interface. On iOS, the corresponding settings are located in the system **Settings** app. To submit scores to leaderboards / save records, or to play online charts directly in the game, read [Online services](/en/majdataplay/configuration/online) first.
 
@@ -462,7 +473,7 @@ This section is <mark>Hidden</mark> in the in-game settings interface. On iOS, t
 | `Online` | Object | See below | **Online services** |
 | `Proxy` | Object | See below | **Proxy** |
 
-### Network.Online
+#### Network.Online
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
@@ -487,7 +498,7 @@ Defaults of `Machine`:
 | `Name` | String | `"MajdataPlay Client"` | **Machine name** |
 | `Description` | String | `"MajdataPlay Client QR Code Authentication"` | **Machine description** |
 
-### Network.Proxy
+#### Network.Proxy
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
@@ -498,7 +509,7 @@ Defaults of `Machine`:
 Older versions stored the online settings under the `Online` category and used the `UseProxy` / `Proxy` keys. The new version migrates them to `Network.Online` and `Network.Proxy`. A legacy standalone `machine_description.json` is also imported into `Network.Online.Machine`.
 :::
 
-## IO — input / output devices
+### IO — input / output devices
 
 This section is <mark>Hidden</mark> in the in-game settings interface and is mainly used for external arcade controllers and LEDs. See [External devices](/en/majdataplay/configuration/external_device) for details.
 
@@ -509,7 +520,7 @@ This section is <mark>Hidden</mark> in the in-game settings interface and is mai
 | `InputDevice` | Object | See below | **Input device** |
 | `OutputDevice` | Object | See below | **Output device**. Desktop only |
 
-### IO.InputDevice
+#### IO.InputDevice
 
 Desktop:
 
@@ -524,7 +535,7 @@ Mobile:
 | --- | --- | --- | --- |
 | `ExternalButtonRing` | Enum | `"None"` | **External button ring**, `"None"` none / `"Keyboard"` keyboard / `"Gamepad"` gamepad |
 
-### IO.InputDevice.ButtonRing
+#### IO.InputDevice.ButtonRing
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
@@ -535,7 +546,7 @@ Mobile:
 | `DebounceThresholdMs` | Integer | `0` | **Debounce threshold**, in milliseconds |
 | `HidOptions` | Object | See below | **HID device parameters** |
 
-### IO.InputDevice.TouchPanel
+#### IO.InputDevice.TouchPanel
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
@@ -548,14 +559,14 @@ Mobile:
 | `UsbOptions` | Object | See below | **USB device parameters** |
 | `CapacitivePanelOptions` | Object | See below | **Capacitive touch panel parameters** |
 
-### IO.InputDevice.TouchPanel.CapacitivePanelOptions
+#### IO.InputDevice.TouchPanel.CapacitivePanelOptions
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
 | `TouchRadius` | Integer | `30` | **Touch radius**, the capacitive touch judgment radius |
 | `RadiusOffset` | Object | `A:0` `B:20` `C:0` `D:0` `E:25` | **Radius offset**, fine-tunes the radius of areas A–E |
 
-### IO.OutputDevice.Led
+#### IO.OutputDevice.Led
 
 | Item | Type | Default value | Meaning |
 | --- | --- | --- | --- |
@@ -566,7 +577,7 @@ Mobile:
 | `SerialPortOptions` | Object | See below | **Serial port parameters** |
 | `HidOptions` | Object | See below | **HID device parameters** |
 
-### IO common parameters
+#### IO common parameters
 
 `HidOptions` and `UsbOptions` have the same structure:
 
@@ -590,7 +601,7 @@ Mobile:
 | --- | --- | --- | --- |
 | `OpenPriority` | Enum | `"VeryHigh"` | **Open priority** |
 
-### IO enum values
+#### IO enum values
 
 | Item | Value | Meaning |
 | --- | --- | --- |
@@ -615,7 +626,7 @@ Mobile:
 | | `High` | High |
 | | `VeryHigh` | Highest |
 
-## Appendix: Mod (not written to the configuration file)
+### Appendix: Mod (not written to the configuration file)
 
 `Mod` does **not** appear in `system-settings.json`; its values only take effect while playing the current chart (per-chart Mod settings are stored in the chart file). The defaults are listed here for reference.
 
@@ -636,9 +647,9 @@ Mobile:
 In the new version, `ButtonRingForTouch` is a persisted gameplay setting. It has moved to `Game.ButtonRingForTouch` in `settings.json` and is no longer part of Mod.
 :::
 
-## Upgrading from an older version
+### Upgrading from an older version
 
-The first launch of 2.1.0-preview6 reads an older `settings.json` and migrates it automatically, so there is no need to split the file by hand. The main changes are:
+On first launch, 2.1.0 and 2.1.0 preview read an older `settings.json` and migrate it automatically, so there is no need to split the file by hand. The main changes are:
 
 - The `Rendering`, `Audio`, `Encoding`, `Decoding`, `Debug`, `Online` and `IO` categories move from `settings.json` to `system-settings.json`.
 - `Audio.Volume` moves to `Volume` in `settings.json`.
@@ -650,3 +661,425 @@ The first launch of 2.1.0-preview6 reads an older `settings.json` and migrates i
 - `machine_description.json` is imported into `Network.Online.Machine` and renamed to `machine_description.json.bak`.
 
 The migration keeps keys already present in the new files and only fills in missing ones from the old keys. A file that cannot be read is backed up as `.bak` and defaults are used. After the next save, both files contain only the current layout.
+
+## Legacy configuration (before 2.1.0 preview) {#legacy-configuration}
+
+This section keeps the single-file `settings.json` reference for versions **before 2.1.0 preview**, and is only meant for looking up older versions. Starting with 2.1.0 and 2.1.0 preview the configuration is split into two files, so read [New configuration](#new-configuration) first; a newer game migrates an older configuration automatically on first launch.
+
+### Legacy Top-level structure
+
+| Section | Meaning | Contents |
+| --- | --- | --- |
+| `Game` | Game settings | Note speed, displayed information, retry / skip, random and mirror, and more |
+| `Judge` | Judgment settings | Various offsets and judgment modes |
+| `Display` | Display settings | Skin, judgment display, scaling, rendering and window |
+| `Audio` | Audio settings | Volume, audio backend and buffers |
+| `Debug` | Debug | Touch simulation, render pools, log level, and more |
+| `Online` | Networking | Online account and API endpoints |
+| `IO` | Input / output devices | Arcade controller, touch panel and LED |
+| `Mod` | Mod | <mark>Not written</mark>, applies only to the current chart |
+
+### Legacy Game —— Game settings
+
+| Item | Type | Default value | Meaning |
+| --- | --- | --- | --- |
+| `TapSpeed` | Float | `7.5` | **Tap speed**, adjusts note speed. Step `0.25`, can be negative (notes fall in reverse) |
+| `TouchSpeed` | Float | `7.5` | **Touch speed**, adjusts Touch note speed. Step `0.25` |
+| `SlideFadeInOffset` | Float | `0.0` | **Slide fade-in offset**, adjusts Slide timing; increasing the value delays it |
+| `BackgroundDim` | Float | `0.8` | **Background dim**, the larger the value, the darker. Range `0`–`1`, step `0.05` |
+| `StarRotation` | Boolean | `true` | **Star rotation**, rotates the star head |
+| `BGInfo` | Enum | `"Combo"` | **Center display**, adjusts the information shown in the center of the screen |
+| `SecondaryBGInfo` | Enum | `"None"` | **Additional info display**, adjusts the information shown in the lower middle of the screen |
+| `SubScreenBGInfo` | Enum | `"Achievement"` | **Sub-screen info display**, adjusts the information shown on the sub-screen |
+| `TopInfo` | Enum | `"None"` | **Outer frame display**, the information shown at the top (between keys 1 and 8) |
+| `EnableJudgeTimingGauge` | Boolean | `false` | **Show judgment timing indicator**, shows the real-time judgment offset and the average judgment position |
+| `TrackSkip` | Boolean | `true` | **Skip track**, hold keys 2, 3, 6 and 7 to forcibly skip the track |
+| `EnforceGameFailure` | Enum | `"Disabled"` | **Force track failure**, automatically skip or retry when the goal cannot be reached |
+| `FastRetry` | Boolean | `true` | **Fast retry**, hold keys 3, 4, 5 and 6 to retry quickly |
+| `FastPractice` | Boolean | `false` | **Fast practice**, hold keys 1, 2, 7 and 8 to enter practice mode (starts 5 seconds before the section, extends 10 seconds after) |
+| `GameplaySubScreenClickBehavior` | Enum | `"TrackSkip"` | **Sub-screen click behavior during gameplay**, adjusts what clicking the sub-screen does while playing. Defaults to `"TrackSkip_1_Sec_Delay"` on mobile |
+| `Mirror` | Enum | `"Off"` | **Mirror**, flips the chart horizontally / vertically |
+| `Rotation` | Integer | `0` | **Rotation**, rotates the chart by an angle; a positive value is clockwise. Range `-7`–`7` |
+| `SlideSkipping` | Boolean | `true` | **Slide skipping**, enables / disables the Slide skip mechanism |
+| `Random` | Enum | `"Disabled"` | **Random**, shuffles notes randomly |
+| `RecordMode` | Enum | `"Disable"` | **Record mode**, only present on Windows / Linux / macOS |
+| `LeadInTime` | Integer | `1` | **Lead-in time**, the number of seconds to wait after entering the gameplay screen before the game actually starts. Range `1`–`5` |
+| `ManualStartGame` | Boolean | `false` | **Manual start**, press a key to start after loading (used for competitions) |
+
+#### Legacy Game enum values
+
+| Item | Value | Meaning |
+| --- | --- | --- |
+| `BGInfo` / `SecondaryBGInfo` / `SubScreenBGInfo` | `CPCombo` | Critical Perfect Combo |
+| | `PCombo` | Perfect Combo |
+| | `Combo` | Combo |
+| | `Achievement_101` | Achievement (101-) |
+| | `Achievement_100` | Achievement (100-) |
+| | `Achievement` | Achievement |
+| | `AchievementClassical` | FiNALE achievement |
+| | `AchievementClassical_100` | FiNALE achievement (100-) |
+| | `DXScore` | DX score |
+| | `DXScoreRank` | DX score rank |
+| | `S_Border` | Distance to S |
+| | `SS_Border` | Distance to SS |
+| | `SSS_Border` | Distance to SSS |
+| | `MyBest` | Distance to best score |
+| | `Diff` | Judgment error |
+| | `None` | None |
+| `TopInfo` | `None` | Not shown |
+| | `Judge` | Judgment result |
+| | `Timing` | Fast / Late |
+| `EnforceGameFailure` | `Disabled` | Off |
+| | `TrackSkip_S` / `Retry_S` | Skip track / S, retry / S |
+| | `TrackSkip_SS` / `Retry_SS` | Skip track / SS, retry / SS |
+| | `TrackSkip_SSS` / `Retry_SSS` | Skip track / SSS, retry / SSS |
+| | `TrackSkip_SSSPlus` / `Retry_SSSPlus` | Skip track / SSS+, retry / SSS+ |
+| | `TrackSkip_Best` / `Retry_Best` | Skip track / best score, retry / best score |
+| | `TrackSkip_FC` / `Retry_FC` | Skip track / FC, retry / FC |
+| | `TrackSkip_AP` / `Retry_AP` | Skip track / AP, retry / AP |
+| `GameplaySubScreenClickBehavior` | `None` | None |
+| | `TrackSkip` | Skip track |
+| | `TrackSkip_1_Sec_Delay` | Skip track (hold for 1 second) |
+| | `FastRetry` | Fast retry |
+| | `FastRetry_1_Sec_Delay` | Fast retry (hold for 1 second) |
+| `Mirror` | `Off` | Off |
+| | `LRMirror` | Left-right mirror |
+| | `UDMirror` | Up-down mirror |
+| `Random` | `Disabled` | Disabled |
+| | `RANDOM` | Random by track |
+| | `S_RANDOM` | Random for each note independently |
+| `RecordMode` | `Disable` | Disabled |
+| | `OBSTrigger` | Connect to the OBS WebSocket to trigger recording automatically |
+
+### Legacy Judge —— Judgment settings
+
+| Item | Type | Default value | Meaning |
+| --- | --- | --- | --- |
+| `AudioOffset` | Float | `0.0` | **Audio offset (A judgment)**, play by ear. Adjust when notes are out of sync with the music. If you get mostly Fast, decrease the value; if you get mostly Late, increase it. This item moves the answer sound, equivalent to `&first` in a chart |
+| `JudgeOffset` | Float | `0.0` | **Judgment offset (B judgment)**, play by sight, compensates for device input latency. If you get mostly Fast, decrease the value; if you get mostly Late, increase it |
+| `AnswerOffset` | Float | `0.0` | **Answer sound offset**, adjusts when the answer sound plays (does not affect judgment). Decrease the value to play it earlier, increase it to play it later. Do not change this unless you are sure |
+| `TouchPanelOffset` | Float | `0.0` | **Inner screen input offset**, compensates for touch input latency. If you get mostly Fast, decrease the value; if you get mostly Late, increase it |
+| `Mode` | Enum | `"Modern"` | **Judgment mode**, selects the game's judgment and scoring mode (old frame / new frame) |
+
+#### Legacy Judge enum values
+
+| Item | Value | Meaning |
+| --- | --- | --- |
+| `Mode` | `Classic` | Classic (old frame) |
+| | `Modern` | Modern (new frame) |
+
+### Legacy Display —— Display settings
+
+| Item | Type | Default value | Meaning |
+| --- | --- | --- | --- |
+| `Language` | String | `""` | **Language**. Empty by default in the source code; after the first run the program writes the current language, in the form `"zh-CN - Majdata"` |
+| `Skin` | String | `"default"` | **Note skin**, changes the note skin. If the configured skin does not exist, the program falls back to the first available skin |
+| `DisplayCriticalPerfect` | Boolean | `false` | **Show Critical judgments**, shows Critical judgments |
+| `DisplayBreakScore` | Boolean | `true` | **Show Break score**, shows the detailed score of Break notes |
+| `FastLateType` | Enum | `"Disable"` | **Fast / Late display level**, sets the condition for showing a note's Fast / Late. The text is only shown below this level |
+| `NoteJudgeType` | Enum | `"All"` | **Note judgment display level**, sets the condition for showing Note judgments. The text is only shown below this level |
+| `TouchJudgeType` | Enum | `"All"` | **Touch judgment display level**, sets the condition for showing Touch judgments. The text is only shown below this level |
+| `SlideJudgeType` | Enum | `"All"` | **Slide judgment display level**, sets the condition for showing Slide judgments. The text is only shown below this level |
+| `BreakJudgeType` | Enum | `"All"` | **Break judgment display level**, sets the condition for showing Break judgments. The text is only shown below this level |
+| `BreakFastLateType` | Enum | `"Disable"` | **Break Fast / Late display level**, sets the condition for showing a Break's Fast / Late. The text is only shown below this level |
+| `SlideSortOrder` | Enum | `"Modern"` | **Slide sort order**, Slide ordering: with Classic, older notes are on the bottom; with Modern, older notes are on top (affects star coloring) |
+| `OuterJudgeDistance` | Float | `1.0` | **Outer judgment display distance**, adjusts the display distance of outer judgment text (the smaller, the closer to the center). Range `0`–`1`, step `0.05`, `0` disables it |
+| `InnerJudgeDistance` | Float | `1.0` | **Inner judgment display distance**, adjusts the display distance of Touch judgment text (the smaller, the closer to the center). Range `0`–`1`, step `0.05`, `0` disables it |
+| `DisplayHoldHeadJudgeResult` | Boolean | `false` | **Show Hold head judgment**, shows the judgment result of the Hold head |
+| `TapScale` | Float | `1.0` | **Tap scale**, adjusts the size of Tap notes. Range `0`–`2`, step `0.01` |
+| `HoldScale` | Float | `1.0` | **Hold scale**, adjusts the size of Hold notes. Range `0`–`2`, step `0.01` |
+| `TouchScale` | Float | `1.0` | **Touch scale**, adjusts the size of Touch notes. Range `0`–`2`, step `0.01` |
+| `SlideScale` | Float | `1.0` | **Slide scale**, adjusts the size of Slide notes (does not affect Wifi Slide). Range `0`–`2`, step `0.01` |
+| `TouchFeedback` | Enum | `"Outer_Only"` | **Touch feedback**, sets the condition for showing touch feedback |
+| `Resolution` | String | `"1080x1920"` | **Resolution** <mark>Hidden</mark>, cannot be adjusted. Only present on Windows / Linux / macOS |
+| `MainScreenTransform` | Boolean | `false` | **Custom screen aspect ratio**, customizes the scale and position of the main screen. Defaults to `true` on mobile |
+| `MainScreenScale` | Float | `1.0` | **Main screen scale**, adjusts the overall size of the main screen. Range `0.05`–`1.5`, step `0.01` |
+| `MainScreenOffset` | Float | `1.0` | **Main screen position offset**, fine-tunes the position of the main screen. Range `-1`–`1`, step `0.01` |
+| `MainScreenCachedScreenCenterY` | Float | `960.0` | **Main screen center Y (cached)** <mark>Hidden</mark>, the cached vertical center coordinate of the main screen |
+| `SubDisplayOffset` | Float | `0.0` | **Sub-screen position offset**, fine-tunes the position of the sub-display area. Range `-5`–`5`, step `0.01` |
+| `SubDisplayScale` | Float | `1.0` | **Sub-screen scale**, adjusts the size of the sub-display area. Step `0.01` |
+| `GameplayScreenRotationAngle` | Enum | `"Zero"` | **Gameplay screen rotation**, rotates the gameplay screen |
+| `RenderQuality` | Enum | `"Medium"` | **Render quality**, the higher the value, the sharper the image. Defaults to `"Low"` on mobile |
+| `RenderScale` | Integer | `100` | **Render scale**, adjusts the internal render resolution. `100` is the native resolution; lowering it reduces GPU load, but the image and text become blurry. It does not change the layout or judgment. Range `50`–`100`, step `5`. Defaults to `75` on mobile |
+| `Topmost` | Boolean | `false` | **Always on top** <mark>Hidden</mark>, keeps the window on top. Only present on Windows / Linux / macOS |
+| `FPSLimit` | Integer | `120` | **Frame rate limit**, limits the maximum frame rate. Minimum `-1` (`-1` means unlimited), step `1` |
+| `VSync` | Boolean | `true` | **Vertical sync**, whether to enable vertical sync. Not present on mobile |
+| `SkipVideoDownload` | Boolean | `false` | **Skip video download**, does not download videos for online charts |
+
+#### Legacy Display enum values
+
+| Item | Value | Meaning |
+| --- | --- | --- |
+| `FastLateType` / `NoteJudgeType` / `TouchJudgeType` / `SlideJudgeType` / `BreakJudgeType` / `BreakFastLateType` | `All` | All |
+| | `BelowCP` | Below Critical |
+| | `BelowP` | Below Perfect |
+| | `BelowGR` | Below Great |
+| | `MissOnly` | Miss only |
+| | `Disable` | Disabled |
+| `SlideSortOrder` | `Classic` | Classic order (older notes on the bottom) |
+| | `Modern` | Modern order (older notes on top) |
+| `TouchFeedback` | `All` | All |
+| | `Outer_Only` | Outer only |
+| | `Inner_Only` | Inner only |
+| | `Disable` | Disabled |
+| `GameplayScreenRotationAngle` | `Zero` | 0° |
+| | `_90` | 90° |
+| | `_180` | 180° |
+| | `_270` | 270° |
+| `RenderQuality` | `VeryLow` | Very low |
+| | `Low` | Low |
+| | `Medium` | Medium |
+| | `High` | High |
+| | `VeryHigh` | Very high |
+| | `Ultra` | Ultra |
+
+### Legacy Audio —— Audio settings
+
+| Item | Type | Default value | Meaning |
+| --- | --- | --- | --- |
+| `ForceMono` | Boolean | `false` | **Force mono**, mixes the audio down to a mono output |
+| `Volume` | Object | See below | **Volume settings**, the volume of each track |
+| `Wasapi` | Object | See below | **WASAPI settings**, only present on Windows |
+| `Asio` | Object | See below | **ASIO settings**, only present on Windows |
+| `Channel` | Object | See below | **Channel volume**, only present on Windows / Linux / macOS |
+| `Bass` | Object | See below | **BASS audio buffer settings**, present on all platforms |
+| `Backend` | Enum | `"Wasapi"` | **Audio backend**. Defaults to `"Wasapi"` on Windows and `"BassSimple"` on mobile |
+
+#### Legacy Audio.Volume —— Volume
+
+All items have a range of `0`–`2` with a step of `0.05`.
+
+| Item | Default value | Meaning |
+| --- | --- | --- |
+| `Global` | `0.3` | **Global**, adjusts the master volume |
+| `BGM` | `1.0` | **Background music**, adjusts the volume of background music outside gameplay (song select, results) |
+| `Track` | `1.0` | **Chart music**, adjusts the volume of in-game music |
+| `Answer` | `0.8` | **Answer sound**, adjusts the volume of the answer sound and the opening metronome |
+| `Tap` | `0.3` | **Tap / Hold judgment sound**, adjusts the judgment volume of Tap / Hold |
+| `Ex` | `0.3` | **Ex judgment sound**, adjusts the judgment volume of Ex notes |
+| `Break` | `0.3` | **Break judgment sound**, adjusts the judgment volume of Break notes |
+| `Slide` | `0.3` | **Slide judgment sound**, adjusts the volume of Slide sound effects |
+| `Touch` | `0.3` | **Touch judgment sound**, adjusts the judgment volume of Touch / TouchHold |
+| `Hanabi` | `0.3` | **Hanabi sound effect**, adjusts the volume of the Touch firework sound effect |
+| `Voice` | `1.0` | **Xiaoxiao Lanbai**, adjusts the volume of the assistant voice |
+
+::: tip
+The built-in default of `Global` is `0.3`; if your file contains a different value, the item has been changed (or comes from an earlier version's default).
+:::
+
+#### Legacy Audio.Wasapi —— WASAPI settings (Windows only)
+
+| Item | Default value | Meaning |
+| --- | --- | --- |
+| `Exclusive` | `true` | **Exclusive mode**, takes exclusive control of the audio device. Only when this is off can other programs such as OBS record / play audio at the same time |
+| `RawMode` | `true` | **Raw mode**, uses raw data that has not been processed by the system mixer |
+| `AsyncMode` | `true` | **Asynchronous mode**, uses asynchronous audio processing. Configuration files generated by some older versions may not contain this item; when it is missing, it is treated as `true` |
+| `BufferSize` | `0.02` | **Buffer size**, in seconds |
+| `Period` | `0.005` | **Period**, in seconds |
+
+#### Legacy Audio.Asio —— ASIO settings (Windows only)
+
+| Item | Default value | Meaning |
+| --- | --- | --- |
+| `DeviceIndex` | `0` | **Device index**, the ASIO device number |
+| `SampleRate` | `44100` | **Sample rate**, the audio sample rate (Hz) |
+
+#### Legacy Audio.Channel —— Channel volume (desktop only)
+
+| Item | Default value | Meaning |
+| --- | --- | --- |
+| `FrontVolume` | `1.0` | **Front channel** (LF / RF) volume |
+| `CenterAndLFEVolume` | `1.0` | **Center and LFE channel** (Center / LFE) volume |
+| `SideVolume` | `1.0` | **Side channel** (LS / RS) volume |
+| `RearVolume` | `1.0` | **Rear channel** (LR / RR) volume |
+
+#### Legacy Audio.Bass —— BASS buffer settings
+
+| Item | Default value | Meaning |
+| --- | --- | --- |
+| `BufferLengthMs` | `1000` | **Buffer length**, in milliseconds |
+| `UpdatePeriodMs` | `200` | **Update period**, in milliseconds |
+| `DeviceBufferLengthMs` | `64` | **Device buffer length**, in milliseconds. Defaults to `32` on mobile |
+| `DeviceUpdatePeriodMs` | `16` | **Device update period**, in milliseconds. Defaults to `8` on mobile |
+| `EnableAAudio` | `true` | **Enable AAudio**, only present on Android |
+
+#### Legacy Audio enum values
+
+| Item | Value | Meaning |
+| --- | --- | --- |
+| `Backend` | `Unity` | Unity built-in audio |
+| | `Wasapi` | WASAPI (Windows) |
+| | `Asio` | ASIO (low latency for professional sound cards) |
+| | `BassSimple` | BASS simplified backend (default on mobile) |
+
+### Legacy Debug —— Debug
+
+| Item | Type | Default value | Meaning |
+| --- | --- | --- | --- |
+| `DisplaySensor` | Boolean | `false` | **Show sensors**, highlights the touch areas that are being triggered |
+| `TouchSimulationRadius` | Float | `0.5` | **Simulated touch radius**, the size of the simulated touch point; the larger the value, the larger the finger judgment area (only takes effect during gameplay). Range `0`–`2`, step `0.05` |
+| `TouchAAreaExtraRadius` | Float | `0.0` | **Simulated touch area A radius**, expands the trigger radius of touch area A. Range `0`–`2`, step `0.05` |
+| `TouchBAreaExtraRadius` | Float | `0.0` | **Simulated touch area B radius**, expands the trigger radius of touch area B |
+| `TouchCAreaExtraRadius` | Float | `0.25` | **Simulated touch area C radius**, expands the trigger radius of touch area C |
+| `TouchDAreaExtraRadius` | Float | `0.2` | **Simulated touch area D radius**, expands the trigger radius of touch area D |
+| `TouchEAreaExtraRadius` | Float | `0.1` | **Simulated touch area E radius**, expands the trigger radius of touch area E |
+| `TouchRadiusAdjust` | Float | `0.0` | **Touch area ratio**, adjusts the touch trigger range according to the finger contact area; `0` disables it. Range `0`–`2` |
+| `DisplayRuntimeInfo` | Boolean | `true` | **Show frame rate and version**, shows the frame rate and version in the upper right corner |
+| `FullScreen` | Boolean | `true` | **Force full screen** <mark>Hidden</mark>, only present on Windows / Linux / macOS |
+| `MenuOptionIterationSpeed` | Integer | `45` | **Menu option repeat speed** <mark>Hidden</mark>, the larger the value, the faster the scrolling |
+| `DisplayOffset` | Float | `0.0` | **Frame offset**, compensates for frame latency. Do not change this unless you are sure |
+| `NoteAppearRate` | Float | `0.265` | **Note fade-in offset**, adjusts the note fade-in effect. Step `0.001` |
+| `OffsetUnit` | Enum | `"Frame"` | **Offset unit**, adjusts the unit of the various offsets |
+| `HideCursorInGame` | Boolean | `true` | **Hide cursor during gameplay** <mark>Hidden</mark>, only present on Windows / Linux / macOS |
+| `NoteFolding` | Boolean | `true` | **Note folding** <mark>Hidden</mark>, folds the note display |
+| `DJAutoPolicy` | Enum | `"Strict"` | **DJAuto policy**, Strict: only one of keys or touch may be used. Permissive: the two may be mixed |
+| `MaxQueuedFrames` | Integer | `2` | **Maximum queued frames** <mark>Hidden</mark>, the maximum number of frames allowed to wait in the queue to be processed |
+| `TapPoolCapacity` | Integer | `96` | **Tap object pool capacity** <mark>Hidden</mark>, defaults to `48` on mobile |
+| `HoldPoolCapacity` | Integer | `96` | **Hold object pool capacity** <mark>Hidden</mark>, defaults to `48` on mobile |
+| `TouchPoolCapacity` | Integer | `64` | **Touch object pool capacity** <mark>Hidden</mark> |
+| `TouchHoldPoolCapacity` | Integer | `64` | **TouchHold object pool capacity** <mark>Hidden</mark> |
+| `EachLinePoolCapacity` | Integer | `48` | **Object pool capacity per track** <mark>Hidden</mark>, defaults to `24` on mobile |
+| `DebugLevel` | Enum | `"Info"` | **Log level** <mark>Hidden</mark>, the minimum level of the logs that are output |
+
+#### Legacy Debug enum values
+
+| Item | Value | Meaning |
+| --- | --- | --- |
+| `OffsetUnit` | `Frame` | Frame |
+| | `Second` | Second |
+| `DJAutoPolicy` | `Strict` | Strict |
+| | `Permissive` | Permissive |
+| `DebugLevel` | `Debug` / `Info` / `Warning` / `Error` / `Fatal` | Debug / Info / Warning / Error / Fatal |
+
+### Legacy Online —— Networking
+
+::: tip
+Want to submit scores to leaderboards / save records? Want to play online charts directly in the game? Read [Online services](/en/majdataplay/configuration/online) first.
+:::
+
+The items in this section are <mark>Hidden</mark> in the in-game settings interface. On iOS, the corresponding settings are located in the system **Settings** app.
+
+| Item | Type | Default value | Meaning |
+| --- | --- | --- | --- |
+| `Enable` | Boolean | `false` | **Enable networking**, whether to enable online features |
+| `UseProxy` | Boolean | `true` | **Use proxy**, only present on Windows / Linux / macOS |
+| `Proxy` | String | `""` | **Proxy address**, only present on Windows / Linux / macOS |
+| `ApiEndpoints` | Array | See below | **API endpoint list**, multiple servers can be configured |
+
+#### Legacy Online.ApiEndpoints[] —— Endpoints
+
+Contains one `MajdataNET` entry by default:
+
+| Item | Type | Default value | Meaning |
+| --- | --- | --- | --- |
+| `Name` | String | `"MajdataNET"` | **Name**, the display name of the endpoint |
+| `Url` | String | `"https://majdata.net/api3/api/"` | **API address**, the server's API root address |
+| `Username` | String | `"YourUsername"` | **Username**, the prefilled account |
+| `Password` | String | `"YourPassword"` | **Password**, the prefilled password |
+| `AutoLogin` | Boolean | `false` | **Auto login**, signs in automatically at startup |
+
+### Legacy IO —— Input / output devices
+
+This section is <mark>Hidden</mark> in the in-game settings interface and is mainly used for external arcade controllers and LEDs. See [External devices](/en/majdataplay/configuration/external_device) for details.
+
+| Item | Type | Default value | Meaning |
+| --- | --- | --- | --- |
+| `Manufacturer` | Enum / `null` | `null` | **Device manufacturer**, `null` means auto-detect. Only present on Windows / Linux / macOS |
+| `InputDevice` | Object | See below | **Input device** |
+| `OutputDevice` | Object | See below | **Output device**. Only present on Windows / Linux / macOS |
+
+#### Legacy IO.InputDevice
+
+| Item | Type | Default value | Meaning |
+| --- | --- | --- | --- |
+| `Player` | Integer | `1` | **Player number**, the gamepad player index. Only present on desktop |
+| `ButtonRing` | Object | See below | **Button ring (arcade controller buttons)**. Only present on desktop |
+| `TouchPanel` | Object | See below | **Touch panel**. Only present on desktop |
+| `ExternalButtonRing` | Enum | `"None"` | **External button ring**, only present on mobile. `"None"` none / `"Keyboard"` keyboard / `"Gamepad"` gamepad |
+
+#### Legacy IO.InputDevice.ButtonRing
+
+| Item | Default value | Meaning |
+| --- | --- | --- |
+| `Enable` | `true` | **Enable**, whether to enable button ring input |
+| `Type` | `null` | **Device type**, `null` automatic; can be `"Keyboard"` keyboard / `"HID"` HID device |
+| `Debounce` | `false` | **Enable debounce**, whether to enable key debounce |
+| `PollingRateMs` | `0` | **Polling interval**, in milliseconds; `0` means unlimited |
+| `DebounceThresholdMs` | `0` | **Debounce threshold**, in milliseconds |
+| `HidOptions` | See below | **HID device parameters** |
+
+#### Legacy IO.InputDevice.TouchPanel
+
+| Item | Default value | Meaning |
+| --- | --- | --- |
+| `Enable` | `true` | **Enable**, whether to enable touch panel input |
+| `Debounce` | `false` | **Enable debounce**, whether to enable touch debounce |
+| `Sensitivities` | `A`–`E` all `0` | **Sensitivity**, the touch sensitivity of areas A–E |
+| `PollingRateMs` | `0` | **Polling interval**, in milliseconds |
+| `DebounceThresholdMs` | `0` | **Debounce threshold**, in milliseconds |
+| `SerialPortOptions` | See below | **Serial port parameters**, `Port` / `BaudRate` both default to `null` |
+| `UsbOptions` | See below | **USB device parameters** |
+| `CapacitivePanelOptions` | See below | **Capacitive touch panel parameters** |
+
+#### Legacy IO.InputDevice.TouchPanel.CapacitivePanelOptions
+
+| Item | Default value | Meaning |
+| --- | --- | --- |
+| `TouchRadius` | `30` | **Touch radius**, the capacitive touch judgment radius |
+| `RadiusOffset` | `A:0` `B:20` `C:0` `D:0` `E:25` | **Radius offset**, fine-tunes the radius of areas A–E |
+
+#### Legacy IO.OutputDevice.Led
+
+| Item | Default value | Meaning |
+| --- | --- | --- |
+| `Enable` | `true` | **Enable**, whether to enable LED output |
+| `Brightness` | `1.0` | **Brightness**, the LED brightness |
+| `RefreshRateMs` | `16` | **Refresh interval**, in milliseconds |
+| `Throttler` | `true` | **Throttler**, limits the LED refresh rate |
+| `SerialPortOptions` | `Port` / `BaudRate` both `null` | **Serial port parameters** |
+| `HidOptions` | See below | **HID device parameters** |
+
+#### Legacy IO common parameters
+
+`HidOptions` and `UsbOptions` have the same structure:
+
+| Item | Default value | Meaning |
+| --- | --- | --- |
+| `DeviceName` | `null` | **Device name**, specifies the device name (leave empty to match automatically) |
+| `ProductId` | `null` | **Product ID (PID)** |
+| `VendorId` | `null` | **Vendor ID (VID)** |
+| `Exclusice` | `false` | **Exclusive mode**. The field name is spelled `Exclusice` in the configuration file |
+
+`HidOptions` additionally contains:
+
+| Item | Default value | Meaning |
+| --- | --- | --- |
+| `OpenPriority` | `"VeryHigh"` | **Open priority**, can be `Idle` / `VeryLow` / `Low` / `Normal` / `High` / `VeryHigh` (lowest / very low / low / normal / high / highest) |
+
+#### Legacy IO enum values
+
+| Item | Value | Meaning |
+| --- | --- | --- |
+| `Manufacturer` | `General` | General |
+| | `Yuan` | Yuan controller |
+| | `Dao` | Dao controller |
+| | `Nov` | Nov controller |
+| | `null` | Auto-detect |
+
+### Legacy Appendix: Mod (not written to the configuration file)
+
+`Mod` does **not** appear in `settings.json`; its values only take effect while playing the current chart (per-chart Mod settings are stored in the chart file). The defaults are listed here for reference.
+
+| Item | Default value | Meaning |
+| --- | --- | --- |
+| `PlaybackSpeed` | `1.0` | **Playback speed**, adjusts the game speed multiplier |
+| `AutoPlay` | `"Disable"` | **Auto play**, Xiaoxiao Lanbai plays for you. Can be `Disable` disabled / `Enable` enabled / `DJAuto_ButtonRing_First` DJAuto (buttons first) / `DJAuto_TouchPanel_First` DJAuto (inner screen first) |
+| `JudgeStyle` | `"DEFAULT"` | **Judgment style**, challenge yourself with stricter judgment. Can be `DEFAULT` / `MAJI` / `GACHI` / `GORI` |
+| `SubdivideSlideJudgeGrade` | `false` | **Subdivide Slide judgment grades**, allows Slides to receive a small Perfect judgment |
+| `AllBreak` | `false` | **All Break**, turns every note into a Break |
+| `AllEx` | `false` | **All Ex**, turns every note into an Ex |
+| `AllTouch` | `false` | **All Touch**, turns every note into a Touch |
+| `SlideNoHead` | `false` | **Headless stars**, removes Slide heads |
+| `SlideNoTrack` | `false` | **No Slide track**, removes Slide paths |
+| `ButtonRingForTouch` | `false` | **Inner screen only experience**, allows using the button ring to play Slides and Touches. Only present on desktop |
+| `NoteMask` | `"Disable"` | **Note mask**, a masking cover for notes |

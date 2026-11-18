@@ -95,10 +95,6 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
               text: '外部デバイス',
               link: '/external_device',
             },
-            {
-              text: '旧バージョンの設定リファレンス',
-              link: '/legacy',
-            },
           ],
         },
         {

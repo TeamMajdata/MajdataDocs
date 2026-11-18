@@ -6,12 +6,14 @@
 
 本节展示各平台 `MajdataPlay` 的配置文件位置, 阅读配置相关文档时默认已阅读本节.
 
-从 **2.1.0-preview6** 起, 配置拆分为两个文件, 它们位于同一目录:
+::: warning 配置拆分为两个文件
+从 **2.1.0** 和 **2.1.0 预览版**起, 配置拆分为两个文件, 它们位于同一目录:
 
 - `settings.json`: **用户设置**, 包含 `Game`、`Judge`、`Display`、`Volume`、`Touch`. 登录在线账号后, 这组设置可能改为从账号读取并上传.
 - `system-settings.json`: **系统设置**, 包含 `Common`、`Rendering`、`Audio`、`Encoding`、`Decoding`、`Debug`、`Network`、`IO`. 这组设置描述当前设备, 始终保存在本地.
 
 只想调整游玩、判定或画面显示时, 通常只需修改 `settings.json`; 外接设备、渲染、网络等系统设置则位于 `system-settings.json`. 旧版只有一个 `settings.json`, 新版首次运行时会自动拆分并迁移, 详见 [配置详解](/majdataplay/configuration/configuration).
+:::
 
 ## Windows
 

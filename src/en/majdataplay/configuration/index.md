@@ -6,12 +6,14 @@ Run the game once manually first. Settings must be changed while the game is clo
 
 This section shows where the `MajdataPlay` configuration files are located on each platform. The other configuration guides assume that you have already read this section.
 
-Starting with **2.1.0-preview6**, the configuration is split into two files in the same directory:
+::: warning Configuration split into two files
+Starting with **2.1.0** and **2.1.0 preview**, the configuration is split into two files in the same directory:
 
 - `settings.json`: **user settings**, containing `Game`, `Judge`, `Display`, `Volume` and `Touch`. After you sign in to an online account, this group of settings may instead be read from the account and uploaded to it.
 - `system-settings.json`: **system settings**, containing `Common`, `Rendering`, `Audio`, `Encoding`, `Decoding`, `Debug`, `Network` and `IO`. This group of settings describes the current device and is always stored locally.
 
 If you only want to adjust gameplay, judgment or the display, you usually only need to edit `settings.json`; system settings such as external devices, rendering and networking are in `system-settings.json`. Older versions had only a single `settings.json`; the new version splits and migrates it automatically on first launch. See [Configuration reference](/en/majdataplay/configuration/configuration) for details.
+:::
 
 ## Windows
 

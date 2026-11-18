@@ -95,10 +95,6 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
               text: 'External devices',
               link: '/external_device',
             },
-            {
-              text: 'Legacy configuration reference',
-              link: '/legacy',
-            },
           ],
         },
         {

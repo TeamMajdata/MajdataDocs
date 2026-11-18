@@ -205,7 +205,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           ]
         },
         {
-          text: 'API 参考',
+          text: 'API',
           link: '/api'
         }
       ]

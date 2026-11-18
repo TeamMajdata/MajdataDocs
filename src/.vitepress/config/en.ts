@@ -205,7 +205,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           ],
         },
         {
-          text: 'API reference',
+          text: 'API',
           link: '/api',
         },
       ],

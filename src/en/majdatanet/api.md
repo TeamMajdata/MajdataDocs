@@ -1159,13 +1159,13 @@ Failure: `400` invalid score; `404` no such chart, `hash` does not match the cur
 This endpoint remains for published clients. New clients should use `POST /api/maiscore/level/{levelHash}` and no longer depend on the chart hash.
 :::
 
+**Response**: `200` —— 空响应体
+
 ## Playlists
 
 Every `{collectionId}` below is a playlist ObjectId. An invalid format returns `400 Status`. A private playlist is treated as nonexistent for anyone but its owner (`404`).
 
 A playlist's `items` holds chart IDs in insertion order; a chart ID stays in the playlist after the chart is deleted, until the owner removes it. The write endpoints and songlist exchange chart IDs, and clients fetch metadata in bulk with `POST /api/maichart/info`; hashlist and the favorite list still return chart hashes for the game.
-
-**Response**: `200` —— 空响应体
 
 ### GET /api/collection/list
 
@@ -1362,10 +1362,6 @@ _Example_:
 
 Same auth and body. Removes favorites. Success: `200 Status` with message `Ok`; an empty array or IDs that were never favorited also succeed.
 
-## Machines and QR authorization
-
-The normal call order is: register the machine → start an authorization request → the user reads the request and approves it → the original machine polls check → store the authorizing user's token. Machine cookies and user cookies should be kept separately.
-
 **Response**: `200` —— [response models](#status)
 
 _Example_:
@@ -1376,6 +1372,10 @@ _Example_:
   "message": "Ok"
 }
 ```
+
+## Machines and QR authorization
+
+The normal call order is: register the machine → start an authorization request → the user reads the request and approves it → the original machine polls check → store the authorizing user's token. Machine cookies and user cookies should be kept separately.
 
 ### POST /api/machine/register
 
@@ -1899,13 +1899,13 @@ The website reports in bulk once a chart card enters the viewport; MajdataPlay r
 
 An invalid `source`, or an empty `chartHashes` or one with more than 100 entries, returns `400 Status`; signing out returns `401`. Empty hashes and hashes longer than 128 characters are silently ignored. Impression times come from the server, and valid requests always return `204`.
 
+**Response**: `204` —— 空响应体 (`204`)
+
 ## Events
 
 Events are the contests, projects, and seasons shown on the website's home and event pages. Reads are anonymous; creating, replacing, and deleting require the `eventManager` group.
 
 `{eventId}` is an event ID and is case-sensitive.
-
-**Response**: `204` —— 空响应体 (`204`)
 
 ### GET /api/event
 
@@ -2028,10 +2028,6 @@ _Example_:
 
 Auth: the `eventManager` group. No body. Success: `200 Status`; missing: `404 Status`.
 
-## Administration and user groups
-
-These endpoints require the `administrator` group. `{group}` is a group name (`administrator`, `eventManager`, case-insensitive), and an unknown name returns `400 Status`; `{username}` is an account username, and an unknown user returns `404 Status`.
-
 **Response**: `200` —— [response models](#status)
 
 _Example_:
@@ -2042,6 +2038,10 @@ _Example_:
   "message": "Ok"
 }
 ```
+
+## Administration and user groups
+
+These endpoints require the `administrator` group. `{group}` is a group name (`administrator`, `eventManager`, case-insensitive), and an unknown name returns `400 Status`; `{username}` is an account username, and an unknown user returns `404 Status`.
 
 ### GET /api/admin/groups
 
@@ -2103,8 +2103,6 @@ _Example_:
 
 Removes the account from the group; no body; a no-op when not a member. Success: `200 OnlineUserGroups`. Administrators cannot remove themselves from `administrator`, which returns `409 Status`.
 
-## Connectivity
-
 **Response**: `200` —— [response models](#onlineusergroups)
 
 _Example_:
@@ -2116,6 +2114,8 @@ _Example_:
   "groups": ["administrator"]
 }
 ```
+
+## Connectivity
 
 ### GET /api/Ping
 
@@ -2135,6 +2135,17 @@ _Example_:
 ### GET /api/info
 
 Anonymous. No parameters. Success: `200 {"id":"...","name":"..."}`, the server instance's identifier and display name, empty strings when unconfigured.
+
+**Response**: `200` —— [response models](#serverinfo)
+
+_Example_:
+
+```json
+{
+  "id": "majnet-main",
+  "name": "MajdataNet"
+}
+```
 
 ## Deprecated but still available
 
@@ -2197,8 +2208,6 @@ This section lists the JSON objects returned by the endpoints. Field names are t
 ::: tip Finding a model
 If you are unsure what an endpoint returns, read the "Success" line of that endpoint, then look the model up here by name. Models marked <i>anonymous object</i> have no C# type; the controller builds them inline.
 :::
-
-**Response**: `200` —— [response models](#serverinfo)
 
 ### Users and sessions
 

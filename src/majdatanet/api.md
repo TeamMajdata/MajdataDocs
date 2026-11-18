@@ -2,10 +2,6 @@
 
 MajdataNet 服务器提供 REST API, 供 MajdataPlay 游戏客户端与网站前端使用.
 
-::: warning 以服务端为准
-本文根据服务端当前实现整理, 接口会随版本更新而变化. 实际部署的路径、参数与返回结构请以服务端为准; 开发环境启用了 Swagger, 可通过 `/swagger` 查看实时接口清单.
-:::
-
 ## 根地址
 
 以下路径均相对于服务端 API 根地址. 客户端在 `system-settings.json` 的 `Network.Online.ApiEndpoints[].Url` 中配置根地址, 默认值为 `https://majdata.net/api3/api/`.

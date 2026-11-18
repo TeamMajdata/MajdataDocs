@@ -2,10 +2,6 @@
 
 The MajdataNet server provides a REST API used by the MajdataPlay game client and the website frontend.
 
-::: warning The server is the source of truth
-This page is written against the current server implementation, and endpoints change as it is updated. Always treat the server as the source of truth for the paths, parameters, and response structures actually deployed. Development builds enable Swagger, where the live endpoint list is available at `/swagger`.
-:::
-
 ## Root address
 
 All paths below are relative to the server API root. The client sets the root in `Network.Online.ApiEndpoints[].Url` in `system-settings.json`; the default is `https://majdata.net/api3/api/`.
@@ -2631,7 +2627,7 @@ The responses below are built inline by the controller and have **no correspondi
 | `POST \`/api/machine/auth/request\`` | `{ requestId }` |
 | `GET \`/api/machine/auth/info\`` | `{ grantee, granteeInfo: { name, description, place, remoteIP } }` |
 | `GET \`/api/machine/auth/check\`` | `{ token, userInfo: UserProfile }` |
-| `GET \`/api/account/session`, `GET \`/api/account/sessions\`` | see [SessionInfo](#sessioninfo) |
+| `GET \`/api/account/session`,`GET \`/api/account/sessions\`` | see [SessionInfo](#sessioninfo) |
 | `PUT \`/api/collection/{collectionId}/modify\`` | `{ code, message, collection: OnlineSongCollection }` |
 | `GET \`/api/collection/list\`` | see [PlaylistListItem](#playlistlistitem) |
 | `GET \`/api/info\`` | see [ServerInfo](#serverinfo) |

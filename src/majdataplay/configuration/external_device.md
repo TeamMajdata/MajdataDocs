@@ -76,6 +76,15 @@ MajdataPlay 支持常见的 maimai 手台, 包括键盘模拟、HID 按键圈、
 
 Windows 下端口写作整数, 例如 `3` 表示 `COM3`; 其他平台写作字符串, 例如 `"/dev/ttyACM0"`.
 
+::: warning 手动串口设置的生效条件
+只有在以下任一情况, `SerialPortOptions` 中的 `Port` / `BaudRate` 才会被使用:
+
+- `IO.Manufacturer` 显式设置为 `"General"`、`"Yuan"` 或 `"Nov"`;
+- `IO.InputDevice.ButtonRing.Type` 显式设置为 `"Keyboard"`.
+
+如果 `Manufacturer` 为 `null` 且 `ButtonRing.Type` 不是 `"Keyboard"`, 游戏会自动检测设备并忽略这些串口参数. `Dao`、`NPro` 和 `Pipe` 使用 HID / 外部 IO, 不读取串口设置; `Nov` 的触摸屏走 USB, 但 LED 仍会使用自定义串口. 除非把 `ButtonRing.Type` 设为 `"Keyboard"`, 这些设备不会使用自定义的触摸串口.
+:::
+
 ## HID 按键圈
 
 使用 `"HID"` 时通常还需要填写 PID 和 VID. 以下是一些常见手台的默认值, 均以**十进制**填入 `HidOptions`:

@@ -76,6 +76,15 @@ MajdataPlay は一般的な maimai 用コントローラーに対応していま
 
 Windows ではポートを整数で指定します (例: `3` は `COM3`)。その他のプラットフォームでは文字列で指定します (例: `"/dev/ttyACM0"`)。
 
+::: warning 手動シリアル設定が有効になる条件
+`SerialPortOptions` の `Port` / `BaudRate` が使用されるのは、次のいずれかの場合だけです。
+
+- `IO.Manufacturer` を `"General"`、`"Yuan"`、`"Nov"` のいずれかに明示的に設定している
+- `IO.InputDevice.ButtonRing.Type` を `"Keyboard"` に明示的に設定している
+
+`Manufacturer` が `null` で、`ButtonRing.Type` が `"Keyboard"` でない場合、ゲームはデバイスを自動検出し、これらのシリアル設定を無視します。`Dao`、`NPro`、`Pipe` は HID / 外部 IO を使用し、シリアル設定を読み取りません。`Nov` のタッチパネルは USB を使用しますが、LED はカスタムシリアルポートを使用します。`ButtonRing.Type` を `"Keyboard"` にしない限り、これらのデバイスはカスタムのタッチパネル用シリアルポートを使用しません。
+:::
+
 ## HID ボタンリング
 
 `"HID"` を使用する場合は、通常 PID と VID も入力する必要があります。以下は一般的なコントローラーのデフォルト値です。いずれも `HidOptions` に**10 進数**で入力します。

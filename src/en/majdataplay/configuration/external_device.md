@@ -76,6 +76,15 @@ If your device is not on the default port, change:
 
 On Windows the port is written as an integer, for example `3` means `COM3`; on other platforms it is written as a string, for example `"/dev/ttyACM0"`.
 
+::: warning When manual serial settings take effect
+The `Port` / `BaudRate` values under `SerialPortOptions` are only used when either:
+
+- `IO.Manufacturer` is explicitly set to `"General"`, `"Yuan"` or `"Nov"`, or
+- `IO.InputDevice.ButtonRing.Type` is explicitly set to `"Keyboard"`.
+
+If `Manufacturer` is `null` and `ButtonRing.Type` is not `"Keyboard"`, the game auto-detects the device and ignores these serial values. `Dao`, `NPro` and `Pipe` use HID / the external IO manager and do not read serial settings; `Nov` uses USB for touch, but its LED still uses the custom serial port. Unless `ButtonRing.Type` is set to `"Keyboard"`, these devices do not use a custom touch-panel serial port.
+:::
+
 ## HID button ring
 
 When you use `"HID"`, you usually also need to fill in the PID and VID. The following are the default values of some common controllers, all entered into `HidOptions` in **decimal**:
